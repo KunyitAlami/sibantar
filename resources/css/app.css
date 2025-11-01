@@ -1,3 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    * {
+        @apply antialiased;
+    }
+
+    body {
+        @apply font-sans text-base text-neutral-900;
+    }
+
+    h1 {
+        @apply text-4xl lg:text-5xl font-bold;
+    }
+
+    h2 {
+        @apply text-3xl lg:text-4xl font-bold;
+    }
+
+    h3 {
+        @apply text-2xl lg:text-3xl font-semibold;
+    }
+
+    h4 {
+        @apply text-xl lg:text-2xl font-semibold;
+    }
+
+    h5 {
+        @apply text-lg lg:text-xl font-medium;
+    }
+
+    h6 {
+        @apply text-base lg:text-lg font-medium;
+    }
+}
+
+@layer components {
+    /* Button Styles */
+    .btn {
+        @apply px-4 py-2 rounded-lg font-medium transition duration-200 inline-flex items-center justify-center;
+    }
+
+    .btn-primary {
+        @apply bg-primary-700 text-white hover:bg-primary-800 active:bg-primary-900;
+    }
+
+    .btn-secondary {
+        @apply bg-secondary-500 text-white hover:bg-secondary-600 active:bg-secondary-700;
+    }
+
+    .btn-outline {
+        @apply border-2 border-primary-700 text-primary-700 hover:bg-primary-50;
+    }
+
+    .btn-sm {
+        @apply px-3 py-1.5 text-sm;
+    }
+
+    .btn-lg {
+        @apply px-6 py-3 text-lg;
+    }
+
+    /* Card Styles */
+    .card {
+        @apply bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200;
+    }
+
+    /* Input Styles */
+    .input {
+        @apply w-full px-4 py-3 rounded-xl border border-neutral-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition;
+    }
+
+    .select {
+        @apply input appearance-none cursor-pointer;
+    }
+
+    /* Hide Scrollbar */
+    .hide-scrollbar {
+        -ms-overflow-style: none !important; /* IE and Edge */
+        scrollbar-width: none !important; /* Firefox */
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none !important; /* Chrome, Safari and Opera */
+        width: 0 !important;
+        height: 0 !important;
+    }
+}
