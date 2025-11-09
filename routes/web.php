@@ -48,6 +48,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dashboard', fn() => view('admin.dashboard.index'))->name('dashboard.index');
             Route::get('/calon-bengkel/{id}', [AdminController::class, 'showCalonBengkel'])->name('calonBengkel.show');
             Route::post('/calon-bengkel/{id}/approve', [AdminController::class, 'approveCalonBengkel'])->name('calonBengkel.approve');
+            
+            // Kelola User
+            Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
 
         });
 
