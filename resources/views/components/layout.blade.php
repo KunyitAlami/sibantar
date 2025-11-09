@@ -11,6 +11,8 @@
     
     <!-- Additional Styles -->
     @stack('styles')
+
+    @livewireStyles
 </head>
 <body class="bg-neutral-50">
     
@@ -27,5 +29,6 @@
     
     <!-- Scripts -->
     @stack('scripts')
+    @livewireScripts
 </body>
 </html>

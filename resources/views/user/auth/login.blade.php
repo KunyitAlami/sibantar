@@ -7,8 +7,8 @@
             <!-- Logo & Title -->
             <div class="text-center mb-6 sm:mb-8">
                 <div class="flex justify-center mb-3 sm:mb-4">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-primary-700 rounded-2xl flex items-center justify-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-8 h-8 sm:w-10 sm:h-10 object-contain">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center">
+                        <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
                     </div>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-1 sm:mb-2">Selamat Datang</h1>
@@ -17,7 +17,13 @@
 
             <!-- Login Card -->
             <div class="card p-6 sm:p-8">
-                <form method="POST" action="{{ route('login') }}" class="space-y-4 sm:space-y-5">
+
+                @if(session('success'))
+                    <div class="mb-4 p-3 text-green-700 bg-green-100 rounded text-center font-semibold">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('login.post') }}" class="space-y-4 sm:space-y-5">
                     @csrf
 
                     <!-- Email -->
@@ -30,7 +36,7 @@
                             id="email" 
                             name="email" 
                             class="input @error('email') border-danger-500 @enderror" 
-                            placeholder="email@example.com"
+                            placeholder="Masukan Email"
                             value="{{ old('email') }}"
                             required 
                             autofocus
@@ -73,16 +79,8 @@
                         @enderror
                     </div>
 
-                    <!-- Remember Me & Forgot Password -->
+                    <!-- Forgot Password -->
                     <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input 
-                                type="checkbox" 
-                                name="remember" 
-                                class="w-4 h-4 text-primary-700 border-neutral-300 rounded focus:ring-primary-500"
-                            >
-                            <span class="ml-2 text-sm text-neutral-700">Ingat saya</span>
-                        </label>
                         <a href="#" class="text-sm text-primary-700 hover:text-primary-800 font-medium">
                             Lupa password?
                         </a>

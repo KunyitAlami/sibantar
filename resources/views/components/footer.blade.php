@@ -1,11 +1,11 @@
 <!-- Footer Component -->
-<footer class="bg-neutral-900 text-white py-8 mt-12">
+<footer class="bg-neutral-900 text-white py-8">
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
             <!-- About Section -->
             <div>
                 <h3 class="text-lg font-bold mb-4">SIBANTAR</h3>
-                <p class="text-neutral-400 text-sm">
+                <p class="text-neutral-400 text-sm text-justify mr-10">
                     Sistem Bantuan Darurat Kendaraan Terdekat. Solusi cepat dan terpercaya untuk kebutuhan darurat kendaraan Anda.
                 </p>
             </div>

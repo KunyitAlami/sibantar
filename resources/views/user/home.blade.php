@@ -15,7 +15,7 @@
 
                 <!-- Search Form Card -->
                 <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-xl">
-                    <form action="{{ route('bengkel.search') }}" method="GET" class="space-y-4">
+                    <form action="{{ route('login') }}" method="GET" class="space-y-4">
                         <!-- Jenis Kendaraan -->
                         <div class="text-left">
                             <label class="block text-sm font-medium mb-2">Jenis Kendaraan</label>

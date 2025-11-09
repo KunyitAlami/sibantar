@@ -17,25 +17,35 @@
 
             <!-- Register Card -->
             <div class="card p-6 sm:p-8">
-                <form method="POST" action="{{ route('register') }}" class="space-y-4 sm:space-y-5">
+                <form method="POST" action="{{ route('register.post') }}" class="space-y-4 sm:space-y-5">
                     @csrf
+
+                    @if ($errors->any())
+                        <div class="mb-4 text-danger-600">
+                            <ul class="list-disc pl-5">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <!-- Nama Lengkap -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-neutral-700 mb-2">
-                            Nama Lengkap
+                        <label for="username" class="block text-sm font-medium text-neutral-700 mb-2">
+                            Username
                         </label>
                         <input 
                             type="text" 
-                            id="name" 
-                            name="name" 
-                            class="input @error('name') border-danger-500 @enderror" 
-                            placeholder="Masukkan nama lengkap"
-                            value="{{ old('name') }}"
+                            id="username" 
+                            name="username" 
+                            class="input @error('username') border-danger-500 @enderror" 
+                            placeholder="Masukkan username"
+                            value="{{ old('username') }}"
                             required 
                             autofocus
                         >
-                        @error('name')
+                        @error('username')
                             <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -61,19 +71,19 @@
 
                     <!-- Nomor Telepon -->
                     <div>
-                        <label for="phone" class="block text-sm font-medium text-neutral-700 mb-2">
+                        <label for="wa_number" class="block text-sm font-medium text-neutral-700 mb-2">
                             Nomor Telepon
                         </label>
                         <input 
                             type="tel" 
-                            id="phone" 
-                            name="phone" 
-                            class="input @error('phone') border-danger-500 @enderror" 
+                            id="wa_number" 
+                            name="wa_number" 
+                            class="input @error('wa_number') border-danger-500 @enderror" 
                             placeholder="08123456789"
-                            value="{{ old('phone') }}"
+                            value="{{ old('wa_number') }}"
                             required
                         >
-                        @error('phone')
+                        @error('wa_number')
                             <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -142,7 +152,7 @@
                     </div>
 
                     <!-- Terms & Conditions -->
-                    <div class="flex items-start pt-1">
+                    {{-- <div class="flex items-start pt-1">
                         <input 
                             type="checkbox" 
                             id="terms" 
@@ -156,7 +166,7 @@
                             dan 
                             <a href="#" class="text-primary-700 hover:text-primary-800 font-medium">Kebijakan Privasi</a>
                         </label>
-                    </div>
+                    </div> --}}
 
                     <!-- Submit Button -->
                     <div class="pt-2">
@@ -166,17 +176,17 @@
                     </div>
 
                     <!-- Divider -->
-                    <div class="relative py-4">
-                        <div class="absolute inset-0 flex items-center">
+                    {{-- <div class="relative py-4"> --}}
+                        {{-- <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-neutral-300"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
                             <span class="px-3 bg-white text-neutral-500">Atau daftar dengan</span>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Social Login -->
-                    <div class="grid grid-cols-2 gap-3 pt-1">
+                    {{-- <div class="grid grid-cols-2 gap-3 pt-1">
                         <button type="button" class="btn btn-outline flex items-center justify-center gap-2 text-sm sm:text-base py-2.5 sm:py-2">
                             <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -194,7 +204,7 @@
                             <span class="hidden sm:inline">Facebook</span>
                             <span class="sm:hidden">Facebook</span>
                         </button>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
 

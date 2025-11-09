@@ -18,8 +18,8 @@
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-6">
             <a href="/" class="text-neutral-700 hover:text-primary-700 transition font-medium">Beranda</a>
-            <a href="#" class="text-neutral-700 hover:text-primary-700 transition font-medium">Tentang</a>
-            <a href="#" class="text-neutral-700 hover:text-primary-700 transition font-medium">Kontak</a>
+            <a href="/about_us" class="text-neutral-700 hover:text-primary-700 transition font-medium">Tentang</a>
+            {{-- <a href="#" class="text-neutral-700 hover:text-primary-700 transition font-medium">Kontak</a> --}}
             <a href="/login" class="btn btn-primary">Masuk</a>
         </nav>
     </div>
@@ -28,8 +28,8 @@
     <nav id="mobileMenu" class="hidden lg:hidden bg-white border-t border-neutral-200">
         <div class="container mx-auto px-4 py-4 flex flex-col gap-3">
             <a href="/" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Beranda</a>
-            <a href="#" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Tentang</a>
-            <a href="#" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Kontak</a>
+            <a href="/about_us" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Tentang</a>
+            {{-- <a href="#" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Kontak</a> --}}
             <a href="/login" class="btn btn-primary text-center">Masuk</a>
         </div>
     </nav>
