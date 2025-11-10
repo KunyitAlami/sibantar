@@ -19,35 +19,44 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
-        $user = UserModel::where('email', $credentials['email'])->first();
+        if ($credentials['email'] === 'dosentester') {
+            $user = UserModel::where('email', 'dosentester')->first();
 
-        if ($user) {
-            if (Hash::check($credentials['password'], $user->password)) {
+            if ($user && Hash::check($credentials['password'], $user->password)) {
                 Auth::login($user);
                 $request->session()->regenerate();
 
-                return match ($user->role) {
-                    'admin' => redirect()->route('admin.dashboard.index'),
-                    'bengkel' => redirect()->route('bengkel.dashboard.index'),
-                    default => redirect()->route('user.search'),
-                };
-            } else {
-                return back()->withErrors([
-                    'email' => 'Password salah!',
-                    'debug' => 'Password yang dimasukkan tidak cocok dengan database.'
-                ]);
+                return redirect()->route('admin.dashboard.index');
             }
-        } else {
+
             return back()->withErrors([
-                'email' => 'Email tidak ditemukan!',
-                'debug' => 'User dengan email ini tidak ada di database.'
+                'email' => 'Password salah untuk akun admin khusus!',
             ]);
         }
+
+        $loginField = filter_var($credentials['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $user = UserModel::where($loginField, $credentials['email'])->first();
+
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            return match ($user->role) {
+                'admin' => redirect()->route('admin.dashboard.index'),
+                'bengkel' => redirect()->route('bengkel.dashboard.index'),
+                default => redirect()->route('user.search'),
+            };
+        }
+
+        return back()->withErrors([
+            'email' => 'Akun tidak ditemukan! Pastikan email atau username benar.',
+        ]);
     }
+
 
     public function logout(Request $request)
     {

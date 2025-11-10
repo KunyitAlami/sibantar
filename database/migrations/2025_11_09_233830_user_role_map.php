@@ -11,7 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('user_role_map', function (Blueprint $table) {
+            $table->id('id_user_role_map');
+            $table->unsignedBigInteger('id_user')->nullable();
+            $table->unsignedBigInteger('id_user_role')->nullable();
+        });
     }
 
     /**
@@ -19,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('user_role_map');
     }
 };

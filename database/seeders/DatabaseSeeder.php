@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             BookingSeeder::class,
             FinalPriceSeeder::class,
             ReviewSeeder::class,
+
+            UserRoleSeeder::class,
+            UserRoleMapSeeder::class,
         ]);
     }
 }

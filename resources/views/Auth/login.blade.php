@@ -32,7 +32,7 @@
                             Email
                         </label>
                         <input 
-                            type="email" 
+                            type="text" 
                             id="email" 
                             name="email" 
                             class="input @error('email') border-danger-500 @enderror" 

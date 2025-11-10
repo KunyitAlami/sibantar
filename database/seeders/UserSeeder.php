@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             ['username'=>'ghanimudzakir', 'role'=>'admin' ,'email'=>'2310817320007@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
 
             // ka erika
-            ['username'=>'erikamaulidiya', 'role'=>'admin' ,'email'=>'erikamaulidiya@admin', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'erikamaulidiya', 'role'=>'admin' ,'email'=>'dosentester', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
         
             ['username'=>'bangjaya_bengkel', 'role'=>'bengkel' ,'email'=>'bangjaya_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), ],
             ['username'=>'bangtera_bengkel', 'role'=>'bengkel' ,'email'=>'bangtera_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
