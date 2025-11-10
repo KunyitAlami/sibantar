@@ -17,25 +17,65 @@
         <h2 class="text-xl font-bold text-neutral-900 mb-4">Aktivitas Terbaru</h2>
 
         @if($activePanel === 'user')
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button wire:click="setRoleFilter('all')"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
+                    {{ $roleFilter === 'all' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                    Semua
+                </button>
+
+                <button wire:click="setRoleFilter('admin')"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
+                    {{ $roleFilter === 'admin' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                    Admin
+                </button>
+
+                <button wire:click="setRoleFilter('bengkel')"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
+                    {{ $roleFilter === 'bengkel' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                    Bengkel
+                </button>
+
+                <button wire:click="setRoleFilter('user')"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
+                    {{ $roleFilter === 'user' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                    User
+                </button>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full border border-neutral-200 text-sm">
-                    <thead class="bg-neutral-100">
-                        <tr class="text-left font-semibold text-neutral-700">
-                            <th class="px-4 py-2 border-b">ID</th>
-                            <th class="px-4 py-2 border-b">Username</th>
-                            <th class="px-4 py-2 border-b">Email</th>
-                            <th class="px-4 py-2 border-b">Role</th>
-                            <th class="px-4 py-2 border-b">WA Number</th>
+                <table class="w-full">
+                    <thead class="bg-neutral-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Username</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Role</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">WA Number</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($users as $user)
                         <tr class="hover:bg-neutral-50">
-                            <td class="px-4 py-2 border-b">{{ $user->id_user }}</td>
-                            <td class="px-4 py-2 border-b">{{ $user->username }}</td>
-                            <td class="px-4 py-2 border-b">{{ $user->email }}</td>
-                            <td class="px-4 py-2 border-b">{{ $user->role }}</td>
-                            <td class="px-4 py-2 border-b">{{ $user->wa_number }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $user->id_user }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $user->username }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $user->email }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">
+                                @if ($user->role == 'admin')
+                                    <span class="px-3 py-1 text-xs font-semibold text-primary-700 bg-primary-100 rounded-full">
+                                        {{ $user->role }}
+                                    </span>
+                                @elseif ($user->role == 'bengkel')
+                                    <span class="px-3 py-1 text-xs font-semibold text-secondary-700 bg-secondary-100 rounded-full">
+                                        {{ $user->role }}
+                                    </span>
+                                @else
+                                    <span class="px-3 py-1 text-xs font-semibold text-success-700 bg-success-100 rounded-full">
+                                        {{ $user->role }}
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $user->wa_number }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -62,27 +102,27 @@
                         </div>
                     @else
                         <div> 
-                            <table class="w-full border border-neutral-200 text-sm">
-                                <thead class="bg-neutral-100">
+                            <table class="w-full">
+                                <thead>
                                     <tr class="text-left font-semibold text-neutral-700">
-                                        <th class="px-4 py-2 border-b">ID Bengkel</th>
-                                        <th class="px-4 py-2 border-b">Nama Bengkel</th>
-                                        <th class="px-4 py-2 border-b">Kecamatan</th>
-                                        <th class="px-4 py-2 border-b">Alamat</th>
-                                        <th class="px-4 py-2 border-b">Jam Operasional</th>
-                                        <th class="px-4 py-2 border-b">Status</th>
-                                        <th class="px-4 py-2 border-b">Aktivitas</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">ID Bengkel</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Nama Bengkel</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Kecamatan</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Alamat</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Jam Operasional</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Aktivitas</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($belumDiterima as $b)
                                         <tr class="hover:bg-neutral-50">
-                                            <td class="px-4 py-2 border-b">{{ $b->id_calon_bengkel }}</td>
-                                            <td class="px-4 py-2 border-b">{{ $b->nama_bengkel }}</td>
-                                            <td class="px-4 py-2 border-b">{{ $b->kecamatan }}</td>
-                                            <td class="px-4 py-2 border-b">{{ $b->alamat_lengkap ?? '-' }}</td>
-                                            <td class="px-4 py-2 border-b">{{ $b->jam_operasional }}</td>
-                                            <td class="px-4 py-2 border-b">Belum Diterima</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->id_calon_bengkel }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->nama_bengkel }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->kecamatan }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->alamat_lengkap ?? '-' }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->jam_operasional }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">Belum Diterima</td>
                                             <td class="px-4 py-2 border-b hover:underline hover:text-gray-700">
                                                 <a href="{{ route('admin.calonBengkel.show', $b->id_calon_bengkel) }}" class="hover:text-gray-700">
                                                     Lebih Lanjut
@@ -103,34 +143,34 @@
                         <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.</p>
                     </div>
                     <div> 
-                        <table class="w-full border border-neutral-200 text-sm">
+                        <table>
                             <thead class="bg-neutral-100">
                                 <tr class="text-left font-semibold text-neutral-700">
-                                    <th class="px-4 py-2 border-b">ID Bengkel</th>
-                                    <th class="px-4 py-2 border-b">ID User</th>
-                                    <th class="px-4 py-2 border-b">Nama Bengkel</th>
-                                    <th class="px-4 py-2 border-b">Kecamatan</th>
-                                    <th class="px-4 py-2 border-b">Alamat</th>
-                                    <th class="px-4 py-2 border-b">Jam Operasional</th>
-                                    <th class="px-4 py-2 border-b">Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">ID Bengkel</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">ID User</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Nama Bengkel</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Kecamatan</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Alamat</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Jam Operasional</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($bengkels as $b)
                                 <tr class="hover:bg-neutral-50">
-                                    <td class="px-4 py-2 border-b">{{ $b->id_bengkel }}</td>
-                                    <td class="px-4 py-2 border-b">
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->id_bengkel }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">
                                         @if($b->id_user)
                                             {{ $b->id_user }}
                                         @else
                                             <span class="italic text-gray-500">tidak ada id_user untuk bengkel ini</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-2 border-b">{{ $b->nama_bengkel }}</td>
-                                    <td class="px-4 py-2 border-b">{{ $b->kecamatan }}</td>
-                                    <td class="px-4 py-2 border-b">{{ $b->alamat_lengkap ?? '-' }}</td>
-                                    <td class="px-4 py-2 border-b">{{ $b->jam_operasional }}</td>
-                                    <td class="px-4 py-2 border-b">{{ $b->status }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->nama_bengkel }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->kecamatan }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->alamat_lengkap ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->jam_operasional }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->status }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

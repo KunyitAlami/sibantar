@@ -27,6 +27,13 @@ class UserSeeder extends Seeder
 
             // ka erika
             ['username'=>'erikamaulidiya', 'role'=>'admin' ,'email'=>'erikamaulidiya@admin', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+        
+            ['username'=>'bangjaya_bengkel', 'role'=>'bengkel' ,'email'=>'bangjaya_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), ],
+            ['username'=>'bangtera_bengkel', 'role'=>'bengkel' ,'email'=>'bangtera_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'bangmandiri_bengkel', 'role'=>'bengkel' ,'email'=>'bangmandiri_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'bangsama_bengkel', 'role'=>'bengkel' ,'email'=>'bangsama_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'bangprima_bengkel', 'role'=>'bengkel' ,'email'=>'bangprima_bengkel@mhs.ulm.ac.id', 'password' => Hash::make('bengkel123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+
         ]);
     }
 }

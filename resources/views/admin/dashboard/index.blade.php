@@ -73,6 +73,9 @@
                     </div>
                 </div>
 
+                <livewire:create-management-buttons />
+                <br> <br>
+
                 <!-- Management Section -->
                 <div class="bg-white rounded-2xl p-8 shadow-lg mb-8 border border-neutral-100">
                     <h2 class="text-2xl font-bold text-neutral-900 mb-6">Management</h2>

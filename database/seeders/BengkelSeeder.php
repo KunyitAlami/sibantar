@@ -22,6 +22,7 @@ class BengkelSeeder extends Seeder
             [
                 'link_gmaps' => 'https://goo.gl/maps/abcd1234',
                 'nama_bengkel' => 'Bengkel Jaya Motor',
+                'id_user'=>6,
                 'kecamatan' => 'Banjarmasin Utara',
                 'alamat_lengkap' => 'Jl. Pangeran Antasari No.12',
                 'jam_buka' => '08:00',
@@ -34,6 +35,7 @@ class BengkelSeeder extends Seeder
             [
                 'link_gmaps' => 'https://goo.gl/maps/efgh5678',
                 'nama_bengkel' => 'Bengkel Motor Sejahtera',
+                'id_user'=>7,
                 'kecamatan' => 'Banjarmasin Tengah',
                 'alamat_lengkap' => 'Jl. Ahmad Yani No.45',
                 'jam_buka' => '09:00',
@@ -46,6 +48,7 @@ class BengkelSeeder extends Seeder
             [
                 'link_gmaps' => 'https://goo.gl/maps/ijkl9012',
                 'nama_bengkel' => 'Bengkel Mandiri',
+                'id_user'=>8,
                 'kecamatan' => 'Banjarmasin Selatan',
                 'alamat_lengkap' => 'Jl. Gatot Subroto No.7',
                 'jam_buka' => '07:30',
@@ -58,6 +61,7 @@ class BengkelSeeder extends Seeder
             [
                 'link_gmaps' => 'https://goo.gl/maps/mnop3456',
                 'nama_bengkel' => 'Bengkel Bersama',
+                'id_user'=>9,
                 'kecamatan' => 'Banjarmasin Timur',
                 'alamat_lengkap' => 'Jl. Lambung Mangkurat No.88',
                 'jam_buka' => '08:00',
@@ -70,6 +74,7 @@ class BengkelSeeder extends Seeder
             [
                 'link_gmaps' => 'https://goo.gl/maps/qrst7890',
                 'nama_bengkel' => 'Bengkel Prima',
+                'id_user'=>10,
                 'kecamatan' => 'Banjarmasin Barat',
                 'alamat_lengkap' => 'Jl. A. Yani Km.5',
                 'jam_buka' => '08:30',

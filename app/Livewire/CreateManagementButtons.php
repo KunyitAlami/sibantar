@@ -13,8 +13,8 @@ class CreateManagementButtons extends Component
     public $activePanel = null;
     public $users = [];
     public $bengkels = [];
-
     public $calonbengkels = [];
+    public $roleFilter = 'all';
 
     public function kelolaUser() {
         $this->activePanel = 'user';
@@ -26,6 +26,19 @@ class CreateManagementButtons extends Component
         $this->bengkels = BengkelModel::all();
         $this->calonbengkels = CalonBengkelModel::all();
         $this->users = []; 
+    }
+    private function loadUsers()
+    {
+        if ($this->roleFilter === 'all') {
+            $this->users = UserModel::all();
+        } else {
+            $this->users = UserModel::where('role', $this->roleFilter)->get();
+        }
+    }
+    public function setRoleFilter($role)
+    {
+        $this->roleFilter = $role;
+        $this->loadUsers();
     }
 
     // COMING SOON
