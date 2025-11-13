@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout-admin>
     <x-slot:title>Kelola User - Admin SIBANTAR</x-slot:title>
 
     <!-- Hero Section -->
@@ -382,4 +382,4 @@
         }
     </style>
 
-</x-layout>
+</x-layout-admin>

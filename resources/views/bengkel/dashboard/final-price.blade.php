@@ -1,4 +1,4 @@
-<x-layout-simple>
+<x-layout-bengkel>
     <x-slot:title>Input Final Price - SIBANTAR</x-slot:title>
 
     <!-- Header -->
@@ -292,4 +292,4 @@
     </script>
     @endpush
 
-</x-layout-simple>
+</x-layout-bengkel>

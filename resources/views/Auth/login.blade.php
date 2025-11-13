@@ -35,7 +35,7 @@
                             type="text" 
                             id="email" 
                             name="email" 
-                            class="input @error('email') border-danger-500 @enderror" 
+                            class="input bg-white @error('email') border-danger-500 @enderror" 
                             placeholder="Masukan Email"
                             value="{{ old('email') }}"
                             required 
@@ -56,7 +56,7 @@
                                 type="password" 
                                 id="password" 
                                 name="password" 
-                                class="input @error('password') border-danger-500 @enderror" 
+                                class="input bg-white @error('password') border-danger-500 @enderror" 
                                 placeholder="Masukkan password"
                                 required
                             >

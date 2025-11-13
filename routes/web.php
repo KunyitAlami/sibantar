@@ -14,22 +14,19 @@ Route::get('/', fn() => view('landing_page'))->name('landing_page');
 Route::get('/about_us', function () {return view('about_us');})->name('about_us');
 
 // Authentikasi dan segala macamnya
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post')->middleware('guest');
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post')->middleware('guest');
 
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-Route::get('/register_bengkel;', [AuthController::class, 'showRegisterBengkel'])->name('registerBengkel');
-Route::post('/register_bengkel', [AuthController::class, 'registerBengkel'])->name('registerBengkel.post');
+Route::get('/register_bengkel', [AuthController::class, 'showRegisterBengkel'])->name('registerBengkel')->middleware('guest');
+Route::post('/register_bengkel', [AuthController::class, 'registerBengkel'])->name('registerBengkel.post')->middleware('guest');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard tiap role
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', fn() => view('dashboard.admin'))->name('admin.dashboard');
-Route::middleware(['auth', 'role:bengkel'])->get('/bengkel/dashboard', fn() => view('dashboard.bengkel'))->name('bengkel.dashboard');
-Route::middleware(['auth', 'role:user'])->get('/user/dashboard', fn() => view('dashboard.user'))->name('user.dashboard');
+// Route Home - Redirect berdasarkan role setelah login
+Route::get('/home', [AuthController::class, 'redirectToDashboard'])->name('home')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('user.')
         ->group(function () {
             Route::get('/dashboard', fn() => view('user.search'))->name('search');
+            Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
+            Route::get('/bengkel/{id}/confirmation', fn($id) => view('user.confirmation'))->name('bengkel.confirmation');
             Route::get('/waiting-confirmation', fn() => view('user.waiting-confirmation'))->name('waiting-confirmation');
         });
 });

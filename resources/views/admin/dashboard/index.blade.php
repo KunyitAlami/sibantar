@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout-admin>
     <x-slot:title>Admin Dashboard - SIBANTAR</x-slot:title>
 
     <!-- Hero Section with Gradient -->
@@ -276,4 +276,4 @@
         }
     </style>
 
-</x-layout>
+</x-layout-admin>

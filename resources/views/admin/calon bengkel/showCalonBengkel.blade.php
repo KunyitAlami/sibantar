@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout-admin>
     <x-slot:title>Daftar - SIBANTAR</x-slot:title>
 
     <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
@@ -376,4 +376,4 @@
     </script>
     @endpush
 
-</x-layout>
+</x-layout-admin>
