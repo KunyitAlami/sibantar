@@ -13,7 +13,23 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
+        // Jika sudah login, redirect ke dashboard sesuai role
+        if (Auth::check()) {
+            return $this->redirectToDashboard();
+        }
         return view('Auth.login');
+    }
+
+    public function redirectToDashboard()
+    {
+        $user = Auth::user();
+        
+        return match ($user->role) {
+            'admin' => redirect()->route('admin.dashboard.index'),
+            'bengkel' => redirect()->route('bengkel.dashboard'),
+            'user' => redirect()->route('user.search'),
+            default => redirect()->route('landing_page'),
+        };
     }
 
     public function login(Request $request)
@@ -47,8 +63,9 @@ class AuthController extends Controller
 
             return match ($user->role) {
                 'admin' => redirect()->route('admin.dashboard.index'),
-                'bengkel' => redirect()->route('bengkel.dashboard.index'),
-                default => redirect()->route('user.search'),
+                'bengkel' => redirect()->route('bengkel.dashboard'),
+                'user' => redirect()->route('user.search'),
+                default => redirect()->route('landing_page'),
             };
         }
 

@@ -16,8 +16,20 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            abort(403, 'Anda tidak memiliki akses ke halaman ini!.');
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+
+        // Jika role tidak sesuai, redirect ke dashboard masing-masing
+        if ($user->role !== $role) {
+            return match ($user->role) {
+                'admin' => redirect()->route('admin.dashboard.index')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
+                'bengkel' => redirect()->route('bengkel.dashboard')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
+                'user' => redirect()->route('user.search')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
+                default => redirect()->route('landing_page'),
+            };
         }
 
         return $next($request);

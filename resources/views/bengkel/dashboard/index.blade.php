@@ -1,27 +1,5 @@
-<x-layout-simple>
+<x-layout-bengkel>
     <x-slot:title>Dashboard Bengkel - SIBANTAR</x-slot:title>
-
-    <!-- Header - Same style as login page -->
-    <section class="bg-white border-b border-neutral-200 sticky top-0 z-50 shadow-sm">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-primary-700 rounded-2xl flex items-center justify-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-7 h-7 object-contain">
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold text-neutral-900">SIBANTAR</h1>
-                        <p class="text-xs text-neutral-600">Dashboard Bengkel</p>
-                    </div>
-                </div>
-                <button id="menuToggle" class="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-colors">
-                    <svg class="w-6 h-6 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </section>
 
     <!-- Stats Section with Better Visual Hierarchy -->
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-8">
@@ -410,12 +388,7 @@
             }
         });
 
-        // Menu Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        menuToggle.addEventListener('click', function() {
-            // Future: Open navigation drawer
-            showNotification('Menu navigasi segera hadir', 'info');
-        });
+        // Menu Toggle - removed, using navbar now
 
         // Simple notification function
         function showNotification(message, type = 'info') {
@@ -448,5 +421,5 @@
     </script>
     @endpush
 
-</x-layout-simple>
+</x-layout-bengkel>
 

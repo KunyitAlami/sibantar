@@ -167,5 +167,29 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [require("daisyui")],
+    daisyui: {
+        themes: [
+            {
+                sibantar: {
+                    "primary": "#0051BA",
+                    "secondary": "#FF9800",
+                    "accent": "#00BCD4",
+                    "neutral": "#212121",
+                    "base-100": "#FFFFFF",
+                    "info": "#2196F3",
+                    "success": "#4CAF50",
+                    "warning": "#FFEB3B",
+                    "error": "#F44336",
+                },
+            },
+            "light",
+            "dark",
+        ],
+        darkTheme: "dark",
+        base: true,
+        styled: true,
+        utils: true,
+        logs: true,
+    },
 };

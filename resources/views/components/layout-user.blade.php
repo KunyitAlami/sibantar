@@ -19,8 +19,8 @@
 </head>
 <body class="bg-neutral-50">
     
-    <!-- Header Component -->
-    <x-header />
+    <!-- Navbar User -->
+    <x-navbar-user />
     
     <!-- Main Content -->
     <main>

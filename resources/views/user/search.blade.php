@@ -1,4 +1,4 @@
-<x-layout-simple>
+<x-layout-user>
     <x-slot:title>Bengkel Terdekat - SIBANTAR</x-slot:title>
 
     @push('styles')
@@ -185,12 +185,12 @@
 
                         <!-- Actions -->
                         <div class="flex gap-2">
-                            <a href="/bengkel/1" class="btn btn-outline btn-sm flex-1">
+                            <a href="{{ route('user.bengkel.detail', 1) }}" class="btn btn-outline btn-sm flex-1">
                                 Detail
                             </a>
-                            <button class="btn btn-primary btn-sm flex-1">
+                            <a href="{{ route('user.bengkel.confirmation', 1) }}" class="btn btn-primary btn-sm flex-1">
                                 Pesan
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -243,9 +243,9 @@
                             <p class="text-sm font-bold text-secondary-600">Rp 30.000 - Rp 60.000</p>
                             <p class="text-xs text-neutral-500">Estimasi Biaya</p>
                         </div>
-                        <div class="flex gap-2">
-                            <a href="/bengkel/2" class="btn btn-outline btn-sm flex-1">Detail</a>
-                            <button class="btn btn-primary btn-sm flex-1">Pesan</button>
+                        <div class="flex gap-2 mt-3">
+                            <a href="{{ route('user.bengkel.detail', 1) }}" class="btn btn-outline btn-sm flex-1">Detail</a>
+                            <a href="{{ route('user.bengkel.confirmation', 1) }}" class="btn btn-primary btn-sm flex-1">Pesan</a>
                         </div>
                     </div>
                 </div>
@@ -299,7 +299,7 @@
                             <p class="text-xs text-neutral-500">Estimasi Biaya</p>
                         </div>
                         <div class="flex gap-2">
-                            <a href="/bengkel/3" class="btn btn-outline btn-sm flex-1">Detail</a>
+                            <a href="{{ route('user.bengkel.detail', 3) }}" class="btn btn-outline btn-sm flex-1">Detail</a>
                             <button class="btn btn-primary btn-sm flex-1">Pesan</button>
                         </div>
                     </div>
@@ -387,7 +387,7 @@
                                 <span class="text-neutral-500">(${bengkel.reviews})</span>
                             </div>
                             <p class="text-xs text-neutral-600 mb-2">${bengkel.distance} dari Anda</p>
-                            <a href="/bengkel/${bengkel.id}" class="text-primary-700 font-medium hover:underline">Lihat Detail →</a>
+                            <a href="/user/bengkel/${bengkel.id}" class="text-primary-700 font-medium hover:underline">Lihat Detail →</a>
                         </div>
                     `);
 
@@ -511,4 +511,4 @@
     </script>
     @endpush
 
-</x-layout-simple>
+</x-layout-user>
