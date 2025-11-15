@@ -3,15 +3,15 @@
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
         <!-- Back Button (hanya muncul di halaman detail) & Logo -->
         <div class="flex items-center gap-2">
-            @if(Request::is('user/bengkel/*'))
-                <a href="{{ route('user.search') }}" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 transition">
+            <?php if(Request::is('user/bengkel/*')): ?>
+                <a href="<?php echo e(route('user.search')); ?>" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 transition">
                     <svg class="w-6 h-6 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </a>
-            @endif
-            <a href="{{ route('user.search') }}" class="flex items-center gap-2">
-                <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-10 h-10 object-contain">
+            <?php endif; ?>
+            <a href="<?php echo e(route('user.search')); ?>" class="flex items-center gap-2">
+                <img src="<?php echo e(asset('images/logo.png')); ?>" alt="SIBANTAR Logo" class="w-10 h-10 object-contain">
                 <span class="text-xl font-bold text-primary-700">SIBANTAR</span>
             </a>
         </div>
@@ -25,10 +25,10 @@
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-6">
-            <a href="{{ route('user.search') }}" class="text-neutral-700 hover:text-primary-700 transition font-medium">
+            <a href="<?php echo e(route('user.search')); ?>" class="text-neutral-700 hover:text-primary-700 transition font-medium">
                 Cari Bengkel
             </a>
-            <a href="{{ route('user.history') }}" class="text-neutral-700 hover:text-primary-700 transition font-medium">
+            <a href="<?php echo e(route('user.history')); ?>" class="text-neutral-700 hover:text-primary-700 transition font-medium">
                 Riwayat Pesanan
             </a>
             <a href="/about_us" class="text-neutral-700 hover:text-primary-700 transition font-medium">Tentang</a>
@@ -39,7 +39,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <span>{{ Auth::user()->username }}</span>
+                    <span><?php echo e(Auth::user()->username); ?></span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -47,7 +47,7 @@
                 
                 <!-- Dropdown Menu -->
                 <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                    <a href="{{ route('user.search') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition">
+                    <a href="<?php echo e(route('user.search')); ?>" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition">
                         <div class="flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -55,7 +55,7 @@
                             Cari Bengkel
                         </div>
                     </a>
-                    <a href="{{ route('user.history') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition">
+                    <a href="<?php echo e(route('user.history')); ?>" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition">
                         <div class="flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -64,8 +64,8 @@
                         </div>
                     </a>
                     <hr class="my-2">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('logout')); ?>">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="w-full text-left px-4 py-2 text-sm text-danger-600 hover:bg-neutral-50 transition">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,14 +83,14 @@
     <!-- Mobile Menu -->
     <nav id="mobileMenu" class="hidden lg:hidden bg-white border-t border-neutral-200">
         <div class="container mx-auto px-4 py-4 flex flex-col gap-3">
-            <a href="{{ route('user.search') }}" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Cari Bengkel</a>
-            <a href="{{ route('user.history') }}" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Riwayat Pesanan</a>
+            <a href="<?php echo e(route('user.search')); ?>" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Cari Bengkel</a>
+            <a href="<?php echo e(route('user.history')); ?>" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Riwayat Pesanan</a>
             <a href="/about_us" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Tentang</a>
             
             <hr class="my-2">
             
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
+            <form method="POST" action="<?php echo e(route('logout')); ?>">
+                <?php echo csrf_field(); ?>
                 <button type="submit" class="w-full text-left text-danger-600 hover:text-danger-700 py-2 transition font-medium">
                     Logout
                 </button>
@@ -100,7 +100,7 @@
 </header>
 
 <!-- Mobile Menu Toggle Script -->
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.getElementById('menuToggle');
@@ -113,4 +113,5 @@
         }
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/components/navbar-user.blade.php ENDPATH**/ ?>

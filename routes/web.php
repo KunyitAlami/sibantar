@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | User Routes (Public)
@@ -24,6 +25,9 @@ Route::get('/register_bengkel', [AuthController::class, 'showRegisterBengkel'])-
 Route::post('/register_bengkel', [AuthController::class, 'registerBengkel'])->name('registerBengkel.post')->middleware('guest');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Midtrans Payment Callback (webhook)
+Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 
 // Route Home - Redirect berdasarkan role setelah login
 Route::get('/home', [AuthController::class, 'redirectToDashboard'])->name('home')->middleware('auth');
@@ -68,9 +72,27 @@ Route::middleware(['auth'])->group(function () {
         ->name('user.')
         ->group(function () {
             Route::get('/dashboard', fn() => view('user.search'))->name('search');
+            Route::get('/history', fn() => view('user.history'))->name('history');
             Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
             Route::get('/bengkel/{id}/confirmation', fn($id) => view('user.confirmation'))->name('bengkel.confirmation');
-            Route::get('/waiting-confirmation', fn() => view('user.waiting-confirmation'))->name('waiting-confirmation');
+            
+            // Order Tracking dengan status dinamis
+            Route::get('/order-tracking/{orderId}', function ($orderId) {
+                $status = request()->get('status', 'waiting');
+                return view('user.order-tracking', compact('orderId', 'status'));
+            })->name('order-tracking');
+            
+            // Halaman waiting confirmation dengan timer 2 menit
+            Route::get('/waiting-confirmation', function () {
+                return view('user.waiting-confirmation');
+            })->name('waiting-confirmation');
+            
+            Route::get('/mechanic-on-the-way', function () {
+                return redirect()->route('user.order-tracking', ['orderId' => 1, 'status' => 'on-the-way']);
+            })->name('mechanic-on-the-way');
+            
+            // Payment routes
+            Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('create-transaction');
         });
 });
 
