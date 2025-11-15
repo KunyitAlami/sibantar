@@ -1,10 +1,19 @@
-<x-layout-user>
-    <x-slot:title>Detail Bengkel - SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal066474d3ca90bb663733ba5d5a32c765 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal066474d3ca90bb663733ba5d5a32c765 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-user','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-user'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Detail Bengkel - SIBANTAR <?php $__env->endSlot(); ?>
 
     <!-- Bengkel Image -->
     <section class="relative">
         <div class="h-64 bg-neutral-200 relative overflow-hidden">
-            <img src="{{ asset('images/bengkel.jpeg') }}" alt="Bengkel" class="w-full h-full object-cover">
+            <img src="<?php echo e(asset('images/bengkel.jpeg')); ?>" alt="Bengkel" class="w-full h-full object-cover">
         </div>
     </section>
 
@@ -226,11 +235,20 @@
                     </svg>
                     WhatsApp
                 </a>
-                <a href="{{ route('user.bengkel.confirmation', ['id' => 1]) }}" class="flex-1 btn btn-primary">
+                <a href="<?php echo e(route('user.bengkel.confirmation', ['id' => 1])); ?>" class="flex-1 btn btn-primary">
                     Pesan
                 </a>
             </div>
         </div>
     </section>
 
-</x-layout-user>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
+<?php $attributes = $__attributesOriginal066474d3ca90bb663733ba5d5a32c765; ?>
+<?php unset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
+<?php $component = $__componentOriginal066474d3ca90bb663733ba5d5a32c765; ?>
+<?php unset($__componentOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php endif; ?><?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/user/detail.blade.php ENDPATH**/ ?>

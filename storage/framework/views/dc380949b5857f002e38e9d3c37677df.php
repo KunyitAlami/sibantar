@@ -1,9 +1,18 @@
-<x-layout-user>
+<?php if (isset($component)) { $__componentOriginal066474d3ca90bb663733ba5d5a32c765 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal066474d3ca90bb663733ba5d5a32c765 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-user','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-user'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
     <!-- Header -->
     <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
-                <a href="{{ url('/bengkel/search') }}" class="text-neutral-700 hover:text-primary-700">
+                <a href="<?php echo e(url('/bengkel/search')); ?>" class="text-neutral-700 hover:text-primary-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
@@ -161,7 +170,7 @@
         </div>
     </div>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         // Function to check if current time is night (20:00 - 06:00)
         function isNightTime() {
@@ -272,7 +281,7 @@
         // Search again button
         searchAgainBtn.addEventListener('click', () => {
             // Redirect to search page
-            window.location.href = '{{ url("/bengkel/search") }}';
+            window.location.href = '<?php echo e(url("/bengkel/search")); ?>';
         });
 
         // Set current order time
@@ -285,6 +294,16 @@
 
         setOrderTime();
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-layout-user>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
+<?php $attributes = $__attributesOriginal066474d3ca90bb663733ba5d5a32c765; ?>
+<?php unset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
+<?php $component = $__componentOriginal066474d3ca90bb663733ba5d5a32c765; ?>
+<?php unset($__componentOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php endif; ?>
+<?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/user/waiting-confirmation.blade.php ENDPATH**/ ?>

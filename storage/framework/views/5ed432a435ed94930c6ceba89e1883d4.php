@@ -1,4 +1,13 @@
-<x-layout-user>
+<?php if (isset($component)) { $__componentOriginal066474d3ca90bb663733ba5d5a32c765 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal066474d3ca90bb663733ba5d5a32c765 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-user','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-user'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
     <!-- Main Content -->
     <section class="py-6 pb-32">
         <div class="container mx-auto px-4">
@@ -90,7 +99,7 @@
     <section class="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 py-4 z-50">
         <div class="container mx-auto px-4">
             <div class="max-w-md mx-auto flex gap-3">
-                <a href="{{ url()->previous() }}" class="flex-1 btn btn-outline text-center">
+                <a href="<?php echo e(url()->previous()); ?>" class="flex-1 btn btn-outline text-center">
                     Batal
                 </a>
                 <button onclick="confirmOrder()" class="flex-1 btn btn-primary">
@@ -100,7 +109,7 @@
         </div>
     </section>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -315,6 +324,16 @@
             });
         }
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-layout-user>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
+<?php $attributes = $__attributesOriginal066474d3ca90bb663733ba5d5a32c765; ?>
+<?php unset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
+<?php $component = $__componentOriginal066474d3ca90bb663733ba5d5a32c765; ?>
+<?php unset($__componentOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php endif; ?>
+<?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/user/confirmation.blade.php ENDPATH**/ ?>
