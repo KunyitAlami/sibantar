@@ -48,4 +48,11 @@ class BengkelModel extends Model
     {
         $this->bengkels = BengkelModel::all();
     }
+
+    public function layananBengkel()
+    {
+        return $this->hasMany(LayananBengkelModel::class, 'id_bengkel', 'id_bengkel');
+    }
+
+
 }

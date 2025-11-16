@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CalonBengkelModel;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,9 @@ class DatabaseSeeder extends Seeder
 
             UserRoleSeeder::class,
             UserRoleMapSeeder::class,
+
+            CalonBengkelSeeder::class,
+            LayananBengkelSeeder::class,
         ]);
     }
 }

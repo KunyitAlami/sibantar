@@ -7,7 +7,7 @@ use App\Models\CalonBengkelModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-
+use Illuminate\Routing\Controller;
 
 class AuthController extends Controller
 {
@@ -27,7 +27,7 @@ class AuthController extends Controller
         return match ($user->role) {
             'admin' => redirect()->route('admin.dashboard.index'),
             'bengkel' => redirect()->route('bengkel.dashboard'),
-            'user' => redirect()->route('user.search'),
+            'user' => redirect()->route('user.dashboard'),
             default => redirect()->route('landing_page'),
         };
     }
@@ -64,7 +64,7 @@ class AuthController extends Controller
             return match ($user->role) {
                 'admin' => redirect()->route('admin.dashboard.index'),
                 'bengkel' => redirect()->route('bengkel.dashboard'),
-                'user' => redirect()->route('user.search'),
+                'user' => redirect()->route('user.dashboard'),
                 default => redirect()->route('landing_page'),
             };
         }

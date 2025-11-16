@@ -4,7 +4,7 @@
         <!-- Navbar Start - Logo -->
         <div class="navbar-start">
             <!-- Logo -->
-            <a href="{{ route('user.search') }}" class="btn btn-ghost text-xl px-2 lg:px-4">
+            <a href="{{ route('user.dashboard') }}" class="btn btn-ghost text-xl px-2 lg:px-4">
                 <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-8 h-8 lg:w-10 lg:h-10 object-contain">
                 <span class="font-bold text-primary">SIBANTAR</span>
             </a>
@@ -13,9 +13,20 @@
         <!-- Navbar Center - Desktop Menu -->
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-                <li><a href="{{ route('user.search') }}" class="font-medium {{ request()->routeIs('user.search') ? 'active' : '' }}">Cari Bengkel</a></li>
+                <li><a href="{{ route('user.dashboard') }}" class="font-medium {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">Beranda</a></li>
+                <li><a href="{{ route('user.eksplor_bengkel') }}" class="font-medium {{ request()->routeIs('user.eksplor_bengkel') ? 'active' : '' }}">Eksplor Bengkel</a></li>
                 <li><a href="{{ route('user.history') }}" class="font-medium {{ request()->routeIs('user.history') ? 'active' : '' }}">Riwayat</a></li>
                 <li><a href="{{ route('about_us') }}" class="font-medium {{ request()->routeIs('about_us') ? 'active' : '' }}">Tentang Kami</a></li>
+                <li>
+                    <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-nav').submit();" 
+                    class="font-medium text-error">
+                        Log out
+                    </a>
+                </li>
+
             </ul>
         </div>
         
@@ -29,7 +40,8 @@
                     </svg>
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a href="{{ route('user.search') }}" class="font-medium">Cari Bengkel</a></li>
+                    <li><a href="{{ route('user.dashboard') }}" class="font-medium">Beranda</a></li>
+                    <li><a href="{{ route('user.eksplor_bengkel') }}" class="font-medium">Eksplor Bengkel</a></li>
                     <li><a href="{{ route('user.history') }}" class="font-medium">Riwayat</a></li>
                     <li><a href="{{ route('about_us') }}" class="font-medium">Tentang Kami</a></li>
                     <div class="divider my-1"></div>
@@ -53,11 +65,17 @@
                     <li class="menu-title">
                         <span>{{ Auth::user()->name }}</span>
                     </li>
-                    <li><a href="{{ route('user.search') }}">
+                    <li><a href="{{ route('user.dashboard') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        Cari Bengkel
+                        Beranda
+                    </a></li>
+                    <li><a href="{{ route('user.eksplor_bengkel') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Eksplor Bengkel
                     </a></li>
                     <li><a href="{{ route('user.history') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

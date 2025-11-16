@@ -91,7 +91,6 @@
                     </div>
 
                     @php
-                        // Filter calonbengkels yang statusnya belum_diterima
                         $belumDiterima = $calonbengkels->where('status', 'belum_diterima');
                     @endphp
 
@@ -121,7 +120,13 @@
                                             <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->nama_bengkel }}</td>
                                             <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->kecamatan }}</td>
                                             <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->alamat_lengkap ?? '-' }}</td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $b->jam_operasional }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">
+                                                @if (!empty($b->jam_operasional))
+                                                    {{ $b->jam_operasional }}
+                                                @else
+                                                    {{ $b->jam_buka }} - {{ $b->jam_tutup }} WITA
+                                                @endif
+                                            </td>
                                             <td class="px-6 py-4 text-sm font-medium text-neutral-900">Belum Diterima</td>
                                             <td class="px-4 py-2 border-b hover:underline hover:text-gray-700">
                                                 <a href="{{ route('admin.calonBengkel.show', $b->id_calon_bengkel) }}" class="hover:text-gray-700">

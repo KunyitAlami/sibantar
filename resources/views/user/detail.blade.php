@@ -13,7 +13,16 @@
         <div class="container mx-auto px-4 py-6">
             <!-- Bengkel Title & Rating -->
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-neutral-900 mb-3">Bengkel Jaya Motor</h2>
+                <div class="flex gap-4 mt-4 mb-8">
+                    <!-- Back Button -->
+                    <a href="{{ $backUrl ?? url('/user/search') }}" class="flex-shrink-0 mt-2">
+                        <svg class="w-6 h-6 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </a>
+                    <h2 class="text-3xl font-bold text-neutral-900">{{ $bengkel->nama_bengkel }}</h2>
+                </div>
+
                 <div class="flex items-center gap-2 mb-3">
                     <div class="flex text-warning-500">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
@@ -45,15 +54,19 @@
 
                 <!-- Price Range -->
                 <div class="mt-3">
-                    <p class="text-lg font-bold text-secondary-600">Rp 25.000 - Rp 50.000</p>
-                    <p class="text-sm text-neutral-500">Estimasi Biaya</p>
+                    <p class="text-lg font-bold text-secondary-600">
+                        Rp {{ number_format($layanan_bengkel->harga_awal, 0, ',', '.') }}
+                        -
+                        Rp {{ number_format($layanan_bengkel->harga_akhir, 0, ',', '.') }}
+                    </p>
+                    <p class="text-sm text-neutral-500">Estimasi Biaya untuk Layanan {{ $layanan_bengkel->nama_layanan}} Pada {{ $layanan_bengkel->kategori}}</p>
                 </div>
 
                 <!-- Description -->
                 <div class="mt-4">
+                    <h1 class="text-lg mt-2 mb-2">Tentang Layanan:</h1>
                     <p class="text-neutral-700 leading-relaxed">
-                        Bengkel motor terpercaya dengan pengalaman lebih dari 10 tahun. Spesialis perbaikan ban bocor, tune up, 
-                        dan servis rutin. Menggunakan suku cadang original dan berkualitas.
+                        {{ $layanan_bengkel->deskripsi}}
                     </p>
                 </div>
             </div>
@@ -74,8 +87,8 @@
                             </div>
                         </div>
                         <div class="flex-1">
-                            <p class="font-medium text-neutral-900">Jl. Raya No. 23</p>
-                            <p class="text-sm text-neutral-600">Banjarmasin</p>
+                            <p class="font-medium text-neutral-900">{{ $bengkel->alamat_lengkap}}</p>
+                            <p class="text-sm text-neutral-600">Kecamatan {{ $bengkel->kecamatan}}, Kota Banjarmasin</p>
                         </div>
                     </div>
 
@@ -89,7 +102,8 @@
                             </div>
                         </div>
                         <div class="flex-1">
-                            <p class="font-medium text-neutral-900">0812-6332-1241</p>
+                            <p class="font-medium text-neutral-900">{{ $bengkel->user->wa_number }}</p>
+                            <p class="text-sm text-neutral-600">Nomor WhatsApp Bengkel</p>
                         </div>
                     </div>
 
@@ -103,8 +117,8 @@
                             </div>
                         </div>
                         <div class="flex-1">
-                            <p class="font-medium text-neutral-900">Buka 24 Jam</p>
-                            <p class="text-sm text-neutral-600">Senin-Minggu</p>
+                            <p class="font-medium text-neutral-900">{{ $bengkel->jam_operasional }} WITA</p>
+                            <p class="text-sm text-neutral-600">Jam Operasional Bengkel</p>
                         </div>
                     </div>
                 </div>
@@ -120,36 +134,15 @@
                 <h3 class="text-lg font-bold text-neutral-900 mb-4">Layanan & Harga</h3>
                 
                 <div class="space-y-3">
-                    <!-- Service Item 1 -->
                     <div class="flex justify-between items-start py-3 border-b border-neutral-100">
                         <div>
-                            <h4 class="font-semibold text-neutral-900 mb-1">Tambal Ban</h4>
-                            <p class="text-sm text-neutral-600">Perbaikan ban bocor standar</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-secondary-600">Rp 15.000</p>
-                        </div>
-                    </div>
-
-                    <!-- Service Item 2 -->
-                    <div class="flex justify-between items-start py-3 border-b border-neutral-100">
-                        <div>
-                            <h4 class="font-semibold text-neutral-900 mb-1">Service Ringan</h4>
-                            <p class="text-sm text-neutral-600">Tune up basic, oli, dll</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-secondary-600">Rp 50.000</p>
-                        </div>
-                    </div>
-
-                    <!-- Service Item 3 -->
-                    <div class="flex justify-between items-start py-3 border-b border-neutral-100">
-                        <div>
-                            <h4 class="font-semibold text-neutral-900 mb-1">Biaya Perjalanan</h4>
-                            <p class="text-sm text-neutral-600">Biaya teknisi ke lokasi</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-secondary-600">Rp 10.000/km</p>
+                            <h4 class="font-semibold text-neutral-900 mb-1">{{ $layanan_bengkel->nama_layanan }}</h4>
+                            <p class="font-bold text-secondary-600">
+                                    Rp {{ number_format($layanan_bengkel->harga_awal, 0, ',', '.') }} 
+                                    - 
+                                    Rp {{ number_format($layanan_bengkel->harga_akhir, 0, ',', '.') }}
+                            </p>
+                            <p class="text-sm text-neutral-600">{{ $layanan_bengkel->deskripsi }}</p>
                         </div>
                     </div>
                 </div>
@@ -157,9 +150,9 @@
 
             <!-- Ulasan Pelanggan Section -->
             <div class="border-t border-neutral-200 pt-6 mb-20">
-                <h3 class="text-lg font-bold text-neutral-900 mb-4">Ulasan Pelanggan</h3>
+                {{-- <h3 class="text-lg font-bold text-neutral-900 mb-4">Ulasan Pelanggan</h3> --}}
                 
-                <div class="space-y-4">
+                {{-- <div class="space-y-4">
                     <!-- Review 1 -->
                     <div class="pb-4 border-b border-neutral-100">
                         <div class="flex items-center gap-2 mb-2">
@@ -210,7 +203,11 @@
                             Pelayanan cepat dan harga terjangkau. Teknisinya datang tepat waktu dan kerja dengan rapi.
                         </p>
                     </div>
-                </div>
+                </div> --}}
+                <h3 class="text-lg font-bold text-neutral-900 mb-4">Ulasan Pelanggan</h3>
+                <p class="text-gray-400 text-sm leading-relaxed italic justify-center text-center">
+                    Belum ada ulasan yang ditemukan.
+                </p>
             </div>
         </div>
     </section>

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\MidtransService;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
+
 
 class PaymentController extends Controller
 {
@@ -80,13 +83,13 @@ class PaymentController extends Controller
                 // Handle transaction status
                 if ($transactionStatus == 'capture' || $transactionStatus == 'settlement') {
                     // TODO: Set order status in database to 'success'
-                    \Log::info('Payment success for order: ' . $orderId);
+                    Log::info('Payment success for order: ' . $orderId);
                 } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
                     // TODO: Set order status in database to 'failure'
-                    \Log::info('Payment failed for order: ' . $orderId);
+                    Log::info('Payment failed for order: ' . $orderId);
                 } else if ($transactionStatus == 'pending') {
                     // TODO: Set order status in database to 'pending'
-                    \Log::info('Payment pending for order: ' . $orderId);
+                    Log::info('Payment pending for order: ' . $orderId);
                 }
 
                 return response()->json(['status' => 'success']);

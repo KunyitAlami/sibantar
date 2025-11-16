@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | User Routes (Public)
@@ -71,10 +74,17 @@ Route::middleware(['auth'])->group(function () {
         ->prefix('user')
         ->name('user.')
         ->group(function () {
-            Route::get('/dashboard', fn() => view('user.search'))->name('search');
+            // Route::get('/dashboard', fn() => view('user.search'))->name('search');
+            Route::get('/eksplor_bengkel', fn() => view('user.eksplor_bengkel'))->name('eksplor_bengkel');            
+            Route::get('/dashboard', fn() => view('user.dashboard'))->name('dashboard');
             Route::get('/history', fn() => view('user.history'))->name('history');
             Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
             Route::get('/bengkel/{id}/confirmation', fn($id) => view('user.confirmation'))->name('bengkel.confirmation');
+
+            // Route::get('/mapping/edit-cpmk-cpl', [CPMKMPLMapController::class, 'edit_cpmk_cpl'])->name('cpmk-cpl-mapping.edit');
+            // Route::put('/mapping/cpmk-cpl', [CPMKMPLMapController::class, 'updateCPMKCPLMap'])->name('cpmk-cpl-mapping.update');
+            Route::get('/search', [UserController::class, 'search'])->name('search');
+            Route::get('/bengkel/{id_bengkel}/layanan/{id_layanan}',[UserController::class, 'detail_bengkel'])->name('bengkel.detail');
             
             // Report/Laporan
             Route::get('/report', fn() => view('user.report'))->name('report');

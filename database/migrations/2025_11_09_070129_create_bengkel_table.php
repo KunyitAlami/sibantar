@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
 
             // korelasi
-            $table->foreign('id_user')->references('id_user')->on('user')->onDelete('cascade');
+            $table->foreign('id_user')->references('id_user')->on('user')->nullOnDelete();
         });
     }
 

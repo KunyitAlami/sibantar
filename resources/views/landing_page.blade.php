@@ -15,7 +15,7 @@
 
                 <!-- Search Form Card -->
                 <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-xl text-left">
-                    <form action="{{ route('user.search') }}" method="GET" class="space-y-6">
+                    <form action="{{ route('login') }}" method="GET" class="space-y-6">
                         <!-- Jenis Kendaraan -->
                         <div class="form-control w-full">
                             <label class="label justify-start">

@@ -15,7 +15,7 @@
     <section class="py-8 bg-gradient-to-b from-neutral-50 to-white">
         <div class="container mx-auto px-4">
             <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 -mt-20 mb-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 mb-12">
                     <!-- Total Users -->
                     <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
                         <div class="flex items-center justify-between mb-4">
@@ -75,7 +75,7 @@
 
                 <livewire:create-management-buttons />
                 <br> <br>
-
+{{-- 
                 <!-- Management Section -->
                 <div class="bg-white rounded-2xl p-8 shadow-lg mb-8 border border-neutral-100">
                     <h2 class="text-2xl font-bold text-neutral-900 mb-6">Management</h2>
@@ -259,7 +259,7 @@
 
         // Initialize with 'all' filter
         filterUsers('all');
-    </script>
+    </script> --}}
 
     <style>
         .filter-btn {
