@@ -6,7 +6,7 @@
         <div class="container mx-auto px-4 py-12 lg:py-20">
             <div class="max-w-2xl mx-auto text-center">
                 <h1 class="mb-4">
-                    Bantuan Darurat Kendaraan Terdekat [ini landing page]
+                    Bantuan Darurat Kendaraan Terdekat
                 </h1>
                 <p class="text-primary-100 text-sm lg:text-base mb-8">
                     Temukan bengkel terdekat dengan cepat dan aman<br class="hidden lg:block">
@@ -14,44 +14,41 @@
                 </p>
 
                 <!-- Search Form Card -->
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-xl">
-                    <form action="{{ route('login') }}" method="GET" class="space-y-4">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-xl text-left">
+                    <form action="{{ route('user.search') }}" method="GET" class="space-y-6">
                         <!-- Jenis Kendaraan -->
-                        <div class="text-left">
-                            <label class="block text-sm font-medium mb-2">Jenis Kendaraan</label>
-                            <div class="relative">
-                                <select name="vehicle_type" class="select bg-white text-neutral-700" required>
-                                    <option value="">Pilih jenis kendaraan</option>
-                                    <option value="Motor">Motor</option>
-                                    <option value="Mobil">Mobil</option>
-                                    <option value="Truk">Truk</option>
-                                </select>
-                                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </div>
+                        <div class="form-control w-full">
+                            <label class="label justify-start">
+                                <span class="label-text text-white font-medium text-base">Jenis Kendaraan</span>
+                            </label>
+                            <select name="vehicle_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
+                                <option disabled selected value="">Pilih jenis kendaraan</option>
+                                <option value="Motor">Motor</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Truk">Truk</option>
+                            </select>
                         </div>
 
                         <!-- Jenis Masalah -->
-                        <div class="text-left">
-                            <label class="block text-sm font-medium mb-2">Jenis Masalah</label>
-                            <div class="relative">
-                                <select name="problem_type" class="select bg-white text-neutral-700" required>
-                                    <option value="">Pilih jenis masalah</option>
-                                    <option value="Ban Bocor">Ban Bocor</option>
-                                    <option value="Aki Tekor">Aki Tekor</option>
-                                    <option value="Mesin Mati">Mesin Mati</option>
-                                    <option value="Kecelakaan">Kecelakaan</option>
-                                    <option value="Lainnya">Lainnya</option>
-                                </select>
-                                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </div>
+                        <div class="form-control w-full">
+                            <label class="label justify-start">
+                                <span class="label-text text-white font-medium text-base">Jenis Kerusakan</span>
+                            </label>
+                            <select name="problem_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
+                                <option disabled selected value="">Pilih jenis kerusakan</option>
+                                <option value="Ban Bocor">Ban Bocor</option>
+                                <option value="Aki Tekor">Aki Tekor</option>
+                                <option value="Mesin Mati">Mesin Mati</option>
+                                <option value="Kecelakaan">Kecelakaan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-secondary w-full btn-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <button type="submit" class="btn btn-secondary w-full btn-lg gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
                             Cari Bengkel Terdekat
                         </button>
                     </form>

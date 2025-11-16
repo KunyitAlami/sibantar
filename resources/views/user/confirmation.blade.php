@@ -30,22 +30,28 @@
                     <!-- Pilih Layanan -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Pilih Layanan</label>
-                        <select id="serviceSelect" onchange="calculateTotal()" class="select w-full text-sm h-12" required>
-                            <option value="">Jenis Layanan</option>
-                            <option value="15000">Tambal Ban</option>
-                            <option value="50000">Service Ringan</option>
-                        </select>
+                        <div class="dropdown w-full">
+                            <select id="serviceSelect" onchange="calculateTotal()" class="select select-bordered w-full text-sm bg-white !h-14 !min-h-0 !leading-normal" required>
+                                <option value="">Jenis Layanan</option>
+                                <option value="15000">Tambal Ban</option>
+                                <option value="50000">Service Ringan</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Lokasi Anda -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Lokasi Anda</label>
+                        <div class="alert alert-info mb-2 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-xs">Geser pin untuk menyesuaikan lokasi Anda</span>
+                        </div>
                         <div class="relative">
                             <!-- Map Container -->
-                            <div id="map" class="w-full h-36 rounded-xl overflow-hidden bg-neutral-200"></div>
+                            <div id="map" class="w-full h-48 rounded-xl overflow-hidden bg-neutral-200 border-2 border-primary-200"></div>
                             <!-- Address Display -->
                             <div class="mt-2 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                                <p class="text-xs">Alamat</p>
+                                <p class="text-xs font-medium text-neutral-700">Alamat</p>
                                 <p class="text-xs text-neutral-600" id="userAddress">Mendeteksi lokasi Anda...</p>
                             </div>
                             <input type="hidden" id="userLatitude">
@@ -157,15 +163,73 @@
                         map.removeLayer(userMarker);
                     }
                     
-                    // Add new marker with custom icon
+                    // Add new marker with custom icon (draggable)
                     const userIcon = L.divIcon({
                         className: 'custom-marker',
-                        html: '<div style="background-color: #0051BA; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>',
-                        iconSize: [20, 20],
-                        iconAnchor: [10, 10]
+                        html: `
+                            <div style="position: relative;">
+                                <div style="background-color: #0051BA; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 12px rgba(0,81,186,0.4); cursor: move;"></div>
+                                <div style="position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #0051BA;"></div>
+                            </div>
+                        `,
+                        iconSize: [24, 32],
+                        iconAnchor: [12, 32]
                     });
                     
-                    userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+                    userMarker = L.marker([lat, lon], { 
+                        icon: userIcon,
+                        draggable: true  // Make marker draggable
+                    }).addTo(map);
+
+                    // Add pulse animation
+                    const pulseCircle = L.circle([lat, lon], {
+                        radius: 50,
+                        color: '#0051BA',
+                        fillColor: '#0051BA',
+                        fillOpacity: 0.1,
+                        weight: 1
+                    }).addTo(map);
+
+                    // Handle marker drag event
+                    userMarker.on('dragend', function(event) {
+                        const marker = event.target;
+                        const position = marker.getLatLng();
+                        const newLat = position.lat;
+                        const newLon = position.lng;
+
+                        // Update coordinates
+                        latInput.value = newLat;
+                        lonInput.value = newLon;
+                        userCoordinates = { lat: newLat, lon: newLon };
+
+                        // Update pulse circle position
+                        pulseCircle.setLatLng([newLat, newLon]);
+
+                        // Update address
+                        document.getElementById('userAddress').textContent = 'Memperbarui alamat...';
+
+                        // Reverse geocoding untuk alamat baru
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLon}&zoom=18&addressdetails=1`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const address = data.display_name || `${newLat.toFixed(6)}, ${newLon.toFixed(6)}`;
+                                document.getElementById('userAddress').textContent = address;
+                                
+                                // Hitung ulang jarak dan ongkir
+                                calculateDistance(newLat, newLon);
+                            })
+                            .catch(error => {
+                                console.error('Error getting address:', error);
+                                document.getElementById('userAddress').textContent = `Koordinat: ${newLat.toFixed(6)}, ${newLon.toFixed(6)}`;
+                                calculateDistance(newLat, newLon);
+                            });
+                    });
+
+                    // Show tooltip on hover
+                    userMarker.bindTooltip("Geser pin ini untuk menyesuaikan lokasi", {
+                        permanent: false,
+                        direction: 'top'
+                    });
 
                     // Reverse geocoding menggunakan Nominatim (OpenStreetMap)
                     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)

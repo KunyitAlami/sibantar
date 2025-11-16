@@ -8,59 +8,128 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-     <?php $__env->slot('title', null, []); ?> Development Team SIBANTAR <?php $__env->endSlot(); ?>
+     <?php $__env->slot('title', null, []); ?> Tentang Kami - SIBANTAR <?php $__env->endSlot(); ?>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-700 to-primary-900 text-white">
-        <div class="container mx-auto py-12 lg:py-20 text-center">
-            <h1 class="mb-10 text-3xl font-bold">Development Team SIBANTAR</h1>
+    <section class="bg-gradient-to-br from-primary-700 to-primary-900 text-white py-8 lg:py-24">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-4">
+                <h2 class="text-3xl font-bold text-white mb-4">Tentang SIBANTAR</h2>
+                <p class="text-white leading-relaxed">
+                    SIBANTAR adalah platform digital yang menghubungkan pemilik kendaraan dengan bengkel motor terpercaya. 
+                    Kami berkomitmen untuk memberikan kemudahan dalam mencari dan memesan layanan bengkel dengan transparansi harga 
+                    dan kualitas pelayanan terbaik.
+                </p>
+            </div>
+        </div>
+    </section>
 
-            <!-- Grid Card -->
-            <div class="grid gap-10  sm:grid-cols-4 lg:grid-cols-4 justify-items-center">
-                <!-- Card 1 -->
-                <div class="w-[20rem] bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="flex flex-col items-center pb-10">
-                        <img class="w-64 h-72 mt-10 mb-3 rounded-lg shadow-lg object-cover" 
-                             src="<?php echo e(asset('images/pengembang/randy.jpg')); ?>" 
-                             alt="Randy Febrian">
-                        <h5 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Randy Febrian</h5>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Project Manager</span>
-                    </div>
-                </div>
+    <!-- Team Section -->
+    <section class="py-12 lg:py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-neutral-900 mb-3">Tim Pengembang</h2>
+            </div>
 
-                <!-- Card 2 -->
-                <div class="w-[20rem] bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="flex flex-col items-center pb-10">
-                        <img class="w-64 h-72 mt-10 mb-3 rounded-lg shadow-lg object-cover" 
-                             src="<?php echo e(asset('images/pengembang/billa.jpg')); ?>" 
-                             alt="Zahra Nabila">
-                        <h5 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Zahra Nabila</h5>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Data Analyst</span>
-                    </div>
-                </div>
+            <!-- Team Grid dengan 3D Effect -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
                 
-
-                <!-- Card 3 -->
-                <div class="w-[20rem] bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="flex flex-col items-center pb-10">
-                        <img class="w-64 h-72 mt-10 mb-3 rounded-lg shadow-lg object-cover" 
-                             src="<?php echo e(asset('images/pengembang/rizky.jpg')); ?>" 
-                             alt="Muhammad Rizky">
-                        <h5 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Muhammad Rizky</h5>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Frontend Developer</span>
+                <!-- Card 1 - Randy Febrian -->
+                <div class="hover-3d">
+                    <div class="card bg-white overflow-hidden rounded-2xl">
+                        <figure class="relative p-8 pb-2">
+                            <img class="w-full aspect-[3/4] object-cover rounded-2xl scale-110" 
+                                 src="<?php echo e(asset('images/pengembang/randy.jpg')); ?>" 
+                                 alt="Randy Febrian">
+                        </figure>
+                        <div class="px-5 pb-5 pt-3 text-center">
+                            <h3 class="text-xl font-bold text-neutral-900 mb-1">Randy Febrian</h3>
+                            <p class="text-sm text-primary-700 font-medium mb-2">Project Manager</p>
+                        </div>
                     </div>
+                    <!-- 8 empty divs needed for the 3D effect -->
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
 
-                <!-- Card 4 -->
-                <div class="w-[20rem] bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="flex flex-col items-center pb-10">
-                        <img class="w-64 h-72 mt-10 mb-3 rounded-lg shadow-lg object-cover" 
-                             src="<?php echo e(asset('images/pengembang/ghani.jpg')); ?>" 
-                             alt="Ghani Mudzakir">
-                        <h5 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Ghani Mudzakir</h5>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Backend Developer</span>
+                <!-- Card 2 - Zahra Nabila -->
+                <div class="hover-3d">
+                    <div class="card bg-white overflow-hidden rounded-2xl">
+                        <figure class="relative p-8 pb-2">
+                            <img class="w-full aspect-[3/4] object-cover rounded-2xl scale-110" 
+                                 src="<?php echo e(asset('images/pengembang/billa.jpg')); ?>" 
+                                 alt="Zahra Nabila">
+                        </figure>
+                        <div class="px-5 pb-5 pt-3 text-center">
+                            <h3 class="text-xl font-bold text-neutral-900 mb-1">Zahra Nabila</h3>
+                            <p class="text-sm text-primary-700 font-medium mb-2">Data Analyst</p>
+                        </div>
                     </div>
+                    <!-- 8 empty divs needed for the 3D effect -->
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
+
+                <!-- Card 3 - Muhammad Rizky -->
+                <div class="hover-3d">
+                    <div class="card bg-white overflow-hidden rounded-2xl">
+                        <figure class="relative p-8 pb-2">
+                            <img class="w-full aspect-[3/4] object-cover rounded-2xl scale-110" 
+                                 src="<?php echo e(asset('images/pengembang/rizky.jpg')); ?>" 
+                                 alt="Muhammad Rizky">
+                        </figure>
+                        <div class="px-5 pb-5 pt-3 text-center">
+                            <h3 class="text-xl font-bold text-neutral-900 mb-1">Muhammad Rizky</h3>
+                            <p class="text-sm text-primary-700 font-medium mb-2">Frontend Developer</p>
+                        </div>
+                    </div>
+                    <!-- 8 empty divs needed for the 3D effect -->
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <!-- Card 4 - Ghani Mudzakir -->
+                <div class="hover-3d">
+                    <div class="card bg-white overflow-hidden rounded-2xl">
+                        <figure class="relative p-8 pb-2">
+                            <img class="w-full aspect-[3/4] object-cover rounded-2xl scale-110" 
+                                 src="<?php echo e(asset('images/pengembang/ghani.jpg')); ?>" 
+                                 alt="Ghani Mudzakir">
+                        </figure>
+                        <div class="px-5 pb- pt-3 text-center">
+                            <h3 class="text-xl font-bold text-neutral-900 mb-1">Ghani Mudzakir</h3>
+                            <p class="text-sm text-primary-700 font-medium mb-2">Backend Developer</p>
+                        </div>
+                    </div>
+                    <!-- 8 empty divs needed for the 3D effect -->
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
             </div>
         </div>
     </section>

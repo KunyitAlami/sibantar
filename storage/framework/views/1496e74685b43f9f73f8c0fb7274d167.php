@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?php echo e($title ?? 'SIBANTAR - Bantuan Darurat Kendaraan Terdekat'); ?></title>
+    <title><?php echo e($title ?? 'SIBANTAR - Dashboard Bengkel'); ?></title>
     
     <!-- Vite Assets -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
@@ -20,11 +20,11 @@
 </head>
 <body class="bg-neutral-50">
     
-    <!-- Header Component -->
-    <?php if (isset($component)) { $__componentOriginalfd1f218809a441e923395fcbf03e4272 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalfd1f218809a441e923395fcbf03e4272 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.header','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('header'); ?>
+    <!-- Navbar Bengkel -->
+    <?php if (isset($component)) { $__componentOriginalf9516f3d9d396f5e52c22286badacc84 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf9516f3d9d396f5e52c22286badacc84 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.navbar-bengkel','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('navbar-bengkel'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
@@ -33,13 +33,13 @@
 <?php $component->withAttributes([]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginalfd1f218809a441e923395fcbf03e4272)): ?>
-<?php $attributes = $__attributesOriginalfd1f218809a441e923395fcbf03e4272; ?>
-<?php unset($__attributesOriginalfd1f218809a441e923395fcbf03e4272); ?>
+<?php if (isset($__attributesOriginalf9516f3d9d396f5e52c22286badacc84)): ?>
+<?php $attributes = $__attributesOriginalf9516f3d9d396f5e52c22286badacc84; ?>
+<?php unset($__attributesOriginalf9516f3d9d396f5e52c22286badacc84); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalfd1f218809a441e923395fcbf03e4272)): ?>
-<?php $component = $__componentOriginalfd1f218809a441e923395fcbf03e4272; ?>
-<?php unset($__componentOriginalfd1f218809a441e923395fcbf03e4272); ?>
+<?php if (isset($__componentOriginalf9516f3d9d396f5e52c22286badacc84)): ?>
+<?php $component = $__componentOriginalf9516f3d9d396f5e52c22286badacc84; ?>
+<?php unset($__componentOriginalf9516f3d9d396f5e52c22286badacc84); ?>
 <?php endif; ?>
     
     <!-- Main Content -->
@@ -76,4 +76,4 @@
 
 </body>
 </html>
-<?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/components/layout.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/components/layout-bengkel.blade.php ENDPATH**/ ?>

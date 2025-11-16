@@ -1,50 +1,47 @@
-<!-- Navbar untuk Guest (Belum Login) -->
-<header class="bg-white shadow-sm sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <!-- Logo -->
-        <a href="/" class="flex items-center gap-2">
-            <img src="<?php echo e(asset('images/logo.png')); ?>" alt="SIBANTAR Logo" class="w-10 h-10 object-contain">
-            <span class="text-xl font-bold text-primary-700">SIBANTAR</span>
-        </a>
-        
-        <!-- Hamburger Menu -->
-        <button id="menuToggle" class="lg:hidden">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-
-        <!-- Desktop Navigation -->
-        <nav class="hidden lg:flex items-center gap-6">
-            <a href="/" class="text-neutral-700 hover:text-primary-700 transition font-medium">Beranda</a>
-            <a href="/about_us" class="text-neutral-700 hover:text-primary-700 transition font-medium">Tentang</a>
-            <a href="/login" class="btn btn-primary">Masuk</a>
-        </nav>
-    </div>
-
-    <!-- Mobile Menu -->
-    <nav id="mobileMenu" class="hidden lg:hidden bg-white border-t border-neutral-200">
-        <div class="container mx-auto px-4 py-4 flex flex-col gap-3">
-            <a href="/" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Beranda</a>
-            <a href="/about_us" class="text-neutral-700 hover:text-primary-700 py-2 transition font-medium">Tentang</a>
-            <a href="/login" class="btn btn-primary text-center">Masuk</a>
+<!-- Navbar untuk Guest (Belum Login) - DaisyUI -->
+<div class="bg-base-100 shadow-md sticky top-0 z-[9999]">
+    <div class="navbar container mx-auto">
+        <!-- Navbar Start - Logo -->
+        <div class="navbar-start">
+            <!-- Logo -->
+            <a href="<?php echo e(route('landing_page')); ?>" class="btn btn-ghost text-xl px-2 lg:px-4">
+                <img src="<?php echo e(asset('images/logo.png')); ?>" alt="SIBANTAR Logo" class="w-8 h-8 lg:w-10 lg:h-10 object-contain">
+                <span class="font-bold text-primary">SIBANTAR</span>
+            </a>
         </div>
-    </nav>
-</header>
-
-<!-- Mobile Menu Toggle Script -->
-<?php $__env->startPush('scripts'); ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        if (menuToggle && mobileMenu) {
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-    });
-</script>
-<?php $__env->stopPush(); ?>
+        
+        <!-- Navbar Center - Desktop Menu -->
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="<?php echo e(route('landing_page')); ?>" class="font-medium <?php echo e(request()->routeIs('landing_page') ? 'active' : ''); ?>">Beranda</a></li>
+                <li><a href="<?php echo e(route('about_us')); ?>" class="font-medium <?php echo e(request()->routeIs('about_us') ? 'active' : ''); ?>">Tentang Kami</a></li>
+            </ul>
+        </div>
+        
+        <!-- Navbar End - Auth Buttons & Mobile Menu -->
+        <div class="navbar-end gap-2">
+            <a href="<?php echo e(route('login')); ?>" class="btn btn-ghost btn-sm lg:btn-md font-medium hidden sm:flex">
+                Masuk
+            </a>
+            <a href="<?php echo e(route('register')); ?>" class="btn btn-primary btn-sm lg:btn-md hidden sm:flex">
+                Daftar
+            </a>
+            
+            <!-- Mobile Dropdown Menu -->
+            <div class="dropdown dropdown-end lg:hidden">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li><a href="<?php echo e(route('landing_page')); ?>" class="font-medium">Beranda</a></li>
+                    <li><a href="<?php echo e(route('about_us')); ?>" class="font-medium">Tentang Kami</a></li>
+                    <li><a href="<?php echo e(route('login')); ?>" class="font-medium">Masuk</a></li>
+                    <li><a href="<?php echo e(route('register')); ?>" class="font-medium">Daftar</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\resources\views/components/navbar-guest.blade.php ENDPATH**/ ?>
