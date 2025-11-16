@@ -76,7 +76,24 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
             Route::get('/bengkel/{id}/confirmation', fn($id) => view('user.confirmation'))->name('bengkel.confirmation');
             
-            // Order Tracking dengan status dinamis
+            // Report/Laporan
+            Route::get('/report', fn() => view('user.report'))->name('report');
+            Route::post('/report', fn() => redirect()->route('user.history'))->name('report.store');
+            
+            // Order Tracking berdasarkan status
+            Route::get('/order-tracking/on-the-way/{id}', function ($id) {
+                return view('user.order-tracking', ['orderId' => $id, 'status' => 'on-the-way']);
+            })->name('order-tracking.on-the-way');
+            
+            Route::get('/order-tracking/in-progress/{id}', function ($id) {
+                return view('user.order-tracking', ['orderId' => $id, 'status' => 'in-progress']);
+            })->name('order-tracking.in-progress');
+            
+            Route::get('/order-tracking/completed/{id}', function ($id) {
+                return view('user.order-tracking', ['orderId' => $id, 'status' => 'completed']);
+            })->name('order-tracking.completed');
+            
+            // Order Tracking dengan status dinamis (fallback)
             Route::get('/order-tracking/{orderId}', function ($orderId) {
                 $status = request()->get('status', 'waiting');
                 return view('user.order-tracking', compact('orderId', 'status'));

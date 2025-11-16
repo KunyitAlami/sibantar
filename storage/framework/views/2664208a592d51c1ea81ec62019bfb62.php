@@ -55,7 +55,7 @@
             <div class="flex-1 min-w-0">
                 <h1 class="text-base font-bold text-neutral-900 truncate">Bengkel Terdekat</h1>
                 <p class="text-xs text-neutral-600 truncate">
-                    <span id="vehicle-type">Motor</span> - <span id="problem-type">Ban Bocor</span>
+                    <span id="vehicle-type"><?php echo e(request('vehicle_type', 'Motor')); ?></span> - <span id="problem-type"><?php echo e(request('problem_type', 'Ban Bocor')); ?></span>
                 </p>
             </div>
         </div>
@@ -120,16 +120,7 @@
             </div>
         </div>
     </section>
-
-    <!-- Results Count -->
-    <section class="bg-neutral-50 py-3">
-        <div class="container mx-auto px-4">
-            <p class="text-sm text-neutral-600">
-                Ditemukan <span class="font-semibold text-neutral-900">12 bengkel</span> terdekat dari lokasi Anda
-            </p>
-        </div>
-    </section>
-
+    
     <!-- Bengkel List -->
     <section class="bg-neutral-50 pb-6">
         <div class="container mx-auto px-4">
@@ -315,12 +306,6 @@
                 </div>
             </div>
 
-            <!-- Load More Button -->
-            <div class="pt-4">
-                <button class="btn btn-outline w-full">
-                    Muat Lebih Banyak
-                </button>
-            </div>
             </div>
 
         </div>
