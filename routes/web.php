@@ -77,15 +77,22 @@ Route::middleware(['auth'])->group(function () {
             // Route::get('/dashboard', fn() => view('user.search'))->name('search');
             Route::get('/eksplor_bengkel', fn() => view('user.eksplor_bengkel'))->name('eksplor_bengkel');            
             Route::get('/dashboard', fn() => view('user.dashboard'))->name('dashboard');
-            Route::get('/history', fn() => view('user.history'))->name('history');
-            Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
+            // Route::get('/history', fn() => view('user.history'))->name('history');
+            // Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
             Route::get('/bengkel/{id}/confirmation', fn($id) => view('user.confirmation'))->name('bengkel.confirmation');
 
             // Route::get('/mapping/edit-cpmk-cpl', [CPMKMPLMapController::class, 'edit_cpmk_cpl'])->name('cpmk-cpl-mapping.edit');
             // Route::put('/mapping/cpmk-cpl', [CPMKMPLMapController::class, 'updateCPMKCPLMap'])->name('cpmk-cpl-mapping.update');
+
+            // yang pakai controller di sini
             Route::get('/search', [UserController::class, 'search'])->name('search');
             Route::get('/bengkel/{id_bengkel}/layanan/{id_layanan}',[UserController::class, 'detail_bengkel'])->name('bengkel.detail');
-            
+            Route::get('/bengkel/{id_bengkel}/confirmation/{id_layanan}',[UserController::class, 'konfirmasi_pesanan'])->name('bengkel.confirmation');
+            Route::post('/order', [UserController::class, 'pesan'])->name('order_store');
+            Route::get('/waiting-confirmation/{order_id}', [UserController::class, 'waiting_confirmation'])->name('waiting_confirmation');
+            Route::get('/history-order/{id_user}', [UserController::class, 'history'])->name('history');
+
+
             // Report/Laporan
             Route::get('/report', fn() => view('user.report'))->name('report');
             Route::post('/report', fn() => redirect()->route('user.history'))->name('report.store');
@@ -110,9 +117,9 @@ Route::middleware(['auth'])->group(function () {
             })->name('order-tracking');
             
             // Halaman waiting confirmation dengan timer 2 menit
-            Route::get('/waiting-confirmation', function () {
-                return view('user.waiting-confirmation');
-            })->name('waiting-confirmation');
+            // Route::get('/waiting-confirmation', function () {
+            //     return view('user.waiting-confirmation');
+            // })->name('waiting-confirmation');
             
             Route::get('/mechanic-on-the-way', function () {
                 return redirect()->route('user.order-tracking', ['orderId' => 1, 'status' => 'on-the-way']);

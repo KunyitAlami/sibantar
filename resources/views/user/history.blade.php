@@ -3,7 +3,7 @@
     <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
-                <a href="{{ route('user.search') }}" class="text-neutral-700 hover:text-primary-700">
+                <a href="{{ route('user.dashboard') }}" class="text-neutral-700 hover:text-primary-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
@@ -18,7 +18,56 @@
     <!-- Main Content -->
     <section class="py-4 pb-24">
         <div class="container mx-auto px-4">
-            <div class="max-w-md mx-auto space-y-3">
+            @foreach ($orders as $order)
+                <!-- Booking Card 1 - In Progress -->
+                <div class="booking-card card p-4 hover:shadow-lg transition-shadow mb-6" data-status="in-progress">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h3 class="font-bold text-neutral-900">{{ $order->bengkel->nama_bengkel }}</h3>
+                            <p class="text-xs text-neutral-500 mt-2">Tanggal Order: {{ $order->created_at }}</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-info-100 text-info-700 text-xs font-semibold rounded-full whitespace-nowrap">
+                            {{ $order->status }}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1 mb-3">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="text-sm text-neutral-600">Jenis Pelayanan: {{ $order->layananBengkel->nama_layanan }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="text-sm text-neutral-600">Jenis Kendaraaan: {{ $order->layananBengkel->kategori }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="text-sm text-neutral-600 truncate">{{ $order->bengkel->alamat_lengkap }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
+                        <span class="font-bold text-xl text-primary-700">
+                                    Rp {{ number_format($order->total_bayar, 0, ',', '.') }}
+                        </span>
+                        <div class="flex gap-2">
+                            <a href="{{ route('user.report', ['booking' => 1]) }}" class="btn btn-sm btn-outline btn-error">
+                                Lapor
+                            </a>
+                            <a href="{{ route('user.order-tracking.in-progress', ['id' => 1]) }}" class="btn btn-sm btn-primary">
+                                Lihat Detail
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+            {{-- <div class="max-w-md mx-auto space-y-3">
                 
                 <!-- Booking Card 1 - In Progress -->
                 <div class="booking-card card p-4 hover:shadow-lg transition-shadow" data-status="in-progress">
@@ -147,7 +196,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> --}}
 
             <!-- Empty State (Hidden by default) -->
             <div id="emptyState" class="hidden text-center py-16">
@@ -165,7 +214,7 @@
         </div>
     </section>
 
-    @push('scripts')
+    {{-- @push('scripts')
     <script>
         function showReviewModal(bookingId) {
             Swal.fire({
@@ -244,6 +293,6 @@
             });
         }
     </script>
-    @endpush
+    @endpush --}}
 
 </x-layout-user>

@@ -21,32 +21,32 @@
 
                 <!-- Bengkel Info -->
                 <div class="card p-4 mb-4">
-                    <h4 class="font-semibold text-neutral-900 mb-1">Bengkel Jaya Motor</h4>
-                    <p class="text-sm text-neutral-600">Jl. Raya No. 23, Banjarmasin</p>
+                    <h4 class="font-semibold text-neutral-900 mb-1"><?php echo e($bengkel->nama_bengkel); ?></h4>
+                    <p class="text-sm text-neutral-600"><?php echo e($bengkel->alamat_lengkap); ?></p>
                     <div class="flex items-center gap-2 mt-2">
                         <div class="flex text-warning-500">
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
                         </div>
                         <span class="text-sm text-neutral-600">4.8</span>
                         <span class="text-neutral-400">•</span>
-                        <span class="text-sm text-neutral-600">0.6 km • 15 menit</span>
+                        <span class="text-sm text-neutral-600" id="distanceDisplay">Menghitung jarak...</span>
                     </div>
                 </div>
 
                 <!-- Form -->
-                <form id="orderForm" class="space-y-4">
+                <form id="orderForm" action="<?php echo e(route('user.order_store')); ?>" method="POST" class="space-y-4">
+                    <?php echo csrf_field(); ?>
+                    <!-- Hidden inputs for bengkel coordinates -->
+                    <input type="hidden" id="bengkelLatitude" name="bengkel_latitude" value="<?php echo e($bengkel->latitude ?? ''); ?>">
+                    <input type="hidden" id="bengkelLongitude" name="bengkel_longitude" value="<?php echo e($bengkel->longitude ?? ''); ?>">
+                    <input type="hidden" id="idBengkel" name="id_bengkel" value="<?php echo e($bengkel->id_bengkel ?? ''); ?>">
+                    <input type="hidden" id="idLayanan" name="id_layanan_bengkel" value="<?php echo e($layanan_bengkel->id_layanan_bengkel ?? ''); ?>">
+                    <input type="hidden" id="idUser" name="id_user" value="<?php echo e($id_user->id_user ?? ''); ?>">
+                    <input type="hidden" id="status" name="status" value="pending">
+                    <input type="hidden" id="estimasiHarga"  name="estimasi_harga" value="<?php echo e($layanan_bengkel->harga_akhir ?? ''); ?>">
+                    <input type="hidden" id="totalBayar" name="total_bayar" id="totalBayar" value="">
+
                     
-                    <!-- Pilih Layanan -->
-                    <div>
-                        <label class="block text-sm font-semibold text-neutral-900 mb-2">Pilih Layanan</label>
-                        <div class="dropdown w-full">
-                            <select id="serviceSelect" onchange="calculateTotal()" class="select select-bordered w-full text-sm bg-white !h-14 !min-h-0 !leading-normal" required>
-                                <option value="">Jenis Layanan</option>
-                                <option value="15000">Tambal Ban</option>
-                                <option value="50000">Service Ringan</option>
-                            </select>
-                        </div>
-                    </div>
 
                     <!-- Lokasi Anda -->
                     <div>
@@ -63,40 +63,48 @@
                                 <p class="text-xs font-medium text-neutral-700">Alamat</p>
                                 <p class="text-xs text-neutral-600" id="userAddress">Mendeteksi lokasi Anda...</p>
                             </div>
-                            <input type="hidden" id="userLatitude">
-                            <input type="hidden" id="userLongitude">
+                            <input type="hidden" id="userLatitude" name="user_latitude">
+                            <input type="hidden" id="userLongitude" name="user_longitude">
                         </div>
                     </div>
 
                     <!-- Catatan -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Catatan (Opsional)</label>
-                        <textarea id="orderNotes" placeholder="Tambahkan catatan untuk bengkel..." class="input w-full text-sm" rows="3"></textarea>
+                        
+                        <textarea 
+                            id="orderNotes" 
+                            name="notes"
+                            placeholder="Tambahkan catatan untuk bengkel..." 
+                            class="textarea textarea-bordered w-full text-sm p-2" 
+                            rows="3"></textarea>
                     </div>
 
                     <!-- Rincian Biaya -->
-                    <div class="card p-4 bg-neutral-50">
+                    <div class="card p-4 bg-neutral-50 mb-10 border border-black">
                         <h5 class="font-semibold text-neutral-900 mb-3">Rincian Biaya</h5>
                         <div class="space-y-2">
                             <div class="flex justify-between text-sm">
                                 <span class="text-neutral-600">Biaya Layanan</span>
-                                <span class="font-medium text-neutral-900" id="servicePrice">Rp 0</span>
+                                <span class="font-medium text-neutral-900" id="servicePrice">
+                                    Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?>
+
+                                </span>
                             </div>
                             <div class="flex justify-between text-sm">
-                                <span class="text-neutral-600" id="ongkirLabel">Ongkir (0.6 km)</span>
-                                <span class="font-medium text-neutral-900" id="ongkirPrice">Rp 6.000</span>
+                                <span class="text-neutral-600" id="ongkirLabel">Ongkir (Menghitung...)</span>
+                                <span class="font-medium text-neutral-900" id="ongkirPrice">Rp 0</span>
                             </div>
                             <div class="border-t border-neutral-200 pt-2 mt-2">
                                 <div class="flex justify-between">
                                     <span class="font-semibold text-neutral-900">Total</span>
-                                    <span class="font-bold text-primary-700 text-lg" id="totalPrice">Rp 6.000</span>
+                                    <span class="font-bold text-primary-700 text-lg" id="totalPrice">Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?></span>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
-
                 </form>
-
             </div>
         </div>
     </section>
@@ -108,7 +116,7 @@
                 <a href="<?php echo e(url()->previous()); ?>" class="flex-1 btn btn-outline text-center">
                     Batal
                 </a>
-                <button onclick="confirmOrder()" class="flex-1 btn btn-primary">
+                <button type="button" onclick="confirmOrder()" class="flex-1 btn btn-primary">
                     Konfirmasi
                 </button>
             </div>
@@ -121,12 +129,20 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+        // Configuration
+        const ONGKIR_PER_KM = 15000; // Rp 15.000 per km
+        const SERVICE_PRICE = <?php echo e($layanan_bengkel->harga_akhir); ?>;
+        
+        // Get bengkel coordinates from backend
+        const bengkelLat = parseFloat(document.getElementById('bengkelLatitude').value) || null;
+        const bengkelLng = parseFloat(document.getElementById('bengkelLongitude').value) || null;
+
         let userCoordinates = null;
-        let ongkirRate = 10000; // Rp 10.000 per km
         let map = null;
         let userMarker = null;
+        let bengkelMarker = null;
+        let routeLine = null;
 
-        // Auto-detect location when page loads
         window.addEventListener('DOMContentLoaded', function() {
             initMap();
             getUserLocation();
@@ -134,13 +150,32 @@
 
         function initMap() {
             // Initialize map with default center (Banjarmasin)
-            map = L.map('map').setView([-3.3186, 114.5942], 13);
+            const defaultLat = bengkelLat || -3.3186;
+            const defaultLng = bengkelLng || 114.5942;
+            
+            map = L.map('map').setView([defaultLat, defaultLng], 13);
             
             // Add OpenStreetMap tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
+
+            // Add bengkel marker if coordinates exist
+            if (bengkelLat && bengkelLng) {
+                const bengkelIcon = L.divIcon({
+                    className: 'bengkel-marker',
+                    html: `
+                        <div style="background-color: #FF9800; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; border: 3px solid white; box-shadow: 0 2px 12px rgba(255,152,0,0.4); transform: rotate(-45deg);"></div>
+                    `,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 24]
+                });
+                
+                bengkelMarker = L.marker([bengkelLat, bengkelLng], { icon: bengkelIcon })
+                    .addTo(map)
+                    .bindPopup('<b><?php echo e($bengkel->nama_bengkel); ?></b><br><?php echo e($bengkel->alamat_lengkap); ?>');
+            }
         }
 
         function getUserLocation() {
@@ -164,15 +199,15 @@
                     lonInput.value = lon;
                     userCoordinates = { lat, lon };
 
-                    // Update map view and add marker
-                    map.setView([lat, lon], 16);
+                    // Update map view
+                    map.setView([lat, lon], 15);
                     
                     // Remove old marker if exists
                     if (userMarker) {
                         map.removeLayer(userMarker);
                     }
                     
-                    // Add new marker with custom icon (draggable)
+                    // Add new user marker (draggable)
                     const userIcon = L.divIcon({
                         className: 'custom-marker',
                         html: `
@@ -187,10 +222,10 @@
                     
                     userMarker = L.marker([lat, lon], { 
                         icon: userIcon,
-                        draggable: true  // Make marker draggable
+                        draggable: true
                     }).addTo(map);
 
-                    // Add pulse animation
+                    // Add pulse circle
                     const pulseCircle = L.circle([lat, lon], {
                         radius: 50,
                         color: '#0051BA',
@@ -199,62 +234,48 @@
                         weight: 1
                     }).addTo(map);
 
-                    // Handle marker drag event
+                    // Handle marker drag
                     userMarker.on('dragend', function(event) {
                         const marker = event.target;
                         const position = marker.getLatLng();
                         const newLat = position.lat;
                         const newLon = position.lng;
 
-                        // Update coordinates
                         latInput.value = newLat;
                         lonInput.value = newLon;
                         userCoordinates = { lat: newLat, lon: newLon };
 
-                        // Update pulse circle position
                         pulseCircle.setLatLng([newLat, newLon]);
+                        addressDisplay.textContent = 'Memperbarui alamat...';
 
-                        // Update address
-                        document.getElementById('userAddress').textContent = 'Memperbarui alamat...';
-
-                        // Reverse geocoding untuk alamat baru
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLon}&zoom=18&addressdetails=1`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const address = data.display_name || `${newLat.toFixed(6)}, ${newLon.toFixed(6)}`;
-                                document.getElementById('userAddress').textContent = address;
-                                
-                                // Hitung ulang jarak dan ongkir
-                                calculateDistance(newLat, newLon);
-                            })
-                            .catch(error => {
-                                console.error('Error getting address:', error);
-                                document.getElementById('userAddress').textContent = `Koordinat: ${newLat.toFixed(6)}, ${newLon.toFixed(6)}`;
-                                calculateDistance(newLat, newLon);
-                            });
+                        // Update address & recalculate
+                        reverseGeocode(newLat, newLon);
+                        calculateDistanceAndOngkir(newLat, newLon);
+                        drawRouteLine(newLat, newLon);
                     });
 
-                    // Show tooltip on hover
                     userMarker.bindTooltip("Geser pin ini untuk menyesuaikan lokasi", {
                         permanent: false,
                         direction: 'top'
                     });
 
-                    // Reverse geocoding menggunakan Nominatim (OpenStreetMap)
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const address = data.display_name || `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-                            addressDisplay.textContent = address;
-                            
-                            // Hitung ulang jarak dan ongkir
-                            calculateDistance(lat, lon);
-                        })
-                        .catch(error => {
-                            console.error('Error getting address:', error);
-                            addressDisplay.textContent = `Koordinat: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-                            calculateDistance(lat, lon);
-                        });
+                    // Get address
+                    reverseGeocode(lat, lon);
+                    
+                    // Calculate distance & ongkir
+                    calculateDistanceAndOngkir(lat, lon);
+                    
+                    // Draw route line
+                    drawRouteLine(lat, lon);
+
+                    // Fit map to show both markers
+                    if (bengkelLat && bengkelLng) {
+                        const bounds = L.latLngBounds([
+                            [lat, lon],
+                            [bengkelLat, bengkelLng]
+                        ]);
+                        map.fitBounds(bounds, { padding: [50, 50] });
+                    }
                 },
                 function(error) {
                     let errorMessage = 'Gagal mendapatkan lokasi';
@@ -274,68 +295,203 @@
             );
         }
 
-        function calculateDistance(userLat, userLon) {
-            // Koordinat bengkel (contoh: -3.316694, 114.590111)
-            const bengkelLat = -3.316694;
-            const bengkelLon = 114.590111;
+        function reverseGeocode(lat, lon) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name || `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                    document.getElementById('userAddress').textContent = address;
+                })
+                .catch(error => {
+                    console.error('Error getting address:', error);
+                    document.getElementById('userAddress').textContent = `Koordinat: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                });
+        }
 
-            // Haversine formula untuk menghitung jarak
-            const R = 6371; // Radius bumi dalam km
-            const dLat = (userLat - bengkelLat) * Math.PI / 180;
-            const dLon = (userLon - bengkelLon) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(bengkelLat * Math.PI / 180) * Math.cos(userLat * Math.PI / 180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            const distance = R * c;
+        function calculateDistanceAndOngkir(userLat, userLon) {
+            if (!bengkelLat || !bengkelLng) return;
 
-            // Update ongkir berdasarkan jarak
-            const ongkir = Math.ceil(distance * ongkirRate);
-            document.getElementById('ongkirLabel').textContent = `Ongkir (${distance.toFixed(1)} km)`;
+            const url = `https://router.project-osrm.org/route/v1/driving/${userLon},${userLat};${bengkelLng},${bengkelLat}?overview=false`;
             
-            // Update total
-            calculateTotal(ongkir, distance);
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes[0]) {
+                        const distance = data.routes[0].distance / 1000;
+                        const duration = data.routes[0].duration / 60;
+                        updateUI(distance, duration);
+                    } else {
+                        const distance = calculateStraightLineDistance(userLat, userLon);
+                        const timeMinutes = Math.round((distance / 30) * 60);
+                        updateUI(distance, timeMinutes);
+                    }
+                })
+                .catch(() => {
+                    const distance = calculateStraightLineDistance(userLat, userLon);
+                    const timeMinutes = Math.round((distance / 30) * 60);
+                    updateUI(distance, timeMinutes);
+                });
         }
 
-        function calculateTotal(customOngkir = 6000, distance = 0.6) {
-            const serviceSelect = document.getElementById('serviceSelect');
-            const servicePrice = parseInt(serviceSelect.value) || 0;
-            const ongkir = customOngkir;
-            const total = servicePrice + ongkir;
+        function calculateStraightLineDistance(userLat, userLon) {
+            const R = 6371;
+            const dLat = deg2rad(bengkelLat - userLat);
+            const dLon = deg2rad(bengkelLng - userLon);
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(deg2rad(userLat)) * Math.cos(deg2rad(bengkelLat)) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
 
-            document.getElementById('servicePrice').textContent = 'Rp ' + servicePrice.toLocaleString('id-ID');
-            document.getElementById('ongkirPrice').textContent = 'Rp ' + ongkir.toLocaleString('id-ID');
-            document.getElementById('totalPrice').textContent = 'Rp ' + total.toLocaleString('id-ID');
+        function updateUI(distance, timeMinutes) {
+            const ongkir = Math.ceil(distance * ONGKIR_PER_KM);
+            const total = SERVICE_PRICE + ongkir;
+            const timeText = timeMinutes < 60 
+                ? `${Math.round(timeMinutes)} menit`
+                : `${Math.floor(timeMinutes / 60)} jam ${Math.round(timeMinutes % 60)} menit`;
 
-            // Update label if distance changed
-            if (distance !== 0.6) {
-                document.getElementById('ongkirLabel').textContent = `Ongkir (${distance.toFixed(1)} km)`;
+            document.getElementById('distanceDisplay').textContent = `${distance.toFixed(1)} km • ${timeText}`;
+            document.getElementById('ongkirLabel').textContent = `Ongkir (${distance.toFixed(1)} km)`;
+            document.getElementById('ongkirPrice').textContent = formatRupiah(ongkir);
+            document.getElementById('totalPrice').textContent = formatRupiah(total);
+            document.getElementById('totalBayar').value = total;
+        }
+
+
+        function drawRouteLine(userLat, userLon) {
+            if (!bengkelLat || !bengkelLng) return;
+            
+            if (routeLine) {
+                map.removeLayer(routeLine);
             }
+            
+            const url = `https://router.project-osrm.org/route/v1/driving/${userLon},${userLat};${bengkelLng},${bengkelLat}?overview=full&geometries=geojson`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes[0] && data.routes[0].geometry) {
+                        const routeCoordinates = data.routes[0].geometry.coordinates;
+                        const leafletCoordinates = routeCoordinates.map(coord => [coord[1], coord[0]]);
+                        
+                        // Main route line
+                        routeLine = L.polyline(leafletCoordinates, {
+                            color: '#0051BA',
+                            weight: 5,
+                            opacity: 0.8,
+                            lineJoin: 'round',
+                            lineCap: 'round',
+                            className: 'route-line'
+                        }).addTo(map);
+                        
+                        // Add animated overlay
+                        const animatedLine = L.polyline(leafletCoordinates, {
+                            color: '#FFFFFF',
+                            weight: 3,
+                            opacity: 0.6,
+                            dashArray: '10, 20',
+                            dashOffset: '0',
+                            lineJoin: 'round',
+                            lineCap: 'round'
+                        }).addTo(map);
+                        
+                        // Animate the dashed line
+                        let offset = 0;
+                        setInterval(() => {
+                            offset += 1;
+                            if (offset > 30) offset = 0;
+                            animatedLine.setStyle({ dashOffset: -offset });
+                        }, 50);
+                        
+                        // Add start and end markers
+                        L.circleMarker([userLat, userLon], {
+                            radius: 6,
+                            color: '#FFFFFF',
+                            fillColor: '#0051BA',
+                            fillOpacity: 1,
+                            weight: 2
+                        }).addTo(map).bindTooltip('Start', { permanent: false });
+                        
+                        const endPoint = leafletCoordinates[leafletCoordinates.length - 1];
+                        L.circleMarker(endPoint, {
+                            radius: 6,
+                            color: '#FFFFFF',
+                            fillColor: '#FF9800',
+                            fillOpacity: 1,
+                            weight: 2
+                        }).addTo(map).bindTooltip('Bengkel', { permanent: false });
+                        
+                    } else {
+                        drawStraightLine(userLat, userLon);
+                    }
+                })
+                .catch(error => {
+                    console.warn('OSRM error:', error);
+                    drawStraightLine(userLat, userLon);
+                });
         }
 
-        function confirmOrder() {
-            const service = document.getElementById('serviceSelect');
+        function drawStraightLine(userLat, userLon) {
+            routeLine = L.polyline([
+                [userLat, userLon],
+                [bengkelLat, bengkelLng]
+            ], {
+                color: '#FF9800',
+                weight: 3,
+                opacity: 0.6,
+                dashArray: '10, 10'
+            }).addTo(map);
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI/180);
+        }
+
+        function formatRupiah(amount) {
+            return 'Rp ' + amount.toLocaleString('id-ID');
+        }
+
+        window.confirmOrder = function() {
             const addressDisplay = document.getElementById('userAddress');
             const location = addressDisplay.textContent;
             const notes = document.getElementById('orderNotes').value;
+            const userLat = document.getElementById('userLatitude').value;
+            const userLng = document.getElementById('userLongitude').value;
 
-            if (!service.value) {
-                notyf.open({
-                    type: 'warning',
-                    message: 'Silakan pilih layanan terlebih dahulu'
+            // Ambil hidden input sesuai form
+            const bengkelLat = document.getElementById('bengkelLatitude').value;
+            const bengkelLng = document.getElementById('bengkelLongitude').value;
+            const idBengkel = document.getElementById('idBengkel').value;
+            const idLayanan = document.getElementById('idLayanan').value;
+            const idUser = document.getElementById('idUser').value;
+            const estimasiHarga = document.getElementById('estimasiHarga').value;
+            const totalBayar = document.getElementById('totalBayar').value;
+
+            // Validation
+            if (!userLat || !userLng || location === 'Mendeteksi lokasi Anda...' || location.includes('Gagal')) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Lokasi Diperlukan',
+                    text: 'Silakan izinkan akses lokasi Anda',
+                    confirmButtonColor: '#0051BA'
                 });
                 return;
             }
 
-            if (!userCoordinates || location === 'Mendeteksi lokasi Anda...') {
-                notyf.open({
-                    type: 'warning',
-                    message: 'Silakan izinkan akses lokasi Anda'
+            if (!totalBayar || isNaN(totalBayar) || totalBayar <= 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan dalam menghitung total harga',
+                    confirmButtonColor: '#0051BA'
                 });
                 return;
             }
 
-            // Show SweetAlert2 confirmation
+            // Format total untuk ditampilkan
+            const totalText = formatRupiah(parseInt(totalBayar));
+
             Swal.fire({
                 title: 'Konfirmasi Pesanan',
                 html: `
@@ -343,12 +499,16 @@
                         <p class="text-sm text-gray-600 mb-3">Pastikan data pesanan Anda sudah benar:</p>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
+                                <span class="text-gray-600">Nama Bengkel:</span>
+                                <span class="font-medium"><?php echo e($bengkel->nama_bengkel); ?></span>
+                            </div>
+                            <div class="flex justify-between">
                                 <span class="text-gray-600">Layanan:</span>
-                                <span class="font-medium">${service.options[service.selectedIndex].text}</span>
+                                <span class="font-medium"><?php echo e($layanan_bengkel->nama_layanan); ?></span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Total:</span>
-                                <span class="font-semibold text-blue-600">${document.getElementById('totalPrice').textContent}</span>
+                                <span class="font-semibold text-blue-600">${totalText}</span>
                             </div>
                         </div>
                     </div>
@@ -367,26 +527,78 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Show loading
                     Swal.fire({
                         title: 'Memproses pesanan...',
                         html: 'Mohon tunggu sebentar',
                         allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
+                        allowEscapeKey: false,
+                        didOpen: () => Swal.showLoading()
                     });
 
-                    // Simulate processing
-                    setTimeout(() => {
+                    axios.post("<?php echo e(route('user.order_store')); ?>", {
+                        id_bengkel: idBengkel,
+                        id_layanan_bengkel: idLayanan,
+                        user_latitude: userLat,
+                        user_longitude: userLng,
+                        bengkel_latitude: bengkelLat,
+                        bengkel_longitude: bengkelLng,
+                        estimasi_harga: estimasiHarga,
+                        total_bayar: totalBayar,
+                        notes: notes,
+                    })
+                    .then(response => {
+                        const data = response.data;
                         Swal.close();
-                        console.log('Redirecting to waiting-confirmation page...');
-                        // Redirect ke halaman waiting confirmation dengan timer 2 menit
-                        window.location.replace('/user/waiting-confirmation');
-                    }, 1500);
+
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pesanan Berhasil!',
+                                text: 'Pesanan Anda sedang diproses',
+                                confirmButtonColor: '#0051BA',
+                                timer: 2000,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = data.redirect_url;
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: data.message || 'Kesalahan tak dikenal',
+                                confirmButtonColor: '#0051BA'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.close();
+
+                        if (error.response && error.response.status === 422) {
+                            const errors = error.response.data.errors;
+                            let msg = '';
+                            Object.values(errors).forEach(arr => arr.forEach(e => msg += `• ${e}\n`));
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Data Tidak Valid',
+                                text: msg,
+                                confirmButtonColor: '#0051BA'
+                            });
+                            return;
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: (error.response?.data?.message) || error.message,
+                            confirmButtonColor: '#0051BA'
+                        });
+                    });
                 }
             });
         }
+
+
     </script>
     <?php $__env->stopPush(); ?>
 
@@ -399,5 +611,4 @@
 <?php if (isset($__componentOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
 <?php $component = $__componentOriginal066474d3ca90bb663733ba5d5a32c765; ?>
 <?php unset($__componentOriginal066474d3ca90bb663733ba5d5a32c765); ?>
-<?php endif; ?>
-<?php /**PATH D:\laragon\www\sibantar\resources\views/user/confirmation.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH D:\laragon\www\sibantar\resources\views/user/confirmation.blade.php ENDPATH**/ ?>

@@ -494,6 +494,7 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
+        /* Custom marker styling */
         .user-marker {
             background-color: #0051BA;
             border: 3px solid white;
@@ -513,6 +514,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
+        /* Leaflet popup custom */
         .leaflet-popup-content-wrapper {
             border-radius: 12px;
         }
@@ -578,12 +580,12 @@
                     Harga
                 </button>
 
-                <button data-filter="buka" class="filter-btn btn btn-sm btn-outline whitespace-nowrap">
+                {{-- <button data-filter="buka" class="filter-btn btn btn-sm btn-outline whitespace-nowrap">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Buka Sekarang
-                </button>
+                </button> --}}
             </div>
         </div>
     </section>
@@ -678,7 +680,10 @@
                                     Detail
                                 </a>
 
-                                <a href="{{ route('user.bengkel.confirmation', $bengkel->id_bengkel) }}" class="btn btn-primary btn-sm flex-1">
+                                <a href="{{ route('user.bengkel.confirmation', [
+                                    'id_bengkel'=> $bengkel->id_bengkel,
+                                    'id_layanan'=> $bengkel->relevant_layanan->id_layanan_bengkel,
+                                ]) }}" class="btn btn-primary btn-sm flex-1">
                                     Pesan
                                 </a>
                             </div>
@@ -699,6 +704,7 @@
             </div>
         </div>
     </section>
+
 
     @push('scripts')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -733,7 +739,10 @@
                 .openPopup();
 
             bengkelData.forEach(bengkel => {
-                if (!bengkel.lat || !bengkel.lng) return;
+                if (!bengkel.lat || !bengkel.lng) {
+                    console.warn(`Bengkel ${bengkel.name} tidak memiliki koordinat yang valid`);
+                    return;
+                }
 
                 const bengkelIcon = L.divIcon({
                     className: 'bengkel-marker',
@@ -753,7 +762,8 @@
                                 <span class="text-neutral-500">(${bengkel.reviews})</span>
                             </div>
                             <p class="text-xs text-neutral-600 mb-2">${bengkel.distance} dari Anda</p>
-                            <a href="/user/bengkel/${bengkel.id}" class="text-primary-700 font-medium hover:underline">Lihat Detail →</a>
+                            <p class="text-xs text-neutral-500 mb-2">${bengkel.layanan}</p>
+                            <p class="text-xs font-semibold text-secondary-600">${bengkel.price}</p>
                         </div>
                     `);
 
@@ -769,11 +779,14 @@
             });
 
             if (bengkelData.length > 0) {
-                const bounds = L.latLngBounds([
-                    [userLat, userLng],
-                    ...bengkelData.filter(b => b.lat && b.lng).map(b => [b.lat, b.lng])
-                ]);
-                map.fitBounds(bounds, { padding: [50, 50] });
+                const validBengkel = bengkelData.filter(b => b.lat && b.lng);
+                if (validBengkel.length > 0) {
+                    const bounds = L.latLngBounds([
+                        [userLat, userLng],
+                        ...validBengkel.map(b => [b.lat, b.lng])
+                    ]);
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                }
             }
         }
 
@@ -822,16 +835,43 @@
                     break;
                     
                 case 'buka':
-                    // Check current time vs jam operasional
-                    alert('Filter bengkel buka sekarang');
+                    const now = new Date();
+                    const currentTime = now.getHours() * 60 + now.getMinutes();
+                    
+                    cardsArray.forEach(card => {
+                        // Placeholder - nanti bisa dikembangkan dengan jam operasional real
+                        const isOpen = Math.random() > 0.3; // 70% chance bengkel buka
+                        if (!isOpen) {
+                            card.style.opacity = '0.5';
+                        } else {
+                            card.style.opacity = '1';
+                        }
+                    });
+                    
+                    cardsArray.sort((a, b) => {
+                        const aOpacity = parseFloat(a.style.opacity || 1);
+                        const bOpacity = parseFloat(b.style.opacity || 1);
+                        return bOpacity - aOpacity;
+                    });
                     break;
             }
             
             cardsArray.forEach(card => container.appendChild(card));
         }
 
-        // Initialize map
-        initMap();
+        // Initialize map when page loads
+        if (bengkelData.length > 0) {
+            initMap();
+        } else {
+            document.getElementById('map-loading').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-16 h-16 text-neutral-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-sm text-neutral-600">Tidak ada bengkel untuk ditampilkan</p>
+                </div>
+            `;
+        }
     </script>
     @endpush
 

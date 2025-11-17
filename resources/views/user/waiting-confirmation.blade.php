@@ -48,15 +48,15 @@
                     <div class="space-y-3">
                         <div class="flex justify-between items-center">
                             <span class="text-neutral-600 text-sm">Jenis Kendaraan</span>
-                            <span class="font-semibold text-neutral-900">Motor</span>
+                            <span class="font-semibold text-neutral-900">{{ $order->layananBengkel->kategori ?? '' }}</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-neutral-600 text-sm">Jenis Masalah</span>
-                            <span class="font-semibold text-neutral-900">Ban Bocor</span>
+                            <span class="font-semibold text-neutral-900">{{ $order->layananBengkel->nama_layanan ?? '' }}</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-neutral-600 text-sm">Waktu Pesanan</span>
-                            <span class="font-semibold text-neutral-900" id="orderTime">14:32 WITA</span>
+                            <span class="font-semibold text-neutral-900" id="orderTime">{{ $order->created_at ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -67,22 +67,28 @@
                     
                     <div class="space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="text-neutral-600 text-sm">Harga Layanan</span>
-                            <span class="font-semibold text-neutral-900" id="servicePriceDisplay">Rp 100.000</span>
+                            <span class="text-neutral-600 text-sm">Harga Makimal Layanan</span>
+                            <span class="font-semibold text-neutral-900" id="servicePriceDisplay">
+                                Rp {{ number_format($order->estimasi_harga, 0, ',', '.') }}
+                            </span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-neutral-600 text-sm">Ongkos Datang</span>
-                            <span class="font-semibold text-neutral-900" id="deliveryFeeDisplay">Rp 20.000</span>
+                            <span class="text-neutral-600 text-sm">Total Harga Maksimal + Ongkir</span>
+                            <span class="font-semibold text-neutral-900" id="deliveryFeeDisplay">
+                                Rp {{ number_format($order->total_bayar, 0, ',', '.') }}
+                            </span>
                         </div>
-                        <div id="nightFeeRowDisplay" class="flex justify-between items-center hidden">
+                        {{-- <div id="nightFeeRowDisplay" class="flex justify-between items-center hidden">
                             <span class="text-neutral-600 text-sm">Biaya Malam <span class="text-xs">(20:00-06:00)</span></span>
                             <span class="font-semibold text-secondary-600" id="nightFeeDisplay">Rp 30.000</span>
-                        </div>
+                        </div> --}}
                         
                         <div class="border-t border-neutral-200 pt-3 mt-3">
                             <div class="flex justify-between items-center">
-                                <span class="font-bold text-neutral-900">Total Estimasi</span>
-                                <span class="font-bold text-xl text-primary-700" id="totalPriceDisplay">Rp 120.000</span>
+                                <span class="font-bold text-neutral-900">Total Estimasi Akhir</span>
+                                <span class="font-bold text-xl text-primary-700" id="totalPriceDisplay">
+                                    Rp {{ number_format($order->total_bayar, 0, ',', '.') }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -103,14 +109,12 @@
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <h4 class="font-bold text-neutral-900">Bengkel Jaya Motor</h4>
+                            <h4 class="font-bold text-neutral-900">{{ $order->bengkel->nama_bengkel ?? '' }}</h4>
                             <div class="flex items-center gap-2 mt-1">
                                 <div class="flex text-warning-500">
                                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
                                 </div>
-                                <span class="text-sm text-neutral-600">4.8</span>
-                                <span class="text-neutral-400">•</span>
-                                <span class="text-sm text-neutral-600">2.5 km</span>
+                                <span class="text-sm text-neutral-600">{{ $order->bengkel->alamat_lengkap ?? '' }}</span>
                             </div>
                         </div>
                     </div>
@@ -161,7 +165,7 @@
         </div>
     </div>
 
-    @push('scripts')
+    {{-- @push('scripts')
     <script>
         // Function to check if current time is night (20:00 - 06:00)
         function isNightTime() {
@@ -285,6 +289,6 @@
 
         setOrderTime();
     </script>
-    @endpush
+    @endpush --}}
 
 </x-layout-user>

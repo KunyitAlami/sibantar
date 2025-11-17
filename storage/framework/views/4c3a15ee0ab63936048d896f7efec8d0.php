@@ -15,7 +15,11 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="<?php echo e(route('user.dashboard')); ?>" class="font-medium <?php echo e(request()->routeIs('user.dashboard') ? 'active' : ''); ?>">Beranda</a></li>
                 <li><a href="<?php echo e(route('user.eksplor_bengkel')); ?>" class="font-medium <?php echo e(request()->routeIs('user.eksplor_bengkel') ? 'active' : ''); ?>">Eksplor Bengkel</a></li>
-                <li><a href="<?php echo e(route('user.history')); ?>" class="font-medium <?php echo e(request()->routeIs('user.history') ? 'active' : ''); ?>">Riwayat</a></li>
+                <li>
+                    <a href="<?php echo e(route('user.history', Auth::id())); ?>" class="font-medium <?php echo e(request()->routeIs('user.history') ? 'active' : ''); ?>">
+                        Riwayat
+                    </a>
+                </li>
                 <li><a href="<?php echo e(route('about_us')); ?>" class="font-medium <?php echo e(request()->routeIs('about_us') ? 'active' : ''); ?>">Tentang Kami</a></li>
                 <li>
                     <form id="logout-form-nav" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
@@ -42,7 +46,11 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li><a href="<?php echo e(route('user.dashboard')); ?>" class="font-medium">Beranda</a></li>
                     <li><a href="<?php echo e(route('user.eksplor_bengkel')); ?>" class="font-medium">Eksplor Bengkel</a></li>
-                    <li><a href="<?php echo e(route('user.history')); ?>" class="font-medium">Riwayat</a></li>
+                    <li>
+                        <a href="<?php echo e(route('user.history', Auth::id())); ?>" class="font-medium">
+                            Riwayat
+                        </a>
+                    </li>
                     <li><a href="<?php echo e(route('about_us')); ?>" class="font-medium">Tentang Kami</a></li>
                     <div class="divider my-1"></div>
                     <li>
@@ -77,7 +85,7 @@
                         </svg>
                         Eksplor Bengkel
                     </a></li>
-                    <li><a href="<?php echo e(route('user.history')); ?>">
+                    <li><a href="<?php echo e(route('user.history', Auth::id())); ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>

@@ -15,11 +15,13 @@ class BengkelSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+    // contoh bentuk benarnya 'https://maps.google.com/?q=-3.278461,114.574509',
+    // -3.278461,114.574509
     public function run(): void
     {
         $bengkelData = [
             [
-                'link_gmaps' => 'https://goo.gl/maps/abcd1234',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.278461,114.574509',
                 'id_user'=>7,
                 'nama_bengkel' => 'Bengkel Jaya Motor',
                 'kecamatan' => 'Banjarmasin Utara',
@@ -32,7 +34,7 @@ class BengkelSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/efgh5678',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.3190496,114.5757471',
                 'nama_bengkel' => 'Bengkel Motor Sejahtera',
                 'id_user'=>8,
                 'kecamatan' => 'Banjarmasin Tengah',
@@ -45,7 +47,7 @@ class BengkelSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/ijkl9012',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.354733,114.599776',
                 'nama_bengkel' => 'Bengkel Mandiri',
                 'id_user'=>9,
                 'kecamatan' => 'Banjarmasin Selatan',
@@ -58,7 +60,7 @@ class BengkelSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/mnop3456',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.312758,114.616216',
                 'nama_bengkel' => 'Bengkel Bersama',
                 'id_user'=>10,
                 'kecamatan' => 'Banjarmasin Timur',
@@ -71,7 +73,7 @@ class BengkelSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/qrst7890',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.322135,114.571172',
                 'nama_bengkel' => 'Bengkel Prima',
                 'id_user'=>11,
                 'kecamatan' => 'Banjarmasin Barat',
@@ -88,7 +90,7 @@ class BengkelSeeder extends Seeder
 
             // Kecamatan Utara (5 Data)
             [
-                'link_gmaps' => 'https://goo.gl/maps/utara01',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.293157, 114.589744',
                 'id_user'=>12,
                 'nama_bengkel' => 'Bengkel Respati I',
                 'kecamatan' => 'Banjarmasin Utara',
@@ -100,7 +102,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/utara02',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.287675,114.575072',
                 'id_user'=>13,
                 'nama_bengkel' => 'Bengkel Otomotor II',
                 'kecamatan' => 'Banjarmasin Utara',
@@ -112,7 +114,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/utara03',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.295522,114.611062',
                 'id_user'=>14,
                 'nama_bengkel' => 'Bengkel Mandiri III',
                 'kecamatan' => 'Banjarmasin Utara',
@@ -124,7 +126,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/utara04',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.270800,114.567819',
                 'id_user'=>15,
                 'nama_bengkel' => 'Bengkel Motor IV',
                 'kecamatan' => 'Banjarmasin Utara',
@@ -136,7 +138,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/utara05',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.301172,114.584587',
                 'id_user'=>16,
                 'nama_bengkel' => 'Bengkel Motor Jaya V',
                 'kecamatan' => 'Banjarmasin Utara',
@@ -150,7 +152,7 @@ class BengkelSeeder extends Seeder
 
             // Kecamatan Tengah (5 Data)
             [
-                'link_gmaps' => 'https://goo.gl/maps/tengah01',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.316261,114.574947',
                 'id_user'=>17,
                 'nama_bengkel' => 'Auto Service Utama I',
                 'kecamatan' => 'Banjarmasin Tengah',
@@ -162,7 +164,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/tengah02',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.312834,114.588680',
                 'id_user'=>18,
                 'nama_bengkel' => 'Cepat Ganti Oli II',
                 'kecamatan' => 'Banjarmasin Tengah',
@@ -174,7 +176,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/tengah03',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.318746,114.603658',
                 'id_user'=>19,
                 'nama_bengkel' => 'Pusat Ban Motor III',
                 'kecamatan' => 'Banjarmasin Tengah',
@@ -186,7 +188,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/tengah04',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.325815,114.601984',
                 'id_user'=>20,
                 'nama_bengkel' => 'Bengkel Motor Jaya IV',
                 'kecamatan' => 'Banjarmasin Tengah',
@@ -198,7 +200,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/tengah05',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.326415,114.588466',
                 'id_user'=>21,
                 'nama_bengkel' => 'Budi Motor V',
                 'kecamatan' => 'Banjarmasin Tengah',
@@ -212,7 +214,7 @@ class BengkelSeeder extends Seeder
 
             // Kecamatan Barat (5 Data)
             [
-                'link_gmaps' => 'https://goo.gl/maps/barat01',
+                'link_gmaps' => 'https://maps.google.com/?q-3.295487,114.569973',
                 'id_user'=>22,
                 'nama_bengkel' => 'Bengkel Cepat & Tepat I',
                 'kecamatan' => 'Banjarmasin Barat',
@@ -224,7 +226,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/barat02',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.319671,114.572173',
                 'id_user'=>23,
                 'nama_bengkel' => 'Bengkel Service II',
                 'kecamatan' => 'Banjarmasin Barat',
@@ -236,7 +238,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/barat03',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.323273,114.570224',
                 'id_user'=>24,
                 'nama_bengkel' => 'Prima Auto III',
                 'kecamatan' => 'Banjarmasin Barat',
@@ -248,7 +250,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/barat04',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.311529,114.579282',
                 'id_user'=>25,
                 'nama_bengkel' => 'Bengkel Barokah IV',
                 'kecamatan' => 'Banjarmasin Barat',
@@ -260,7 +262,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/barat05',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.301441,114.570694',
                 'id_user'=>26,
                 'nama_bengkel' => 'Motor Cepat V',
                 'kecamatan' => 'Banjarmasin Barat',
@@ -274,7 +276,7 @@ class BengkelSeeder extends Seeder
 
             // Kecamatan Selatan (5 Data)
             [
-                'link_gmaps' => 'https://goo.gl/maps/selatan01',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.347786,114.567842',
                 'id_user'=>27,
                 'nama_bengkel' => 'Bengkel Selatan I',
                 'kecamatan' => 'Banjarmasin Selatan',
@@ -286,7 +288,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/selatan02',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.365417,114.620097',
                 'id_user'=>28,
                 'nama_bengkel' => 'Jaya Abadi II',
                 'kecamatan' => 'Banjarmasin Selatan',
@@ -298,7 +300,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/selatan03',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.352572,114.625802',
                 'id_user'=>29,
                 'nama_bengkel' => 'Motor Expert III',
                 'kecamatan' => 'Banjarmasin Selatan',
@@ -310,7 +312,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/selatan04',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.344667,114.611345',
                 'id_user'=>30,
                 'nama_bengkel' => 'Bengkel AC Motor IV',
                 'kecamatan' => 'Banjarmasin Selatan',
@@ -322,7 +324,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/selatan05',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.337178,114.599097',
                 'id_user'=>31,
                 'nama_bengkel' => 'Ganti Oli Cepat V',
                 'kecamatan' => 'Banjarmasin Selatan',
@@ -336,7 +338,7 @@ class BengkelSeeder extends Seeder
 
             // Kecamatan Timur (5 Data)
             [
-                'link_gmaps' => 'https://goo.gl/maps/timur01',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.335850,114.615570',
                 'id_user'=>32,
                 'nama_bengkel' => 'Bengkel Sejati I',
                 'kecamatan' => 'Banjarmasin Timur',
@@ -348,7 +350,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/timur02',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.320575,114.612033',
                 'id_user'=>33,
                 'nama_bengkel' => 'Pusat Motor II',
                 'kecamatan' => 'Banjarmasin Timur',
@@ -360,7 +362,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/timur03',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.320215,114.624808',
                 'id_user'=>34,
                 'nama_bengkel' => 'Bengkel Tiga Rasa III',
                 'kecamatan' => 'Banjarmasin Timur',
@@ -372,7 +374,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/timur04',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.346226,114.631232',
                 'id_user'=>35,
                 'nama_bengkel' => 'Bengkel Tunas IV',
                 'kecamatan' => 'Banjarmasin Timur',
@@ -384,7 +386,7 @@ class BengkelSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ],
             [
-                'link_gmaps' => 'https://goo.gl/maps/timur05',
+                'link_gmaps' => 'https://maps.google.com/?q=-3.331743,114.624086',
                 'id_user'=>36,
                 'nama_bengkel' => 'Sinar Motor V',
                 'kecamatan' => 'Banjarmasin Timur',
