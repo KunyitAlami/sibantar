@@ -1,5 +1,14 @@
-<x-layout-bengkel>
-    <x-slot:title>Dashboard Bengkel - SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal70339126620b9ce2988dbf7f78f02854 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal70339126620b9ce2988dbf7f78f02854 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-bengkel','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-bengkel'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Dashboard Bengkel - SIBANTAR <?php $__env->endSlot(); ?>
 
     <!-- Stats Section with Better Visual Hierarchy -->
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-8">
@@ -9,10 +18,11 @@
                 <div class="relative overflow-hidden bg-white bg-opacity-15 backdrop-blur-md rounded-3xl p-6 text-center border border-white border-opacity-20 shadow-xl">
                     <div class="absolute top-0 right-0 w-20 h-20 bg-white opacity-5 rounded-full -mr-10 -mt-10"></div>
                     <div class="relative z-10">
-                        <p class="text-7xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-primary-100">{{ $totalOrdersToday }}</p>
+                        <p class="text-7xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-primary-100"><?php echo e($totalOrdersToday); ?></p>
                         <p class="text-sm font-semibold text-primary-50">Order Hari Ini</p>
                         <p class="text-xs text-primary-200 mt-1">
-                            {{ now()->translatedFormat('l, d F Y') }}
+                            <?php echo e(now()->translatedFormat('l, d F Y')); ?>
+
                         </p>
                     </div>
                 </div>
@@ -20,7 +30,7 @@
                 <div class="relative overflow-hidden bg-white bg-opacity-15 backdrop-blur-md rounded-3xl p-6 text-center border border-white border-opacity-20 shadow-xl">
                     <div class="absolute top-0 right-0 w-20 h-20 bg-white opacity-5 rounded-full -mr-10 -mt-10"></div>
                     <div class="relative z-10">
-                        <p class="text-7xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-primary-100">{{ $LayananTotal }}</p>
+                        <p class="text-7xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-primary-100"><?php echo e($LayananTotal); ?></p>
                         <p class="text-sm font-semibold text-primary-50">Total Layanan</p>
                         <p class="text-xs text-primary-200 mt-1">Aktif</p>
                     </div>
@@ -60,9 +70,24 @@
     <!-- Order Section -->
     <section class="py-6 bg-gradient-to-b from-neutral-50 to-white min-h-screen">
         <div class="container mx-auto px-4">
-            {{-- recent activity --}}
+            
             <div> 
-                <livewire:bengkel.bengkel-dashboard :id_bengkel="$id_Bengkel" />
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('bengkel.bengkel-dashboard', ['idBengkel' => $id_Bengkel,'id_bengkel' => $id_Bengkel]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1623562624-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
             </div>
         </div>
     </section>
@@ -84,7 +109,7 @@
         </div>
     </div>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         // Detail Modal Functions
         const orders = {
@@ -196,7 +221,17 @@
             }
         });
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-layout-bengkel>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal70339126620b9ce2988dbf7f78f02854)): ?>
+<?php $attributes = $__attributesOriginal70339126620b9ce2988dbf7f78f02854; ?>
+<?php unset($__attributesOriginal70339126620b9ce2988dbf7f78f02854); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal70339126620b9ce2988dbf7f78f02854)): ?>
+<?php $component = $__componentOriginal70339126620b9ce2988dbf7f78f02854; ?>
+<?php unset($__componentOriginal70339126620b9ce2988dbf7f78f02854); ?>
+<?php endif; ?>
 
+<?php /**PATH D:\laragon\www\sibantar\resources\views/bengkel/dashboard/index.blade.php ENDPATH**/ ?>

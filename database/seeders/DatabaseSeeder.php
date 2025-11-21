@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
 
             CalonBengkelSeeder::class,
             LayananBengkelSeeder::class,
+            BengkelStatusSeeder::class
         ]);
     }
 }

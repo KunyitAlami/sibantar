@@ -54,5 +54,11 @@ class BengkelModel extends Model
         return $this->hasMany(LayananBengkelModel::class, 'id_bengkel', 'id_bengkel');
     }
 
+    public function status()
+    {
+        return $this->hasMany(BengkelStatusModel::class, 'id_bengkel', 'id_bengkel');
+    }
+
+
 
 }

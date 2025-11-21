@@ -37,6 +37,7 @@
                 <form id="orderForm" action="<?php echo e(route('user.order_store')); ?>" method="POST" class="space-y-4">
                     <?php echo csrf_field(); ?>
                     <!-- Hidden inputs for bengkel coordinates -->
+                    <input type="hidden" name="client_timezone" id="client_timezone">
                     <input type="hidden" id="bengkelLatitude" name="bengkel_latitude" value="<?php echo e($bengkel->latitude ?? ''); ?>">
                     <input type="hidden" id="bengkelLongitude" name="bengkel_longitude" value="<?php echo e($bengkel->longitude ?? ''); ?>">
                     <input type="hidden" id="idBengkel" name="id_bengkel" value="<?php echo e($bengkel->id_bengkel ?? ''); ?>">
@@ -45,8 +46,6 @@
                     <input type="hidden" id="status" name="status" value="pending">
                     <input type="hidden" id="estimasiHarga"  name="estimasi_harga" value="<?php echo e($layanan_bengkel->harga_akhir ?? ''); ?>">
                     <input type="hidden" id="totalBayar" name="total_bayar" id="totalBayar" value="">
-
-                    
 
                     <!-- Lokasi Anda -->
                     <div>
@@ -127,6 +126,10 @@
     <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    document.getElementById('client_timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    </script>
 
     <script>
         // Configuration
@@ -458,6 +461,7 @@
             const notes = document.getElementById('orderNotes').value;
             const userLat = document.getElementById('userLatitude').value;
             const userLng = document.getElementById('userLongitude').value;
+            const client_timezone = document.getElementById('client_timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
             // Ambil hidden input sesuai form
             const bengkelLat = document.getElementById('bengkelLatitude').value;
@@ -545,10 +549,10 @@
                         estimasi_harga: estimasiHarga,
                         total_bayar: totalBayar,
                         notes: notes,
+                        client_timezone :client_timezone
                     })
                     .then(response => {
                         const data = response.data;
-                        Swal.close();
 
                         if (data.success) {
                             Swal.fire({
@@ -571,7 +575,6 @@
                         }
                     })
                     .catch(error => {
-                        Swal.close();
 
                         if (error.response && error.response.status === 422) {
                             const errors = error.response.data.errors;

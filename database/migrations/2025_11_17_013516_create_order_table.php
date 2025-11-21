@@ -20,10 +20,11 @@ return new class extends Migration
             $table->text('user_longitude');
             $table->text('bengkel_latitude');
             $table->text('bengkel_longitude');
-            $table->enum('status', ['pending' ,'dibayar', 'diproses','selesai','gagal', 'dibatalkan'])->default('pending');
+            $table->enum('status', ['menunggu_konfirmasi', 'pending', 'dibayar', 'diproses', 'selesai', 'ditolak', 'dibatalkan'])->default('menunggu_konfirmasi');
             $table->string('estimasi_harga');
             $table->text('total_bayar')->nullable();
             $table->text('notes')->nullable();
+            $table->string('client_timezone', 50)->nullable();
             $table->timestamps();
 
             $table->foreign('id_user')->references('id_user')->on('user')->cascade();

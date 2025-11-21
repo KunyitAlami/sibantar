@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use Carbon\Carbon;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -19,9 +20,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    // public function boot()
-    // {
-    //     URL::forceScheme('https');
-    // }
-
+    public function boot()
+    {
+        Carbon::setLocale('id');
+    }
 }

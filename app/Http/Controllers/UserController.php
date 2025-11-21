@@ -8,6 +8,9 @@ use App\Models\OrderModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Models\CountDownModel;
 
 class UserController extends Controller
 {
@@ -188,7 +191,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function pesan(Request $request)
+   public function pesan(Request $request)
     {
         try {
             $validated = $request->validate([
@@ -200,7 +203,8 @@ class UserController extends Controller
                 'bengkel_longitude' => 'required',
                 'estimasi_harga' => 'required',
                 'total_bayar' => 'required',
-                'notes' => 'nullable|string'
+                'notes' => 'nullable|string',
+                'client_timezone' => 'required|string'
             ]);
 
             $order = OrderModel::create([
@@ -211,19 +215,35 @@ class UserController extends Controller
                 'user_longitude' => $validated['user_longitude'],
                 'bengkel_latitude' => $validated['bengkel_latitude'],
                 'bengkel_longitude' => $validated['bengkel_longitude'],
-                'status' => 'pending',
+                'status' => 'menunggu_konfirmasi',
                 'estimasi_harga' => $validated['estimasi_harga'],
                 'total_bayar' => $validated['total_bayar'],
-                'notes' => $validated['notes'] ?? null
+                'notes' => $validated['notes'] ?? null,
+                'client_timezone' => $validated['client_timezone']
+            ]);
+            $clientZone = $validated['client_timezone'];
+            $now = Carbon::now($clientZone);
+            $batas = $now->copy()->addMinutes(5);
+
+            CountDownModel::create([
+                'id_order' => $order->id_order,
+                'status' => 'tidak_dikonfirmasi',
+                'batas_konfirmasi' => $batas->toDateTimeString(),
+            ]);
+
+            Log::info("Order created with timezone", [
+                'order_id' => $order->id_order,
+                'client_timezone' => $clientZone,
+                'batas_konfirmasi' => $batas->toDateTimeString()
             ]);
 
             return response()->json([
-                    'success' => true,
-                    'message' => 'Pesanan berhasil dibuat',
-                    'redirect_url' => route('user.waiting_confirmation', [
-                        'order_id' => $order->id_order,
-                    ])
-                ]);
+                'success' => true,
+                'message' => 'Pesanan berhasil dibuat',
+                'redirect_url' => route('user.waiting_confirmation', [
+                    'order_id' => $order->id_order,
+                ])
+            ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -242,17 +262,14 @@ class UserController extends Controller
 
     public function waiting_confirmation($order_id)
     {
-        $order = OrderModel::with(['bengkel', 'layananBengkel', 'user'])
+        $order = OrderModel::with(['bengkel', 'layananBengkel', 'user', 'countDown'])
             ->where('id_order', $order_id)
             ->where('id_user', Auth::id())
             ->firstOrFail();
 
         return view('user.waiting-confirmation', [
             'order' => $order,
-            'id_order' => $order->id_order,
-            'id_bengkel' => $order->id_bengkel,
-            'id_layanan_bengkel' => $order->id_layanan_bengkel,
-            'id_user' => $order->id_user,
+            'orderId' => $order->id_order, 
         ]);
     }
 
@@ -268,7 +285,7 @@ class UserController extends Controller
             $bengkel->latitude = $coordinates['lat'];
             $bengkel->longitude = $coordinates['lng'];
         } else {
-            Log::warning("Cannot parse coordinates for bengkel: {$bengkel->nama_bengkel}, link: {$bengkel->link_gmaps}");
+            Log::warning("Cannot parse coordinates for bengkel: {$bengkel->nama_bengkel}");
             $bengkel->latitude = null;
             $bengkel->longitude = null;
         }
@@ -279,11 +296,20 @@ class UserController extends Controller
             'bengkel' => $bengkel,
             'layanan_bengkel' => $layanan_bengkel,
             'backUrl' => $backUrl,
-            'id_user'=>$userId,
+            'id_user' => $userId,
         ]);
     }
 
-    public function history($id_user){
+    public function orderTracking($orderId)
+    {
+        $status = request()->get('status', 'waiting');
+
+        return view('user.order-tracking', compact('orderId', 'status'));
+    }
+
+
+    public function history($id_user)
+    {
         if (Auth::id() != $id_user) {
             abort(403, 'Unauthorized access');
         }

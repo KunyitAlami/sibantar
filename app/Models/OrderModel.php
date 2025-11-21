@@ -22,7 +22,8 @@ class OrderModel extends Model
         'status',
         'estimasi_harga',
         'total_bayar',
-        'notes'
+        'notes',
+        'client_timezone',
     ];
 
     public $timestamps = true;
@@ -39,5 +40,9 @@ class OrderModel extends Model
     public function layananBengkel()
     {
         return $this->belongsTo(LayananBengkelModel::class, 'id_layanan_bengkel', 'id_layanan_bengkel');
+    }
+    public function countDown()
+    {
+        return $this->hasOne(CountDownModel::class, 'id_order', 'id_order');
     }
 }

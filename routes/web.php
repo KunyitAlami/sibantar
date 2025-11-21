@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Bengkel\BengkelController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+use App\Livewire\Bengkel\OrderTrackingBengkel;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,8 +67,12 @@ Route::middleware(['auth'])->group(function () {
         ->prefix('bengkel')
         ->name('bengkel.')
         ->group(function () {
-            Route::get('/dashboard', fn() => view('bengkel.dashboard.index'))->name('dashboard');
-            Route::get('/final-price/{id}', fn($id) => view('bengkel.dashboard.final-price'))->name('final-price');
+            // Route::get('/dashboard', fn() => view('bengkel.dashboard.index'))->name('dashboard');
+            // Route::get('/final-price/{id}', fn($id) => view('bengkel.dashboard.final-price'))->name('final-price');
+
+
+            Route::get('/dashboard/bengkel/{id_bengkel}', [BengkelController::class, 'index'])->name('dashboard');
+            Route::get('/bengkel/order-tracking/{orderId}', [BengkelController::class, 'orderTracking'])->name('order-tracking');
         });
 
     // USER
@@ -74,7 +80,6 @@ Route::middleware(['auth'])->group(function () {
         ->prefix('user')
         ->name('user.')
         ->group(function () {
-            // Route::get('/dashboard', fn() => view('user.search'))->name('search');
             Route::get('/eksplor_bengkel', fn() => view('user.eksplor_bengkel'))->name('eksplor_bengkel');            
             Route::get('/dashboard', fn() => view('user.dashboard'))->name('dashboard');
             // Route::get('/history', fn() => view('user.history'))->name('history');
@@ -91,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/order', [UserController::class, 'pesan'])->name('order_store');
             Route::get('/waiting-confirmation/{order_id}', [UserController::class, 'waiting_confirmation'])->name('waiting_confirmation');
             Route::get('/history-order/{id_user}', [UserController::class, 'history'])->name('history');
+            Route::get('/order-tracking/{id}', [UserController::class, 'orderTracking'])->name('order-tracking');
 
 
             // Report/Laporan
@@ -98,32 +104,32 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/report', fn() => redirect()->route('user.history'))->name('report.store');
             
             // Order Tracking berdasarkan status
-            Route::get('/order-tracking/on-the-way/{id}', function ($id) {
-                return view('user.order-tracking', ['orderId' => $id, 'status' => 'on-the-way']);
-            })->name('order-tracking.on-the-way');
+            // Route::get('/order-tracking/on-the-way/{id}', function ($id) {
+            //     return view('user.order-tracking', ['orderId' => $id, 'status' => 'on-the-way']);
+            // })->name('order-tracking.on-the-way');
             
-            Route::get('/order-tracking/in-progress/{id}', function ($id) {
-                return view('user.order-tracking', ['orderId' => $id, 'status' => 'in-progress']);
-            })->name('order-tracking.in-progress');
+            // Route::get('/order-tracking/in-progress/{id}', function ($id) {
+            //     return view('user.order-tracking', ['orderId' => $id, 'status' => 'in-progress']);
+            // })->name('order-tracking.in-progress');
             
-            Route::get('/order-tracking/completed/{id}', function ($id) {
-                return view('user.order-tracking', ['orderId' => $id, 'status' => 'completed']);
-            })->name('order-tracking.completed');
+            // Route::get('/order-tracking/completed/{id}', function ($id) {
+            //     return view('user.order-tracking', ['orderId' => $id, 'status' => 'completed']);
+            // })->name('order-tracking.completed');
             
             // Order Tracking dengan status dinamis (fallback)
-            Route::get('/order-tracking/{orderId}', function ($orderId) {
-                $status = request()->get('status', 'waiting');
-                return view('user.order-tracking', compact('orderId', 'status'));
-            })->name('order-tracking');
+            // Route::get('/order-tracking/{orderId}', function ($orderId) {
+            //     $status = request()->get('status', 'waiting');
+            //     return view('user.order-tracking', compact('orderId', 'status'));
+            // })->name('order-tracking');
             
             // Halaman waiting confirmation dengan timer 2 menit
             // Route::get('/waiting-confirmation', function () {
             //     return view('user.waiting-confirmation');
             // })->name('waiting-confirmation');
             
-            Route::get('/mechanic-on-the-way', function () {
-                return redirect()->route('user.order-tracking', ['orderId' => 1, 'status' => 'on-the-way']);
-            })->name('mechanic-on-the-way');
+            // Route::get('/mechanic-on-the-way', function () {
+            //     return redirect()->route('user.order-tracking', ['orderId' => 1, 'status' => 'on-the-way']);
+            // })->name('mechanic-on-the-way');
             
             // Payment routes
             Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('create-transaction');

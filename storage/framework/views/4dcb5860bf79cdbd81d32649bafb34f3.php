@@ -4,8 +4,8 @@
         <!-- Navbar Start - Logo -->
         <div class="navbar-start">
             <!-- Logo -->
-            <a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="btn btn-ghost text-xl px-2 lg:px-4">
-                <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-8 h-8 lg:w-10 lg:h-10 object-contain">
+            <a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])); ?>" class="btn btn-ghost text-xl px-2 lg:px-4">
+                <img src="<?php echo e(asset('images/logo.png')); ?>" alt="SIBANTAR Logo" class="w-8 h-8 lg:w-10 lg:h-10 object-contain">
                 <span class="font-bold text-primary">SIBANTAR</span>
                 <span class="text-sm text-warning hidden sm:inline">Bengkel</span>
             </a>
@@ -14,11 +14,11 @@
         <!-- Navbar Center - Desktop Menu -->
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-                <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium {{ request()->routeIs('bengkel.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-                <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium {{ request()->routeIs('bengkel.dashboard') ? 'active' : '' }}">Profile Bengkel</a></li>
+                <li><a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])); ?>" class="font-medium <?php echo e(request()->routeIs('bengkel.dashboard') ? 'active' : ''); ?>">Dashboard</a></li>
+                <li><a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])); ?>" class="font-medium <?php echo e(request()->routeIs('bengkel.dashboard') ? 'active' : ''); ?>">Profile Bengkel</a></li>
                 <li>
-                    <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
+                    <form id="logout-form-nav" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                        <?php echo csrf_field(); ?>
                     </form>
                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-nav').submit();" 
                     class="font-medium text-error">
@@ -38,15 +38,15 @@
                     </svg>
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium">Dashboard</a></li>
+                    <li><a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])); ?>" class="font-medium">Dashboard</a></li>
                 </ul>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium">Profile Bengkel</a></li>
+                    <li><a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])); ?>" class="font-medium">Profile Bengkel</a></li>
                 </ul>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li>
-                        <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
+                        <form id="logout-form-mobile" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                            <?php echo csrf_field(); ?>
                         </form>
                         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Logout</a>
                     </li>
@@ -58,17 +58,17 @@
             <div class="dropdown dropdown-end hidden lg:block">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                     <div class="w-10 rounded-full bg-warning text-white flex items-center justify-center">
-                        <span class="text-lg font-semibold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                        <span class="text-lg font-semibold"><?php echo e(substr(Auth::user()->name, 0, 1)); ?></span>
                     </div>
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li class="menu-title">
-                        <span>{{ Auth::user()->name }} (Bengkel)</span>
+                        <span><?php echo e(Auth::user()->name); ?> (Bengkel)</span>
                     </li>
-                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}">Dashboard</a></li>
+                    <li><a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])); ?>">Dashboard</a></li>
                     <li>
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
+                        <form action="<?php echo e(route('logout')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="w-full text-left">Logout</button>
                         </form>
                     </li>
@@ -77,3 +77,4 @@
         </div>
     </div>
 </div>
+<?php /**PATH D:\laragon\www\sibantar\resources\views/components/navbar-bengkel.blade.php ENDPATH**/ ?>

@@ -28,6 +28,7 @@
                 <form id="orderForm" action="{{ route('user.order_store') }}" method="POST" class="space-y-4">
                     @csrf
                     <!-- Hidden inputs for bengkel coordinates -->
+                    <input type="hidden" name="client_timezone" id="client_timezone">
                     <input type="hidden" id="bengkelLatitude" name="bengkel_latitude" value="{{ $bengkel->latitude ?? '' }}">
                     <input type="hidden" id="bengkelLongitude" name="bengkel_longitude" value="{{ $bengkel->longitude ?? '' }}">
                     <input type="hidden" id="idBengkel" name="id_bengkel" value="{{ $bengkel->id_bengkel ?? '' }}">
@@ -36,23 +37,6 @@
                     <input type="hidden" id="status" name="status" value="pending">
                     <input type="hidden" id="estimasiHarga"  name="estimasi_harga" value="{{ $layanan_bengkel->harga_akhir ?? '' }}">
                     <input type="hidden" id="totalBayar" name="total_bayar" id="totalBayar" value="">
-
-                    {{-- 
-                        const addressDisplay = document.getElementById('userAddress');
-                        const location = addressDisplay.textContent;
-                        const notes = document.getElementById('orderNotes').value;
-                        const userLat = document.getElementById('userLatitude').value;
-                        const userLng = document.getElementById('userLongitude').value;
-
-                        // Ambil hidden input sesuai form
-                        const bengkelLat = document.getElementById('bengkelLatitude').value;
-                        const bengkelLng = document.getElementById('bengkelLongitude').value;
-                        const idBengkel = document.getElementById('idBengkel').value;
-                        const idLayanan = document.getElementById('idLayanan').value;
-                        const idUser = document.getElementById('idUser').value;
-                        const estimasiHarga = document.getElementById('estimasiHarga').value;
-                        const totalBayar = document.getElementById('totalBayar').value;
-                    --}}
 
                     <!-- Lokasi Anda -->
                     <div>
@@ -134,6 +118,10 @@
     <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    document.getElementById('client_timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    </script>
 
     <script>
         // Configuration
@@ -465,6 +453,7 @@
             const notes = document.getElementById('orderNotes').value;
             const userLat = document.getElementById('userLatitude').value;
             const userLng = document.getElementById('userLongitude').value;
+            const client_timezone = document.getElementById('client_timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
             // Ambil hidden input sesuai form
             const bengkelLat = document.getElementById('bengkelLatitude').value;
@@ -552,10 +541,10 @@
                         estimasi_harga: estimasiHarga,
                         total_bayar: totalBayar,
                         notes: notes,
+                        client_timezone :client_timezone
                     })
                     .then(response => {
                         const data = response.data;
-                        Swal.close();
 
                         if (data.success) {
                             Swal.fire({
@@ -578,7 +567,6 @@
                         }
                     })
                     .catch(error => {
-                        Swal.close();
 
                         if (error.response && error.response.status === 422) {
                             const errors = error.response.data.errors;

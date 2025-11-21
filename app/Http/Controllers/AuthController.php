@@ -24,12 +24,24 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         
+        // return match ($user->role) {
+        //     'admin' => redirect()->route('admin.dashboard.index'),
+        //     'bengkel' => redirect()->route('dashboard', [
+        //         'id_bengkel' => $user->bengkel->first()->id_bengkel
+        //     ]),
+        //     'user' => redirect()->route('user.dashboard'),
+        //     default => redirect()->route('landing_page'),
+        // };
+
         return match ($user->role) {
             'admin' => redirect()->route('admin.dashboard.index'),
-            'bengkel' => redirect()->route('bengkel.dashboard'),
+            'bengkel' => redirect()->route('bengkel.dashboard', [
+                'id_bengkel' => $user->bengkel->first()->id_bengkel
+            ]),
             'user' => redirect()->route('user.dashboard'),
             default => redirect()->route('landing_page'),
         };
+
     }
 
     public function login(Request $request)
@@ -63,7 +75,9 @@ class AuthController extends Controller
 
             return match ($user->role) {
                 'admin' => redirect()->route('admin.dashboard.index'),
-                'bengkel' => redirect()->route('bengkel.dashboard'),
+                'bengkel' => redirect()->route('bengkel.dashboard', [
+                    'id_bengkel' => $user->bengkel->first()->id_bengkel
+                ]),
                 'user' => redirect()->route('user.dashboard'),
                 default => redirect()->route('landing_page'),
             };
