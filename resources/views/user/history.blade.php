@@ -60,9 +60,9 @@
                             <a href="{{ route('user.report', ['booking' => 1]) }}" class="btn btn-sm btn-outline btn-error">
                                 Lapor
                             </a>
-                            <a href="{{ route('user.order-tracking.in-progress', ['id' => 1]) }}" class="btn btn-sm btn-primary">
+                            {{-- <a href="{{ route('user.order-tracking.in-progress', ['id' => 1]) }}" class="btn btn-sm btn-primary">
                                 Lihat Detail
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>

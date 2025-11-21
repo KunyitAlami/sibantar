@@ -71,9 +71,7 @@
                             <a href="<?php echo e(route('user.report', ['booking' => 1])); ?>" class="btn btn-sm btn-outline btn-error">
                                 Lapor
                             </a>
-                            <a href="<?php echo e(route('user.order-tracking.in-progress', ['id' => 1])); ?>" class="btn btn-sm btn-primary">
-                                Lihat Detail
-                            </a>
+                            
                         </div>
                     </div>
                 </div>
