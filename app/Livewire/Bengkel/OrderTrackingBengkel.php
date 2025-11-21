@@ -100,6 +100,20 @@ class OrderTrackingBengkel extends Component
 
         session()->flash('success', 'Final price berhasil dikirim ke customer!');
     }
+    public function refreshTracking()
+    {
+        $this->tracking = OrderTrackingModel::with('order')->where('id_order', $this->orderId)->first();
+        
+        if ($this->tracking) {
+            $this->servicePrice = (int) ($this->tracking->finalPrice ?? $this->tracking->order->estimasi_harga ?? 0);
+            $this->ongkir = (int) ($this->tracking->order->total_bayar ?? 0);
+            $this->deliveryFee = (int) ($this->ongkir - $this->servicePrice);
+            $this->nightFee = 0;
+            $this->currentStep = (int) ($this->tracking->current_step ?? 1);
+            $this->finalPriceSent = !is_null($this->tracking->finalPrice);
+        }
+    }
+
     public function render()
     {
         return view('livewire.bengkel.order-tracking-bengkel');

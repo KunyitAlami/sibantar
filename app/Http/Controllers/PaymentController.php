@@ -7,6 +7,7 @@ use App\Services\MidtransService;
 use App\Models\OrderTrackingModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class PaymentController extends Controller
@@ -124,11 +125,41 @@ class PaymentController extends Controller
     /**
      * Confirm transaction from frontend (called after snap onSuccess/onPending)
      */
+    // public function confirmTransaction(Request $request)
+    // {
+    //     $request->validate([
+    //         'transaction_id' => 'required|string',
+    //         'status' => 'nullable|string'
+    //     ]);
+
+    //     $transactionId = $request->transaction_id;
+    //     $status = $request->status ?? 'settlement';
+
+    //     try {
+    //         $tracking = OrderTrackingModel::where('midtrans_order_id', $transactionId)->first();
+    //         if (!$tracking) {
+    //             return response()->json(['status' => 'error', 'message' => 'Tracking not found'], 404);
+    //         }
+
+    //         $tracking->midtrans_status = $status;
+    //         if ($status === 'settlement' || $status === 'capture') {
+    //             $tracking->current_step = 5;
+    //         }
+    //         $tracking->save();
+
+    //         return response()->json(['status' => 'success']);
+    //     } catch (\Exception $e) {
+    //         Log::error('confirmTransaction error: ' . $e->getMessage());
+    //         return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    //     }
+    // }
+
     public function confirmTransaction(Request $request)
     {
         $request->validate([
             'transaction_id' => 'required|string',
-            'status' => 'nullable|string'
+            'status' => 'nullable|string',
+            'order_id' => 'required|numeric'
         ]);
 
         $transactionId = $request->transaction_id;
@@ -146,10 +177,18 @@ class PaymentController extends Controller
             }
             $tracking->save();
 
+            DB::table('order')
+                ->where('id_order', $request->order_id)
+                ->update([
+                    'status' => 'selesai',
+                    'updated_at' => now()
+                ]);
+
             return response()->json(['status' => 'success']);
         } catch (\Exception $e) {
             Log::error('confirmTransaction error: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
 }

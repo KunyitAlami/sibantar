@@ -148,8 +148,9 @@ class BengkelController extends Controller
 
     public function orderTracking($orderId)
     {
-        // Bisa langsung render Livewire page
-        return view('bengkel.dashboard.final-price', compact('orderId'));
+        $order = OrderModel::findOrFail($orderId);
+        return view('bengkel.dashboard.final-price', compact('order', 'orderId'));
     }
+
 
 }

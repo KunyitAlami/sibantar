@@ -1,5 +1,26 @@
 <x-layout-bengkel>
     <x-slot:title>Input Final Price - SIBANTAR</x-slot:title>
+    {{-- <section class="bg-white border-b border-neutral-200 sticky top-0 z-50 mt-4">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center gap-4 py-4">
+                <a href="{{ route('bengkel.dashboard', ['id_bengkel' => $orderId]) }}" class="text-neutral-700 hover:text-primary-700">
+                    Kembali ke Dashboard
+                </a>
+            </div>
+        </div>
+         --}}
+    <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center gap-4 py-4">
+                <a href="{{ route('bengkel.dashboard', ['id_bengkel' => $order->id_bengkel]) }}" class="text-neutral-700 hover:text-primary-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="font-bold text-lg text-neutral-900">Riwayat Pesanan</h1>
+            </div>
+        </div>
+    </section>
     @livewire('bengkel.order-tracking-bengkel', ['orderId' => $orderId])
 </x-layout-bengkel>
 @push('scripts')

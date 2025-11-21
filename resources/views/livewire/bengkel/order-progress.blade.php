@@ -1,5 +1,4 @@
 <div wire:poll.5000ms="loadTracking">
-
     <!-- Progress Layanan -->
     <div class="card p-6 mb-4">
         <h3 class="font-bold text-neutral-900 mb-4">Progress Layanan</h3>
@@ -73,102 +72,130 @@
                     Pembayaran berhasil ✅
                 </div>
             @else
-                <button id="pay-now"
-                    data-order-id="{{ $tracking->order->id_order ?? 0 }}"
-                    data-amount="{{ $tracking->finalPrice ?? 0 }}"
-                    class="block w-full text-center py-3 bg-success-500 hover:bg-success-600 text-white rounded-xl font-bold">
+                <button 
+                    type="button"
+                    onclick="handlePayment({{ $tracking->order->id_order ?? 0 }}, {{ $tracking->finalPrice ?? 0 }})"
+                    class="block w-full text-center py-3 bg-success-500 hover:bg-success-600 text-white rounded-xl font-bold transition-colors">
                     Bayar Sekarang
                 </button>
             @endif
-            @push('scripts')
-                @php $midtransClientKey = config('services.midtrans.client_key'); $isProd = config('services.midtrans.is_production'); @endphp
-                <script src="{{ $isProd ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ $midtransClientKey }}"></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const payBtn = document.getElementById('pay-now');
-                        if (!payBtn) return;
-
-                        payBtn.addEventListener('click', function (e) {
-                            e.preventDefault();
-                            const orderId = this.dataset.orderId;
-                            const amount = parseInt(this.dataset.amount || 0, 10);
-
-                            if (!amount || amount <= 0) {
-                                alert('Jumlah pembayaran tidak valid');
-                                return;
-                            }
-
-                            payBtn.disabled = true;
-                            payBtn.textContent = 'Membuat transaksi...';
-
-                            fetch("{{ route('user.create-transaction') }}", {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                },
-                                body: JSON.stringify({
-                                    order_id: orderId,
-                                    gross_amount: amount,
-                                    customer_details: {
-                                        first_name: "{{ $tracking->order->user->username ?? 'User' }}",
-                                        email: "{{ $tracking->order->user->email ?? 'user@example.com' }}",
-                                        phone: "{{ $tracking->order->user->phone ?? '081234567890' }}",
-                                    }
-                                })
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.error) throw new Error(data.error);
-                                const token = data.snap_token;
-                                if (!token) throw new Error('Token tidak diterima dari server');
-
-                                // Open Midtrans Snap popup
-                                const transactionId = data.transaction_id;
-                                window.snap.pay(token, {
-                                    onSuccess: function(result){
-                                        // Notify server (useful when webhook cannot reach local env)
-                                        fetch("{{ route('user.confirm-transaction') }}", {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                            },
-                                            body: JSON.stringify({ transaction_id: transactionId, status: 'settlement' })
-                                        }).finally(() => {
-                                            window.location.reload();
-                                        });
-                                    },
-                                    onPending: function(result){
-                                        fetch("{{ route('user.confirm-transaction') }}", {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                            },
-                                            body: JSON.stringify({ transaction_id: transactionId, status: 'pending' })
-                                        }).finally(() => {
-                                            window.location.reload();
-                                        });
-                                    },
-                                    onError: function(result){
-                                        alert('Terjadi kesalahan saat pembayaran');
-                                        payBtn.disabled = false;
-                                        payBtn.textContent = 'Bayar Sekarang';
-                                    }
-                                });
-                            })
-                            .catch(err => {
-                                console.error(err);
-                                alert('Gagal membuat transaksi: ' + (err.message || 'error'));
-                                payBtn.disabled = false;
-                                payBtn.textContent = 'Bayar Sekarang';
-                            });
-                        });
-                    });
-                </script>
-            @endpush
         </div>
     @endif
-
 </div>
+
+@push('scripts')
+    @php 
+        $midtransClientKey = config('services.midtrans.client_key'); 
+        $isProd = config('services.midtrans.is_production'); 
+    @endphp
+    <script src="{{ $isProd ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ $midtransClientKey }}"></script>
+    <script>
+        // Global function yang bisa dipanggil kapan saja
+        window.handlePayment = function(orderId, amount) {
+            console.log('Payment triggered - Order ID:', orderId, 'Amount:', amount);
+            
+            if (!amount || amount <= 0) {
+                alert('Jumlah pembayaran tidak valid');
+                return;
+            }
+
+            // Cari tombol yang diklik
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Membuat transaksi...';
+
+            fetch("{{ route('user.create-transaction') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    gross_amount: amount,
+                    customer_details: {
+                        first_name: "{{ $tracking->order->user->username ?? 'User' }}",
+                        email: "{{ $tracking->order->user->email ?? 'user@example.com' }}",
+                        phone: "{{ $tracking->order->user->phone ?? '081234567890' }}",
+                    }
+                })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log('Server response:', data);
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                const token = data.snap_token;
+                const transactionId = data.transaction_id;
+
+                if (!token) {
+                    throw new Error('Token tidak diterima dari server');
+                }
+
+                console.log('Opening Midtrans Snap...');
+
+                // Pastikan Snap library sudah loaded
+                if (typeof window.snap === 'undefined') {
+                    throw new Error('Midtrans Snap belum loaded');
+                }
+
+                window.snap.pay(token, {
+                    onSuccess: function(result) {
+                        console.log('Payment success:', result);
+                        
+                        // Panggil Livewire method menggunakan @this
+                        if (typeof Livewire !== 'undefined') {
+                            Livewire.find('{{ $_instance->getId() }}').call('handleTransactionConfirmed', transactionId, 'settlement', orderId);
+                        }
+                        
+                        // Fallback: reload halaman jika Livewire tidak tersedia
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    },
+                    onPending: function(result) {
+                        console.log('Payment pending:', result);
+                        
+                        if (typeof Livewire !== 'undefined') {
+                            Livewire.find('{{ $_instance->getId() }}').call('handleTransactionConfirmed', transactionId, 'pending', orderId);
+                        }
+                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    },
+                    onError: function(result) {
+                        console.error('Payment error:', result);
+                        alert('Terjadi kesalahan saat pembayaran');
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                    },
+                    onClose: function() {
+                        console.log('Payment popup closed');
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                    }
+                });
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Gagal membuat transaksi: ' + (err.message || 'Unknown error'));
+                btn.disabled = false;
+                btn.textContent = originalText;
+            });
+        }
+
+        // Log untuk debugging
+        console.log('Payment script loaded');
+        console.log('Midtrans Snap available:', typeof window.snap !== 'undefined');
+    </script>
+@endpush
