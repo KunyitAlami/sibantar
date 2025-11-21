@@ -52,6 +52,14 @@ class OrderTrackingBengkel extends Component
 
         $this->currentStep = $step;
 
+        // Prevent advancing to 'Menunggu Pembayaran' (4) before final price sent
+        if ($this->currentStep === 4 && !$this->finalPriceSent) {
+            session()->flash('error', 'Kirim final price dulu sebelum pindah ke Menunggu Pembayaran.');
+            // revert to model value
+            $this->currentStep = (int) ($this->tracking->current_step ?? 1);
+            return;
+        }
+
         $this->tracking->update([
             'current_step' => $this->currentStep
         ]);
@@ -68,7 +76,8 @@ class OrderTrackingBengkel extends Component
 
     public function submitFinalPrice()
     {
-        if ($this->currentStep !== 3) {
+        // allow sending if in/after repair step; block if still before repair
+        if ($this->currentStep < 3) {
             session()->flash('error', 'Tidak bisa mengirim ke customer sebelum step Proses Perbaikan.');
             return;
         }
@@ -80,11 +89,14 @@ class OrderTrackingBengkel extends Component
 
         $totalFinalPrice = $this->servicePrice + $this->deliveryFee;
 
+        // Save final price and mark tracking as waiting for payment (step 4)
         $this->tracking->update([
-            'finalPrice' => $totalFinalPrice
+            'finalPrice' => $totalFinalPrice,
+            'current_step' => 4,
         ]);
 
         $this->finalPriceSent = true;
+        $this->currentStep = 4;
 
         session()->flash('success', 'Final price berhasil dikirim ke customer!');
     }

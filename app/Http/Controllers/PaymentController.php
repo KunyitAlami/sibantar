@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\MidtransService;
+use App\Models\OrderTrackingModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 
@@ -38,18 +39,13 @@ class PaymentController extends Controller
                 'email' => $request->customer_details['email'] ?? 'user@example.com',
                 'phone' => $request->customer_details['phone'] ?? '081234567890',
             ],
+            // Ensure item_details sum equals transaction_details.gross_amount
             'item_details' => [
                 [
-                    'id' => 'SERVICE-1',
-                    'price' => 15000,
+                    'id' => 'TOTAL-1',
+                    'price' => (int) $request->gross_amount,
                     'quantity' => 1,
-                    'name' => 'Biaya Layanan',
-                ],
-                [
-                    'id' => 'ONGKIR-1',
-                    'price' => 6000,
-                    'quantity' => 1,
-                    'name' => 'Ongkir',
+                    'name' => 'Total Pembayaran',
                 ],
             ],
         ];
@@ -57,7 +53,19 @@ class PaymentController extends Controller
         try {
             // Get Snap Token
             $snapToken = $this->midtrans->getSnapToken($params);
-            
+
+            // Persist midtrans order id to order_tracking (mark pending)
+            try {
+                OrderTrackingModel::where('id_order', $request->order_id)
+                    ->update([
+                        'midtrans_order_id' => $transactionId,
+                        'midtrans_status' => 'pending'
+                    ]);
+            } catch (\Exception $e) {
+                // Non-fatal: log and continue returning snap token
+                Log::warning('Failed to persist midtrans_order_id for order ' . $request->order_id . ': ' . $e->getMessage());
+            }
+
             return response()->json([
                 'snap_token' => $snapToken,
                 'transaction_id' => $transactionId,
@@ -80,16 +88,28 @@ class PaymentController extends Controller
                 $transactionStatus = $request->transaction_status;
                 $orderId = $request->order_id;
                 
-                // Handle transaction status
-                if ($transactionStatus == 'capture' || $transactionStatus == 'settlement') {
-                    // TODO: Set order status in database to 'success'
-                    Log::info('Payment success for order: ' . $orderId);
-                } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
-                    // TODO: Set order status in database to 'failure'
-                    Log::info('Payment failed for order: ' . $orderId);
-                } else if ($transactionStatus == 'pending') {
-                    // TODO: Set order status in database to 'pending'
-                    Log::info('Payment pending for order: ' . $orderId);
+                // Handle transaction status and persist to DB
+                try {
+                    $tracking = OrderTrackingModel::where('midtrans_order_id', $orderId)->first();
+                    if ($tracking) {
+                        $tracking->midtrans_status = $transactionStatus;
+
+                        if ($transactionStatus == 'capture' || $transactionStatus == 'settlement') {
+                            // mark as paid — advance step to 5 (paid) if desired
+                            $tracking->current_step = 5;
+                        } else if (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
+                            // payment failure
+                            // optionally set a failure step or keep step as-is
+                        } else if ($transactionStatus == 'pending') {
+                            // pending — keep current_step or set a pending flag
+                        }
+
+                        $tracking->save();
+                    } else {
+                        Log::warning('OrderTrackingModel not found for midtrans_order_id: ' . $orderId);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Failed to update tracking for midtrans callback: ' . $e->getMessage());
                 }
 
                 return response()->json(['status' => 'success']);
@@ -97,6 +117,38 @@ class PaymentController extends Controller
             
             return response()->json(['status' => 'error', 'message' => 'Invalid signature'], 403);
         } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Confirm transaction from frontend (called after snap onSuccess/onPending)
+     */
+    public function confirmTransaction(Request $request)
+    {
+        $request->validate([
+            'transaction_id' => 'required|string',
+            'status' => 'nullable|string'
+        ]);
+
+        $transactionId = $request->transaction_id;
+        $status = $request->status ?? 'settlement';
+
+        try {
+            $tracking = OrderTrackingModel::where('midtrans_order_id', $transactionId)->first();
+            if (!$tracking) {
+                return response()->json(['status' => 'error', 'message' => 'Tracking not found'], 404);
+            }
+
+            $tracking->midtrans_status = $status;
+            if ($status === 'settlement' || $status === 'capture') {
+                $tracking->current_step = 5;
+            }
+            $tracking->save();
+
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            Log::error('confirmTransaction error: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }

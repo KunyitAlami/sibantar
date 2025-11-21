@@ -133,6 +133,7 @@ Route::middleware(['auth'])->group(function () {
             
             // Payment routes
             Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('create-transaction');
+            Route::post('/confirm-transaction', [PaymentController::class, 'confirmTransaction'])->name('confirm-transaction');
         });
 });
 
