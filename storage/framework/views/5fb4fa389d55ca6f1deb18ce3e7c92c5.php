@@ -4,26 +4,26 @@
     <div class="card p-6 mb-4">
         <h3 class="font-bold text-neutral-900 mb-4">Progress Layanan</h3>
 
-        @foreach($steps as $step => $info)
+        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $steps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $step => $info): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="flex items-start gap-3 mb-4">
                 <div class="flex flex-col items-center">
                     <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-                        @if($step < $currentStep) bg-success-500 text-white
-                        @elseif($step == $currentStep) bg-primary-600 text-white
-                        @else bg-neutral-200 text-neutral-500
-                        @endif">
-                        <span class="font-bold">{{ $step }}</span>
+                        <?php if($step < $currentStep): ?> bg-success-500 text-white
+                        <?php elseif($step == $currentStep): ?> bg-primary-600 text-white
+                        <?php else: ?> bg-neutral-200 text-neutral-500
+                        <?php endif; ?>">
+                        <span class="font-bold"><?php echo e($step); ?></span>
                     </div>
-                    @if($step != count($steps))
-                        <div class="w-0.5 h-8 @if($step < $currentStep) bg-success-500 @else bg-neutral-200 @endif mt-1"></div>
-                    @endif
+                    <!--[if BLOCK]><![endif]--><?php if($step != count($steps)): ?>
+                        <div class="w-0.5 h-8 <?php if($step < $currentStep): ?> bg-success-500 <?php else: ?> bg-neutral-200 <?php endif; ?> mt-1"></div>
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
                 <div class="flex-1 pt-1">
-                    <p class="font-semibold @if($step <= $currentStep) text-neutral-900 @else text-neutral-500 @endif">{{ $info['title'] }}</p>
-                    <p class="text-xs @if($step <= $currentStep) text-neutral-500 @else text-neutral-400 @endif mt-0.5">{{ $info['desc'] }}</p>
+                    <p class="font-semibold <?php if($step <= $currentStep): ?> text-neutral-900 <?php else: ?> text-neutral-500 <?php endif; ?>"><?php echo e($info['title']); ?></p>
+                    <p class="text-xs <?php if($step <= $currentStep): ?> text-neutral-500 <?php else: ?> text-neutral-400 <?php endif; ?> mt-0.5"><?php echo e($info['desc']); ?></p>
                 </div>
             </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
     </div>
 
     <!-- Order Details Card -->
@@ -32,57 +32,57 @@
         <div class="space-y-3">
             <div class="flex justify-between items-center">
                 <span class="text-sm text-neutral-600">Jenis Kendaraan</span>
-                <span class="font-semibold text-neutral-900">{{ $tracking->order->layananBengkel->kategori ?? '-' }}</span>
+                <span class="font-semibold text-neutral-900"><?php echo e($tracking->order->layananBengkel->kategori ?? '-'); ?></span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-sm text-neutral-600">Jenis Masalah</span>
-                <span class="font-semibold text-neutral-900">{{ $tracking->order->layananBengkel->nama_layanan ?? '-' }}</span>
+                <span class="font-semibold text-neutral-900"><?php echo e($tracking->order->layananBengkel->nama_layanan ?? '-'); ?></span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-sm text-neutral-600">Bengkel</span>
-                <span class="font-semibold text-neutral-900">{{ $tracking->order->bengkel->nama_bengkel ?? '-' }}</span>
+                <span class="font-semibold text-neutral-900"><?php echo e($tracking->order->bengkel->nama_bengkel ?? '-'); ?></span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-sm text-neutral-600">Waktu Pesanan</span>
-                <span class="font-semibold text-neutral-900">{{ optional($tracking->order->created_at)->format('H:i d/m/Y') ?? '-' }}</span>
+                <span class="font-semibold text-neutral-900"><?php echo e(optional($tracking->order->created_at)->format('H:i d/m/Y') ?? '-'); ?></span>
             </div>
         </div>
     </div>
 
     <!-- Final Price & Payment -->
-    @if(($tracking->finalPrice ?? 0) > 0)
+    <!--[if BLOCK]><![endif]--><?php if(($tracking->finalPrice ?? 0) > 0): ?>
         <div class="card p-4 mb-4 bg-success-50 border border-success-200 rounded-xl">
             <h3 class="font-bold text-lg text-success-700 mb-3">Rincian Biaya Final</h3>
             <div class="flex justify-between mb-2">
                 <span>Harga Keseluruhan</span>
-                <span>Rp {{ number_format(($tracking->finalPrice ?? 0) - ($tracking->deliveryFee ?? 0), 0, ',', '.') }}</span>
+                <span>Rp <?php echo e(number_format(($tracking->finalPrice ?? 0) - ($tracking->deliveryFee ?? 0), 0, ',', '.')); ?></span>
             </div>
 
             <div class="flex justify-between items-center font-semibold text-success-800 text-lg mb-3">
                 <span>Total</span>
-                <span>Rp {{ number_format($tracking->finalPrice ?? 0, 0, ',', '.') }}</span>
+                <span>Rp <?php echo e(number_format($tracking->finalPrice ?? 0, 0, ',', '.')); ?></span>
             </div>
 
-            @php
+            <?php
                 $paidStatuses = ['settlement', 'capture'];
                 $isPaid = in_array($tracking->midtrans_status ?? '', $paidStatuses) || (($tracking->current_step ?? 0) >= 5);
-            @endphp
+            ?>
 
-            @if($isPaid)
+            <!--[if BLOCK]><![endif]--><?php if($isPaid): ?>
                 <div class="py-3 text-center text-sm font-semibold text-success-700 border border-success-200 rounded-xl bg-success-100">
                     Pembayaran berhasil ✅
                 </div>
-            @else
+            <?php else: ?>
                 <button id="pay-now"
-                    data-order-id="{{ $tracking->order->id_order ?? 0 }}"
-                    data-amount="{{ $tracking->finalPrice ?? 0 }}"
+                    data-order-id="<?php echo e($tracking->order->id_order ?? 0); ?>"
+                    data-amount="<?php echo e($tracking->finalPrice ?? 0); ?>"
                     class="block w-full text-center py-3 bg-success-500 hover:bg-success-600 text-white rounded-xl font-bold">
                     Bayar Sekarang
                 </button>
-            @endif
-            @push('scripts')
-                @php $midtransClientKey = config('services.midtrans.client_key'); $isProd = config('services.midtrans.is_production'); @endphp
-                <script src="{{ $isProd ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ $midtransClientKey }}"></script>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            <?php $__env->startPush('scripts'); ?>
+                <?php $midtransClientKey = config('services.midtrans.client_key'); $isProd = config('services.midtrans.is_production'); ?>
+                <script src="<?php echo e($isProd ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'); ?>" data-client-key="<?php echo e($midtransClientKey); ?>"></script>
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         const payBtn = document.getElementById('pay-now');
@@ -101,7 +101,7 @@
                             payBtn.disabled = true;
                             payBtn.textContent = 'Membuat transaksi...';
 
-                            fetch("{{ route('user.create-transaction') }}", {
+                            fetch("<?php echo e(route('user.create-transaction')); ?>", {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -111,9 +111,9 @@
                                     order_id: orderId,
                                     gross_amount: amount,
                                     customer_details: {
-                                        first_name: "{{ $tracking->order->user->username ?? 'User' }}",
-                                        email: "{{ $tracking->order->user->email ?? 'user@example.com' }}",
-                                        phone: "{{ $tracking->order->user->phone ?? '081234567890' }}",
+                                        first_name: "<?php echo e($tracking->order->user->username ?? 'User'); ?>",
+                                        email: "<?php echo e($tracking->order->user->email ?? 'user@example.com'); ?>",
+                                        phone: "<?php echo e($tracking->order->user->phone ?? '081234567890'); ?>",
                                     }
                                 })
                             })
@@ -128,7 +128,7 @@
                                 window.snap.pay(token, {
                                     onSuccess: function(result){
                                         // Notify server (useful when webhook cannot reach local env)
-                                        fetch("{{ route('user.confirm-transaction') }}", {
+                                        fetch("<?php echo e(route('user.confirm-transaction')); ?>", {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -140,7 +140,7 @@
                                         });
                                     },
                                     onPending: function(result){
-                                        fetch("{{ route('user.confirm-transaction') }}", {
+                                        fetch("<?php echo e(route('user.confirm-transaction')); ?>", {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -167,8 +167,9 @@
                         });
                     });
                 </script>
-            @endpush
+            <?php $__env->stopPush(); ?>
         </div>
-    @endif
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
 </div>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/livewire/bengkel/order-progress.blade.php ENDPATH**/ ?>
