@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\CountDownModel;
+use App\Models\ReviewsModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 class UserController extends Controller
 {
@@ -316,7 +317,7 @@ class UserController extends Controller
             abort(403, 'Unauthorized access');
         }
 
-        $orders = OrderModel::with(['bengkel', 'layananBengkel', 'user'])
+        $orders = OrderModel::with(['bengkel', 'layananBengkel', 'user', 'review'])
             ->where('id_user', $id_user)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -326,6 +327,51 @@ class UserController extends Controller
             'id_user' => $id_user,
         ]);
     }
+
+    public function review($id_order)
+    {
+        $order = OrderModel::with('review')->findOrFail($id_order);
+
+        if (Auth::id() != $order->id_user) {
+            abort(403, 'Unauthorized access');
+        }
+
+        return view('user.review', [
+            'order' => $order,
+            'review' => $order->review,
+        ]);
+    }
+
+    public function saveReview(Request $request, $id_order)
+    {
+        $order = OrderModel::findOrFail($id_order);
+
+        if (Auth::id() != $order->id_user) {
+            abort(403, 'Unauthorized access');
+        }
+
+        $validated = $request->validate([
+            'ratingBengkel' => 'required|integer|min:1|max:5',
+            'ratingLayanan' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        ReviewsModel::updateOrCreate(
+            ['id_order' => $id_order],
+            [
+                'id_user' => Auth::id(),
+                'id_bengkel' => $order->id_bengkel,
+                'ratingBengkel' => $validated['ratingBengkel'],
+                'ratingLayanan' => $validated['ratingLayanan'],
+                'comment' => $validated['comment'] ?? null,
+            ]
+        );
+
+        return redirect()->route('user.history', ['id_user' => Auth::id()])
+                        ->with('success', 'Review berhasil disimpan.');
+    }
+
+
 
     public function reportOrder($id_order)
     {

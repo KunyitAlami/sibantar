@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('wa_number');
+            $table->integer('skor')->nullable();
             $table->timestamps();
         });
     }

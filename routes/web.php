@@ -50,15 +50,39 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.')
         ->group(function () {
 
-            // halaman awal admin
-            Route::get('/dashboard', fn() => view('admin.dashboard.index'))->name('dashboard.index');
-            Route::get('/calon-bengkel/{id}', [AdminController::class, 'showCalonBengkel'])->name('calonBengkel.show');
-            Route::post('/calon-bengkel/{id}/approve', [AdminController::class, 'approveCalonBengkel'])->name('calonBengkel.approve');
-            
-            // Kelola User
-            Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
+            Route::get('/dashboard', [AdminController::class, 'index'])
+                ->name('dashboard.index');
+
+            Route::get('/calon-bengkel/{id}', [AdminController::class, 'showCalonBengkel'])
+                ->name('calonBengkel.show');
+
+            Route::post('/calon-bengkel/{id}/approve', [AdminController::class, 'approveCalonBengkel'])
+                ->name('calonBengkel.approve');
+
+            Route::get('/users', fn() => view('admin.users.index'))
+                ->name('users.index');
+
+            Route::get('/tambah-user', [AdminController::class, 'tambahUser'])
+                ->name('tambah-user');
+
+            Route::post('/tambah-user/store', [AdminController::class, 'tambahUserStore'])
+                ->name('tambah-user-store');
+
+            Route::get('/edit-user/{id_user}', [AdminController::class, 'editUser'])
+                ->name('edit-user');
+
+            Route::post('/edit-user/store', [AdminController::class, 'updateUser'])
+                ->name('update-user');
+
+            Route::get('/calonBengkel/{id_calon_bengkel}', [AdminController::class, 'showCalon'])
+                ->name('calonBengkel.show');
+
+            Route::post('/approve-calon-bengkel/{id}', [AdminController::class, 'approveCalonBengkel'])
+                ->name('calonBengkel.approve');
+
 
         });
+
 
 
 
@@ -121,6 +145,12 @@ Route::middleware(['auth'])->group(function () {
                 ->name('report.store');
 
             Route::get('/user/invoice/{id_order}', [UserController::class, 'invoice'])->name('invoice');
+
+            Route::get('/review/{id_order}', [UserController::class, 'review'])
+                ->name('review');
+
+            Route::post('/review-store/{id_order}', [UserController::class, 'saveReview'])
+                ->name('review.store');
 
 
             

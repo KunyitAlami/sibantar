@@ -80,9 +80,39 @@
                             </a>
                         </div>
                     </div>
+                    
+                    <div class="mt-10 mb-5">
+                        <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($order->review): ?>
+                                <p>Rating Bengkel: 
+                                    <?php for($i = 1; $i <= 5; $i++): ?>
+                                        <?php if($i <= $order->review->ratingBengkel): ?>
+                                            ★
+                                        <?php else: ?>
+                                            ☆
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+                                </p>
+                                <p>Rating Layanan: 
+                                    <?php for($i = 1; $i <= 5; $i++): ?>
+                                        <?php if($i <= $order->review->ratingLayanan): ?>
+                                            ★
+                                        <?php else: ?>
+                                            ☆
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+                                </p>
+                            <?php else: ?>
+                                <p>
+                                    <a href="<?php echo e(route('user.review', ['id_order' => $order->id_order])); ?>" class="text-gray-600 italic underline">
+                                        Belum ada review
+                                    </a>
+                                </p>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            
 
             <!-- Empty State (Hidden by default) -->
             <div id="emptyState" class="hidden text-center py-16">
@@ -99,8 +129,6 @@
             </div>
         </div>
     </section>
-
-    
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

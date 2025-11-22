@@ -179,7 +179,7 @@ class BengkelDashboard extends Component
         return view('livewire.bengkel.bengkel-dashboard', [
             'bengkel' => $bengkel,
             'orders' => $orders,
-            'layanan' => $this->layanan, // <- pakai property, bukan query baru
+            'layanan' => $this->layanan,
         ]);
     }
 
