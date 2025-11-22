@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-1 sm:mb-2">Selamat Datang</h1>
-                <p class="text-sm sm:text-base text-neutral-600">Masuk ke akun SIBANTAR Anda [ini di Folder AUTH]</p>
+                <p class="text-sm sm:text-base text-neutral-600">Masuk ke akun SIBANTAR Anda</p>
             </div>
 
             <!-- Login Card -->
