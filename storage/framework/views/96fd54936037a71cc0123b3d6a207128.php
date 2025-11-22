@@ -143,4 +143,4 @@
 <?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
 <?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
 <?php endif; ?>
-<?php /**PATH D:\laragon\www\sibantar\resources\views/about_us.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/about_us.blade.php ENDPATH**/ ?>

@@ -10,6 +10,18 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('title', null, []); ?> Detail Bengkel - SIBANTAR <?php $__env->endSlot(); ?>
 
+    <!-- Back Header (sticky below navbar) - only 'Kembali' text -->
+    <section class="sticky top-16 z-40 bg-white shadow-sm">
+        <div class="px-4 py-3 container mx-auto">
+            <a href="<?php echo e($backUrl ?? url('/user/search')); ?>" class="inline-flex items-center gap-2 text-neutral-900 font-medium" aria-label="Kembali ke daftar bengkel">
+                <svg class="w-6 h-6 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Kembali</span>
+            </a>
+        </div>
+    </section>
+
     <!-- Bengkel Image -->
     <section class="relative">
         <div class="h-64 bg-neutral-200 relative overflow-hidden">
@@ -22,14 +34,8 @@
         <div class="container mx-auto px-4 py-6">
             <!-- Bengkel Title & Rating -->
             <div class="mb-6">
-                <div class="flex gap-4 mt-4 mb-8">
-                    <!-- Back Button -->
-                    <a href="<?php echo e($backUrl ?? url('/user/search')); ?>" class="flex-shrink-0 mt-2">
-                        <svg class="w-6 h-6 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </a>
-                    <h2 class="text-3xl font-bold text-neutral-900"><?php echo e($bengkel->nama_bengkel); ?></h2>
+                <div class="flex gap-4 mt-2 mb-2">
+                    <h2 class="text-2xl font-bold text-neutral-900"><?php echo e($bengkel->nama_bengkel); ?></h2>
                 </div>
 
                 <div class="flex items-center gap-2 mb-3">
@@ -53,33 +59,6 @@
                         </svg>
                         <span>0.6 km</span>
                     </div>
-                    <div class="flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>15 menit</span>
-                    </div>
-                </div>
-
-                <!-- Price Range -->
-                <div class="mt-3">
-                    <p class="text-lg font-bold text-secondary-600">
-                        Rp <?php echo e(number_format($layanan_bengkel->harga_awal, 0, ',', '.')); ?>
-
-                        -
-                        Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?>
-
-                    </p>
-                    <p class="text-sm text-neutral-500">Estimasi Biaya untuk Layanan <?php echo e($layanan_bengkel->nama_layanan); ?> Pada <?php echo e($layanan_bengkel->kategori); ?></p>
-                </div>
-
-                <!-- Description -->
-                <div class="mt-4">
-                    <h1 class="text-lg mt-2 mb-2">Tentang Layanan:</h1>
-                    <p class="text-neutral-700 leading-relaxed">
-                        <?php echo e($layanan_bengkel->deskripsi); ?>
-
-                    </p>
                 </div>
             </div>
 
@@ -115,7 +94,7 @@
                         </div>
                         <div class="flex-1">
                             <p class="font-medium text-neutral-900"><?php echo e($bengkel->user->wa_number); ?></p>
-                            <p class="text-sm text-neutral-600">Nomor WhatsApp Bengkel</p>
+                            <p class="text-sm text-neutral-600">WhatsApp Bengkel</p>
                         </div>
                     </div>
 
@@ -130,14 +109,14 @@
                         </div>
                         <div class="flex-1">
                             <p class="font-medium text-neutral-900"><?php echo e($bengkel->jam_operasional); ?> WITA</p>
-                            <p class="text-sm text-neutral-600">Jam Operasional Bengkel</p>
+                            <p class="text-sm text-neutral-600">Jam Operasional</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Button Lihat Rute -->
                 <a href="<?php echo e($bengkel->link_gmaps); ?>" target="_blank" rel="noopener noreferrer">
-                    <button class="w-full mt-6 bg-neutral-200 text-neutral-700 py-3 rounded-xl font-semibold hover:bg-neutral-300 transition">
+                    <button class="w-full mt-6 bg-primary-200 text-black-700 py-3 rounded-xl font-semibold hover:bg-primary-300 transition">
                         Lihat Rute di Peta
                     </button>
                 </a>
@@ -202,4 +181,4 @@
 <?php if (isset($__componentOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
 <?php $component = $__componentOriginal066474d3ca90bb663733ba5d5a32c765; ?>
 <?php unset($__componentOriginal066474d3ca90bb663733ba5d5a32c765); ?>
-<?php endif; ?><?php /**PATH D:\laragon\www\sibantar\resources\views/user/detail.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\laragon\www\sibantar\resources\views/user/detail.blade.php ENDPATH**/ ?>

@@ -12,9 +12,10 @@
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-primary-700 to-primary-900 text-white">
-        <div class="container mx-auto px-4 py-12 lg:py-20">
+    <div class="container mx-auto px-4 py-12 lg:pt-10 lg:pb-16">
+
             <div class="max-w-2xl mx-auto text-center">
-                <h1 class="mb-4">
+                <h1 class="mb-4 text-4xl">
                     Bantuan Darurat Kendaraan Terdekat
                 </h1>
                 <p class="text-primary-100 text-sm lg:text-base mb-8">
@@ -30,7 +31,12 @@
                             <label class="label justify-start">
                                 <span class="label-text text-white font-medium text-base">Jenis Kendaraan</span>
                             </label>
-                            <select name="vehicle_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
+                            <select 
+name="vehicle_type" 
+    class="select select-bordered w-full bg-white text-neutral-700 
+           text-base h-12 lg:h-12 lg:text-sm"
+    required>
+
                                 <option disabled selected value="">Pilih jenis kendaraan</option>
                                 <option value="Motor">Motor</option>
                                 <option value="Mobil">Mobil</option>
@@ -43,7 +49,12 @@
                             <label class="label justify-start">
                                 <span class="label-text text-white font-medium text-base">Jenis Kerusakan</span>
                             </label>
-                            <select name="problem_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
+                            <select 
+    name="vehicle_type" 
+    class="select select-bordered w-full bg-white text-neutral-700 
+           text-base h-12 lg:h-12 lg:text-sm"
+    required>
+
                                 <option disabled selected value="">Pilih jenis kerusakan</option>
                                 <option value="Ban Bocor">Ban Bocor</option>
                                 <option value="Aki Tekor">Aki Tekor</option>

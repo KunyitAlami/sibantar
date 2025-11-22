@@ -7,15 +7,15 @@
         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $steps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $step => $info): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="flex items-start gap-3 mb-4">
                 <div class="flex flex-col items-center">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-                        <?php if($step < $currentStep): ?> bg-success-500 text-white
-                        <?php elseif($step == $currentStep): ?> bg-primary-600 text-white
-                        <?php else: ?> bg-neutral-200 text-neutral-500
-                        <?php endif; ?>">
+                    <?php
+                        $isCompleted = ($step < $currentStep) || ($step == $currentStep && $currentStep == 5);
+                        $isCurrent = ($step == $currentStep && $currentStep != 5);
+                    ?>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 <?php echo e($isCompleted ? 'bg-success-500 text-white' : ($isCurrent ? 'bg-primary-600 text-white' : 'bg-neutral-200 text-neutral-500')); ?>">
                         <span class="font-bold"><?php echo e($step); ?></span>
                     </div>
                     <!--[if BLOCK]><![endif]--><?php if($step != count($steps)): ?>
-                        <div class="w-0.5 h-8 <?php if($step < $currentStep): ?> bg-success-500 <?php else: ?> bg-neutral-200 <?php endif; ?> mt-1"></div>
+                        <div class="w-0.5 h-8 <?php echo e($step < $currentStep ? 'bg-success-500' : 'bg-neutral-200'); ?> mt-1"></div>
                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
                 <div class="flex-1 pt-1">
@@ -53,9 +53,26 @@
     <!--[if BLOCK]><![endif]--><?php if(($tracking->finalPrice ?? 0) > 0): ?>
         <div class="card p-4 mb-4 bg-success-50 border border-success-200 rounded-xl">
             <h3 class="font-bold text-lg text-success-700 mb-3">Rincian Biaya Final</h3>
-            <div class="flex justify-between mb-2">
-                <span>Harga Keseluruhan</span>
-                <span>Rp <?php echo e(number_format(($tracking->finalPrice ?? 0) - ($tracking->deliveryFee ?? 0), 0, ',', '.')); ?></span>
+
+            <div class="space-y-2 text-sm text-success-800 mb-3">
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Layanan</span>
+                    <span class="font-semibold"><?php echo e($tracking->order->layananBengkel->nama_layanan ?? '-'); ?></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Harga Layanan</span>
+                    <span class="font-semibold">Rp <?php echo e(number_format($tracking->order->layananBengkel->harga_awal ?? 0, 0, ',', '.')); ?></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Ongkir</span>
+                    <span class="font-semibold">Rp <?php echo e(number_format($tracking->deliveryFee ?? 0, 0, ',', '.')); ?></span>
+                </div>
+                <!--[if BLOCK]><![endif]--><?php if(isset($tracking->admin_fee) && $tracking->admin_fee > 0): ?>
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Biaya Admin</span>
+                    <span class="font-semibold">Rp <?php echo e(number_format($tracking->admin_fee, 0, ',', '.')); ?></span>
+                </div>
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
 
             <div class="flex justify-between items-center font-semibold text-success-800 text-lg mb-3">
@@ -68,9 +85,11 @@
                 $isPaid = in_array($tracking->midtrans_status ?? '', $paidStatuses) || (($tracking->current_step ?? 0) >= 5);
             ?>
 
+            
+
             <!--[if BLOCK]><![endif]--><?php if($isPaid): ?>
                 <div class="py-3 text-center text-sm font-semibold text-success-700 border border-success-200 rounded-xl bg-success-100">
-                    Pembayaran berhasil ✅
+                    Pembayaran berhasil
                 </div>
             <?php else: ?>
                 <button id="pay-now"

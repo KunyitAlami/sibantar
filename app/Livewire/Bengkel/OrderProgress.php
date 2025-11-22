@@ -15,7 +15,7 @@ class OrderProgress extends Component
         2 => ['title' => 'Teknisi Dalam Perjalanan', 'desc' => 'Menunggu teknisi menuju lokasi'],
         3 => ['title' => 'Proses Perbaikan', 'desc' => 'Teknisi akan segera mulai perbaikan'],
         4 => ['title' => 'Menunggu Pembayaran', 'desc' => 'Silakan lakukan pembayaran'],
-        5 => ['title' => 'Selesai', 'desc' => 'Berikan ulasan'],
+        5 => ['title' => 'Selesai', 'desc' => 'Pesanan selesai'],
     ];
 
     public function mount($orderId)

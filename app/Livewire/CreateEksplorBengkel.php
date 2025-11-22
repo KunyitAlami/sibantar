@@ -12,16 +12,27 @@ class CreateEksplorBengkel extends Component
     
     // Daftar kecamatan
     public $kecamatanList = [
-        'Banjarmasin Utara',
-        'Banjarmasin Tengah',
-        'Banjarmasin Timur',
-        'Banjarmasin Barat',
-        'Banjarmasin Selatan'
+        // will be loaded dynamically in mount()
     ];
 
     public function mount()
     {
+        // Load daftar kecamatan berdasarkan data di DB (aktif)
+        $this->kecamatanList = BengkelModel::where('status', 'aktif')
+            ->whereNotNull('kecamatan')
+            ->distinct()
+            ->orderBy('kecamatan')
+            ->pluck('kecamatan')
+            ->toArray();
+
         // Load semua bengkel saat pertama kali
+        $this->loadBengkels();
+    }
+
+    public function updatedSelectedKecamatan($value)
+    {
+        // when the select changes, reload bengkels
+        $this->selectedKecamatan = $value;
         $this->loadBengkels();
     }
 
@@ -30,8 +41,10 @@ class CreateEksplorBengkel extends Component
         if ($this->selectedKecamatan === 'all') {
             $this->bengkels = BengkelModel::where('status', 'aktif')->get();
         } else {
+            // normalize comparison: trim and lowercase both sides to avoid mismatch
+            $kec = trim(strtolower($this->selectedKecamatan));
             $this->bengkels = BengkelModel::where('status', 'aktif')
-                ->where('kecamatan', $this->selectedKecamatan)
+                ->whereRaw("LOWER(TRIM(kecamatan)) = ?", [$kec])
                 ->get();
         }
     }

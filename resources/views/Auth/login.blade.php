@@ -1,11 +1,13 @@
 <x-layout>
     <x-slot:title>Masuk - SIBANTAR</x-slot:title>
 
-    <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
+    <section class="min-h-screen flex items-center justify-center 
+            lg:items-start lg:pt-20 
+            py-8 px-4 bg-neutral-50">
         <div class="w-full max-w-md">
             
             <!-- Logo & Title -->
-            <div class="text-center mb-6 sm:mb-8">
+            <div class="text-center mb-4 sm:mb-4">
                 <div class="flex justify-center mb-3 sm:mb-4">
                     <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center">
                         <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
@@ -87,7 +89,7 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="pt-2">
+                    <div class="pt-0">
                         <button type="submit" class="btn btn-primary w-full btn-lg">
                             Masuk
                         </button>
@@ -102,7 +104,7 @@
                     Daftar sekarang
                 </a>
             </p>
-            <p class="text-center mt-5 sm:mt-6 text-sm text-neutral-600 ">
+            <p class="text-center mt-2 sm:mt-2 text-sm text-neutral-600 ">
                 Ingin Menjadi Mitra?
                 <a href="{{ route('registerBengkel') }}" class="text-primary-700 hover:text-primary-800 font-semibold hover:underline">
                     Daftar menjadi Mitra SIBANTAR

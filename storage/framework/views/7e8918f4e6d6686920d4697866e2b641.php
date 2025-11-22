@@ -1,42 +1,27 @@
 <div class="max-w-7xl mx-auto px-4 py-6">
-    <!-- Filter Kecamatan -->
-    <div class="card p-6 mb-6">
+    <!-- Filter Kecamatan (dropdown) -->
+    <div class="card p-6 mb-3">
         <h2 class="text-xl font-bold text-neutral-900 mb-4">Filter Bengkel per Kecamatan</h2>
-        
-        <div class="flex flex-wrap gap-3">
-            <!-- Button Semua -->
-            <button 
-                wire:click="showAll" 
-                class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                <?php echo e($selectedKecamatan === 'all' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'); ?>">
-                Semua Kecamatan
-            </button>
 
-            <!-- Button per Kecamatan -->
-            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $kecamatanList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kecamatan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <button 
-                    wire:click="filterByKecamatan('<?php echo e($kecamatan); ?>')" 
-                    class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                    <?php echo e($selectedKecamatan === $kecamatan ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'); ?>">
-                    <?php echo e($kecamatan); ?>
-
-                </button>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+        <div class="relative w-72">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10h18v10a1 1 0 01-1 1H4a1 1 0 01-1-1V10z"/>
+                </svg>
+            </span>
+            <select wire:model="selectedKecamatan" wire:change="filterByKecamatan($event.target.value)" class="block w-full pl-10 pr-4 py-3 rounded-xl border border-neutral-200 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-200">
+                <option value="all">Semua Kecamatan</option>
+                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $kecamatanList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kecamatan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($kecamatan); ?>"><?php echo e($kecamatan); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+            </select>
         </div>
     </div>
 
     <!-- Daftar Bengkel -->
     <div class="card p-6">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-3">
             <div>
-                <h2 class="text-2xl font-bold text-neutral-900">
-                    <!--[if BLOCK]><![endif]--><?php if($selectedKecamatan === 'all'): ?>
-                        Semua Bengkel
-                    <?php else: ?>
-                        Bengkel di <?php echo e($selectedKecamatan); ?>
-
-                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                </h2>
                 <p class="text-sm text-neutral-600 mt-1">
                     Ditemukan <?php echo e(count($bengkels)); ?> bengkel
                 </p>

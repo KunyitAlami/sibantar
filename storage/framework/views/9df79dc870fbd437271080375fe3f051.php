@@ -44,7 +44,7 @@
     <!-- Header: Back Button + Search Info -->
     <header class="bg-white shadow-sm flex sticky top-0 z-50">
         <!-- Back Button -->
-        <a  href="<?php echo e(route('user.dashboard')); ?>" class="flex-shrink-0 mt-4 ml-12">
+        <a  href="<?php echo e(route('user.dashboard')); ?>" class="flex-shrink-0 mt-4 ml-3">
             <svg class="w-6 h-6 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
@@ -52,7 +52,7 @@
         <div class="px-4 py-3 flex items-center justify-center gap-3">
             <!-- Search Info -->
             <div class="flex-1 min-w-0 justify-center">
-                <h1 class="text-2xl font-bold text-neutral-900 truncate">Ayo Eksplorasi Bengkel di Kota Banjarmasin</h1>
+                <h1 class="text-lg font-bold text-neutral-900 truncate">Cari Bengkel</h1>
             </div>
         </div>
     </header>
@@ -97,9 +97,6 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
     </section>
-
-
-
 
     <!-- Filter & Sort Section -->
     

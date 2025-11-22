@@ -43,10 +43,10 @@
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-primary-700 to-primary-900 text-white">
-        <div class="container mx-auto px-4 py-12 lg:py-20">
+    <div class="container mx-auto px-4 py-12 lg:pt-10 lg:pb-16">
             <div class="max-w-2xl mx-auto text-center">
-                <h1 class="mb-4">
-                    Selamat Datang di SIBANTAR
+                <h1 class="mb-4 text-4xl">
+                    Bantuan Darurat Kendaraan Terdekat
                 </h1>
                 <p class="text-primary-100 text-sm lg:text-base mb-8">
                     Temukan bengkel terdekat dengan cepat dan aman<br class="hidden lg:block">
@@ -54,51 +54,73 @@
                 </p>
 
                 <!-- Search Form Card -->
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-xl text-left">
-                    <form action="<?php echo e(route('user.search')); ?>" method="GET" class="space-y-6">
-                        <!-- Jenis Kendaraan -->
-                        <div class="form-control w-full">
-                            <label class="label justify-start">
-                                <span class="label-text text-white font-medium text-base">Jenis Kendaraan</span>
-                            </label>
-                            <select name="vehicle_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
-                                <option disabled selected value="">Pilih jenis kendaraan</option>
-                                <option value="Motor">Motor</option>
-                                <option value="Mobil">Mobil</option>
-                                <option value="Truk">Truk</option>
-                            </select>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-xl">
+                    <form action="<?php echo e(route('user.search')); ?>" method="GET">
+
+                        <!-- Responsive: Mobile 1 kolom, Desktop 2 kolom -->
+                        <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-6">
+
+                            <!-- LEFT: Dropdown + Label kiri -->
+                            <div class="space-y-6 text-left">
+
+                                <!-- Jenis Kendaraan -->
+                                <div class="form-control w-full">
+                                    <label class="label">
+                                        <span class="label-text text-white font-medium text-base">Jenis Kendaraan</span>
+                                    </label>
+                                    <select name="vehicle_type"
+                                        class="select select-bordered w-full bg-white text-neutral-700 h-12 lg:h-12 lg:text-sm"
+                                        required>
+                                        <option disabled selected value="">Pilih jenis kendaraan</option>
+                                        <option value="Motor">Motor</option>
+                                        <option value="Mobil">Mobil</option>
+                                        <option value="Truk">Truk</option>
+                                    </select>
+                                </div>
+
+                                <!-- Jenis Masalah -->
+                                <div class="form-control w-full">
+                                    <label class="label">
+                                        <span class="label-text text-white font-medium text-base">Jenis Kerusakan</span>
+                                    </label>
+                                    <select name="nama_layanan"
+                                        class="select select-bordered w-full bg-white text-neutral-700 h-12 lg:h-12 lg:text-sm"
+                                        required>
+                                        <option disabled selected value="">Pilih jenis kerusakan</option>
+                                        <option value="Ban Bocor">Ban Bocor</option>
+                                        <option value="Aki Tekor">Aki Tekor</option>
+                                        <option value="Mesin Mati">Mesin Mati</option>
+                                        <option value="Kecelakaan">Kecelakaan</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <!-- RIGHT: Map (Leaflet versi kamu) -->
+                            <div class="text-left">
+                                <label class="label justify-start mb-2">
+                                    <span class="label-text text-white font-medium text-base">Lokasi anda sekarang:</span>
+                                </label>
+
+                                <div id="map"
+                                    class="rounded-xl border-2 border-white/20 w-full h-48 lg:h-64 xl:h-72 overflow-hidden">
+                                </div>
+
+                                <input type="hidden" name="latitude" id="latitude">
+                                <input type="hidden" name="longitude" id="longitude">
+                            </div>
+
                         </div>
 
-                        <!-- Jenis Masalah -->
-                        <div class="form-control w-full">
-                            <label class="label justify-start">
-                                <span class="label-text text-white font-medium text-base">Jenis Kerusakan</span>
-                            </label>
-                            <select name="nama_layanan" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
-                                <option disabled selected value="">Pilih jenis kerusakan</option>
-                                <option value="Ban Bocor">Ban Bocor</option>
-                                <option value="Aki Tekor">Aki Tekor</option>
-                                <option value="Mesin Mati">Mesin Mati</option>
-                                <option value="Kecelakaan">Kecelakaan</option>
-                                <option value="Lainnya">Lainnya</option>
-                            </select>
+                        <!-- BUTTON -->
+                        <div class="mt-6">
+                            <button type="submit"
+                                class="btn btn-secondary w-full gap-2 h-12 lg:h-11 text-base lg:text-sm shadow-lg hover:shadow-xl">
+                                Cari Bengkel Terdekat
+                            </button>
                         </div>
 
-                        <!-- Lokasi Anda -->
-                        <div class="text-left">
-                            <label class="label justify-start mb-4">
-                                <span class="label-text text-white font-medium text-base">Lokasi anda sekarang:</span>
-                            </label>
-
-                            <div id="map" class="rounded-xl border-2 border-white/20" style="height: 300px; width: 100%;"></div>
-                            <input type="hidden" name="latitude" id="latitude">
-                            <input type="hidden" name="longitude" id="longitude">
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-secondary w-full btn-lg shadow-lg hover:shadow-xl">
-                            Cari Bengkel Terdekat
-                        </button>
                     </form>
                 </div>
             </div>

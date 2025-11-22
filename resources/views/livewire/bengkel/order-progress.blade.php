@@ -7,15 +7,15 @@
         @foreach($steps as $step => $info)
             <div class="flex items-start gap-3 mb-4">
                 <div class="flex flex-col items-center">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-                        @if($step < $currentStep) bg-success-500 text-white
-                        @elseif($step == $currentStep) bg-primary-600 text-white
-                        @else bg-neutral-200 text-neutral-500
-                        @endif">
+                    @php
+                        $isCompleted = ($step < $currentStep) || ($step == $currentStep && $currentStep == 5);
+                        $isCurrent = ($step == $currentStep && $currentStep != 5);
+                    @endphp
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 {{ $isCompleted ? 'bg-success-500 text-white' : ($isCurrent ? 'bg-primary-600 text-white' : 'bg-neutral-200 text-neutral-500') }}">
                         <span class="font-bold">{{ $step }}</span>
                     </div>
                     @if($step != count($steps))
-                        <div class="w-0.5 h-8 @if($step < $currentStep) bg-success-500 @else bg-neutral-200 @endif mt-1"></div>
+                        <div class="w-0.5 h-8 {{ $step < $currentStep ? 'bg-success-500' : 'bg-neutral-200' }} mt-1"></div>
                     @endif
                 </div>
                 <div class="flex-1 pt-1">
@@ -53,9 +53,26 @@
     @if(($tracking->finalPrice ?? 0) > 0)
         <div class="card p-4 mb-4 bg-success-50 border border-success-200 rounded-xl">
             <h3 class="font-bold text-lg text-success-700 mb-3">Rincian Biaya Final</h3>
-            <div class="flex justify-between mb-2">
-                <span>Harga Keseluruhan</span>
-                <span>Rp {{ number_format(($tracking->finalPrice ?? 0) - ($tracking->deliveryFee ?? 0), 0, ',', '.') }}</span>
+
+            <div class="space-y-2 text-sm text-success-800 mb-3">
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Layanan</span>
+                    <span class="font-semibold">{{ $tracking->order->layananBengkel->nama_layanan ?? '-' }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Harga Layanan</span>
+                    <span class="font-semibold">Rp {{ number_format($tracking->order->layananBengkel->harga_awal ?? 0, 0, ',', '.') }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Ongkir</span>
+                    <span class="font-semibold">Rp {{ number_format($tracking->deliveryFee ?? 0, 0, ',', '.') }}</span>
+                </div>
+                @if(isset($tracking->admin_fee) && $tracking->admin_fee > 0)
+                <div class="flex justify-between">
+                    <span class="text-neutral-700">Biaya Admin</span>
+                    <span class="font-semibold">Rp {{ number_format($tracking->admin_fee, 0, ',', '.') }}</span>
+                </div>
+                @endif
             </div>
 
             <div class="flex justify-between items-center font-semibold text-success-800 text-lg mb-3">
@@ -68,9 +85,11 @@
                 $isPaid = in_array($tracking->midtrans_status ?? '', $paidStatuses) || (($tracking->current_step ?? 0) >= 5);
             @endphp
 
+            {{-- Metode pembayaran removed per request --}}
+
             @if($isPaid)
                 <div class="py-3 text-center text-sm font-semibold text-success-700 border border-success-200 rounded-xl bg-success-100">
-                    Pembayaran berhasil ✅
+                    Pembayaran berhasil
                 </div>
             @else
                 <button id="pay-now"
