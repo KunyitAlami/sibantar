@@ -66,15 +66,32 @@
             </div>
 
             <div class="mb-4">
-                <select wire:model="currentStep" wire:change="updateStep($event.target.value)" class="w-full border rounded-lg p-2 text-base">
-                    @foreach($steps as $key => $label)
-                        @if((int)$key >= $currentStep)
-                            <option value="{{ $key }}">{{ $label }}</option>
-                        @endif
-                    @endforeach
+                @php
+                    $isFinished = $tracking->order->status === 'selesai';
+                @endphp
+
+                <select 
+                    wire:model="currentStep" 
+                    wire:change="updateStep($event.target.value)" 
+                    class="w-full border rounded-lg p-2 text-base"
+                    @if($isFinished) disabled @endif
+                >
+                    @if($isFinished)
+                        <option value="5">Selesai</option>
+                    @else
+                        @foreach($steps as $key => $label)
+                            @if((int)$key >= $currentStep)
+                                <option value="{{ $key }}">{{ $label }}</option>
+                            @endif
+                        @endforeach
+                    @endif
                 </select>
-                <p class="text-xs text-neutral-500 mt-2">Pilih step untuk update status layanan.</p>
+                <p class="text-xs text-neutral-500 mt-2">
+                    Pilih step untuk update status layanan.
+                    @if($isFinished) Pesanan sudah selesai, tidak bisa diubah. @endif
+                </p>
             </div>
+
         </div>
 
 

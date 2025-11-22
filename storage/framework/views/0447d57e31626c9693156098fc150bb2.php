@@ -68,10 +68,16 @@
 
                         </span>
                         <div class="flex gap-2">
-                            <a href="<?php echo e(route('user.report', ['booking' => 1])); ?>" class="btn btn-sm btn-outline btn-error">
+                            <a href="<?php echo e(route('user.report.order', ['id_order' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
                                 Lapor
                             </a>
-                            
+                            <a href="<?php echo e(route('user.invoice', $order->id_order)); ?>" 
+                            class="btn btn-sm btn-outline btn-error">
+                            Invoice
+                            </a>
+                            <a href="<?php echo e(route('user.order-tracking', ['id' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
+                                Detail Order
+                            </a>
                         </div>
                     </div>
                 </div>

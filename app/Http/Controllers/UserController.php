@@ -5,13 +5,14 @@ use Illuminate\Http\Request;
 use App\Models\BengkelModel;
 use App\Models\LayananBengkelModel;
 use App\Models\OrderModel;
+use App\Models\ReportFromUserModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\CountDownModel;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class UserController extends Controller
 {
     public function search(Request $request)
@@ -303,8 +304,9 @@ class UserController extends Controller
     public function orderTracking($orderId)
     {
         $status = request()->get('status', 'waiting');
+        $order = OrderModel::findOrFail($orderId);
 
-        return view('user.order-tracking', compact('orderId', 'status'));
+        return view('user.order-tracking', compact('orderId', 'status', 'order'));
     }
 
 
@@ -323,5 +325,44 @@ class UserController extends Controller
             'orders' => $orders,
             'id_user' => $id_user,
         ]);
+    }
+
+    public function reportOrder($id_order)
+    {
+        $order = OrderModel::with(['user', 'layananBengkel', 'bengkel'])
+            ->findOrFail($id_order);
+
+        return view('user.report', compact('order'));
+    }
+
+
+    public function reportStore(Request $request, $id_order)
+    {
+        $request->validate([
+            'deskripsi' => 'required|min:10',
+            'id_bengkel' => 'required|integer',
+            'id_user' => 'required|integer',
+        ]);
+
+        ReportFromUserModel::create([
+            'id_order'    => $id_order,
+            'id_bengkel'  => $request->id_bengkel,
+            'id_user'     => $request->id_user,
+            'deskripsi'   => $request->deskripsi,
+        ]);
+
+        return redirect()
+            ->route('user.dashboard')
+            ->with('success', 'Laporan berhasil dikirim!');
+    }
+    
+    public function invoice($id_order)
+    {
+        $order = OrderModel::with(['user', 'bengkel'])->findOrFail($id_order);
+
+        $pdf = Pdf::loadView('user.invoice', compact('order'))
+                    ->setPaper('A4', 'portrait');
+
+        return $pdf->download('invoice-order-'.$order->id_order.'.pdf');
     }
 }

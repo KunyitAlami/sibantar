@@ -73,6 +73,18 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/dashboard/bengkel/{id_bengkel}', [BengkelController::class, 'index'])->name('dashboard');
             Route::get('/bengkel/order-tracking/{orderId}', [BengkelController::class, 'orderTracking'])->name('order-tracking');
+
+            Route::delete('/bengkel/layanan/{id}', [BengkelController::class, 'hapusLayanan'])->name('hapusLayanan');
+            Route::get('/form/bengkel/{id_bengkel}', [BengkelController::class, 'formTambahLayanan'])->name('tambahLayanan');
+            Route::post('/bengkel/layanan/{id_bengkel}/store', [BengkelController::class, 'storeLayananBengkel'])->name('layanan.store');
+
+            Route::get('/form/bengkel/{id_bengkel}', [BengkelController::class, 'formTambahLayanan'])->name('tambahLayanan');
+            Route::get('/bengkel/layanan/{id}/edit', [BengkelController::class, 'editLayanan'])->name('edit.layanan');
+
+            Route::post('/bengkel/layanan/{id_layanan_bengkel}/update',[BengkelController::class, 'updateLayananBengkel'])->name('layanan.update');
+
+            Route::get('/report/{id_order}', [BengkelController::class, 'reportOrder'])->name('report.order');
+            Route::post('/report-store/{id_order}', [BengkelController::class, 'reportStore'])->name('report.store');
         });
 
     // USER
@@ -100,8 +112,17 @@ Route::middleware(['auth'])->group(function () {
 
 
             // Report/Laporan
-            Route::get('/report', fn() => view('user.report'))->name('report');
-            Route::post('/report', fn() => redirect()->route('user.history'))->name('report.store');
+            // Route::get('/report', fn() => view('user.report'))->name('report');
+            // Route::post('/report', fn() => redirect()->route('user.history'))->name('report.store');
+            Route::get('/report/{id_order}', [UserController::class, 'reportOrder'])
+                ->name('report.order');
+
+            Route::post('/report-store/{id_order}', [UserController::class, 'reportStore'])
+                ->name('report.store');
+
+            Route::get('/user/invoice/{id_order}', [UserController::class, 'invoice'])->name('invoice');
+
+
             
             // Order Tracking berdasarkan status
             // Route::get('/order-tracking/on-the-way/{id}', function ($id) {

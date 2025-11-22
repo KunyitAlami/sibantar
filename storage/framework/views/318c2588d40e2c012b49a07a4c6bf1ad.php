@@ -1,10 +1,7 @@
-
-    
-    
-<?php if (isset($component)) { $__componentOriginal066474d3ca90bb663733ba5d5a32c765 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal066474d3ca90bb663733ba5d5a32c765 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-user','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('layout-user'); ?>
+<?php if (isset($component)) { $__componentOriginal70339126620b9ce2988dbf7f78f02854 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal70339126620b9ce2988dbf7f78f02854 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-bengkel','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-bengkel'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
@@ -14,7 +11,7 @@
     <section class="bg-white border-b border-neutral-200 sticky top-0 z-50 mb-5">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
-                <a href="<?php echo e(route('user.dashboard', ['id_user' => $order->id_user])); ?>"
+                <a href="<?php echo e(route('bengkel.dashboard', ['id_bengkel' => $order->id_bengkel])); ?>"
                    class="text-neutral-700 hover:text-primary-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,7 +32,7 @@
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam quasi voluptates.</p>
             </div>
             
-            <form  action="<?php echo e(route('user.report.store', $order->id_order)); ?>"
+            <form action="<?php echo e(route('bengkel.report.store', $order->id_order)); ?>"
                 method="POST" enctype="multipart/form-data" class="mt-10 mb-10 gap-5">
                 <?php echo csrf_field(); ?>
 
@@ -44,7 +41,7 @@
                         <h1 class="font-semibold text-lg mb-2">Keterangan Order</h1>
                         <div class="space-y-1 text-sm text-neutral-700">
 
-                            <p><span class="font-semibold">Nama Bengkel:</span> <?php echo e($order->bengkel->nama_bengkel); ?></p>
+                            <p><span class="font-semibold">Pelanggan:</span> <?php echo e($order->user->username); ?></p>
 
                             <p><span class="font-semibold">Kategori:</span> <?php echo e($order->layananBengkel->kategori ?? '-'); ?></p>
 
@@ -80,15 +77,14 @@
         </div>
         
     </section>
-
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
-<?php $attributes = $__attributesOriginal066474d3ca90bb663733ba5d5a32c765; ?>
-<?php unset($__attributesOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php if (isset($__attributesOriginal70339126620b9ce2988dbf7f78f02854)): ?>
+<?php $attributes = $__attributesOriginal70339126620b9ce2988dbf7f78f02854; ?>
+<?php unset($__attributesOriginal70339126620b9ce2988dbf7f78f02854); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal066474d3ca90bb663733ba5d5a32c765)): ?>
-<?php $component = $__componentOriginal066474d3ca90bb663733ba5d5a32c765; ?>
-<?php unset($__componentOriginal066474d3ca90bb663733ba5d5a32c765); ?>
+<?php if (isset($__componentOriginal70339126620b9ce2988dbf7f78f02854)): ?>
+<?php $component = $__componentOriginal70339126620b9ce2988dbf7f78f02854; ?>
+<?php unset($__componentOriginal70339126620b9ce2988dbf7f78f02854); ?>
 <?php endif; ?>
-<?php /**PATH D:\laragon\www\sibantar\resources\views/user/report.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\laragon\www\sibantar\resources\views/bengkel/form/lapor.blade.php ENDPATH**/ ?>

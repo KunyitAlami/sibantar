@@ -1,6 +1,5 @@
-<x-layout-user>
-    <!-- Header -->
-    <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
+
+    {{-- <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
                 <a href="{{ route('user.history') }}" class="text-neutral-700 hover:text-primary-700">
@@ -13,12 +12,10 @@
         </div>
     </section>
 
-    <!-- Main Content -->
     <section class="py-6 pb-32">
         <div class="container mx-auto px-4">
             <div class="max-w-md mx-auto">
                 
-                <!-- Order Info Card -->
                 <div class="card p-4 mb-4">
                     <h4 class="font-semibold text-neutral-900 mb-1">Bengkel Jaya Motor</h4>
                     <p class="text-sm text-neutral-600 mb-2">Order ID: #{{ $bookingId ?? '12345' }}</p>
@@ -30,12 +27,10 @@
                     </div>
                 </div>
 
-                <!-- Report Form -->
                 <form id="reportForm" action="{{ route('user.report.store') }}" method="POST" class="space-y-4">
                     @csrf
                     <input type="hidden" name="booking_id" value="{{ $bookingId ?? '' }}">
 
-                    <!-- Report Type -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Jenis Masalah <span class="text-error">*</span></label>
                         <select name="report_type" class="select select-bordered w-full text-sm bg-white !h-14 !min-h-0 !leading-normal" required>
@@ -50,7 +45,6 @@
                         </select>
                     </div>
 
-                    <!-- Priority Level -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Tingkat Urgensi <span class="text-error">*</span></label>
                         <div class="grid grid-cols-3 gap-3">
@@ -75,7 +69,6 @@
                         </div>
                     </div>
 
-                    <!-- Subject -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Judul Laporan <span class="text-error">*</span></label>
                         <input 
@@ -88,7 +81,6 @@
                         <p class="text-xs text-neutral-500 mt-1">Maksimal 100 karakter</p>
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Detail Laporan <span class="text-error">*</span></label>
                         <textarea 
@@ -101,7 +93,6 @@
                         <p class="text-xs text-neutral-500 mt-1">Minimal 20 karakter</p>
                     </div>
 
-                    <!-- Upload Evidence (Optional) -->
                     <div>
                         <label class="block text-sm font-semibold text-neutral-900 mb-2">Bukti Pendukung <span class="text-neutral-500 font-normal">(Opsional)</span></label>
                         <input 
@@ -113,7 +104,6 @@
                         <p class="text-xs text-neutral-500 mt-1">Format: JPG, PNG. Maksimal 5 foto</p>
                     </div>
 
-                    <!-- Info Box -->
                     <div class="alert alert-info">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -134,7 +124,6 @@
         </div>
     </section>
 
-    <!-- Bottom Action Buttons -->
     <section class="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 py-4 z-50">
         <div class="container mx-auto px-4">
             <div class="max-w-md mx-auto flex gap-3">
@@ -150,7 +139,7 @@
 
     @push('scripts')
     <script>
-        // File input preview
+
         document.querySelector('input[type="file"]')?.addEventListener('change', function(e) {
             const files = e.target.files;
             if (files.length > 5) {
@@ -164,7 +153,6 @@
             }
         });
 
-        // Form submission
         document.querySelector('form')?.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -179,10 +167,6 @@
                 cancelButtonText: 'Periksa Lagi'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Submit form (in real scenario)
-                    // this.submit();
-                    
-                    // Show success message
                     Swal.fire({
                         icon: 'success',
                         title: 'Laporan Terkirim!',
@@ -196,6 +180,76 @@
             });
         });
     </script>
-    @endpush
+    @endpush --}}
+    
+<x-layout-user>
+    <section class="bg-white border-b border-neutral-200 sticky top-0 z-50 mb-5">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center gap-4 py-4">
+                <a href="{{ route('user.dashboard', ['id_user' => $order->id_user]) }}"
+                   class="text-neutral-700 hover:text-primary-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                <h1 class="font-bold text-lg text-neutral-900">Kembali ke Beranda</h1>
+            </div>
+        </div>
+    </section>
+
+    {{-- Form --}}
+    
+    <section class="px-4">
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
+            <div class="flex flex-col gap-4 justify-center text-center">
+                <h1>Form Laporkan Pesanan</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam quasi voluptates.</p>
+            </div>
+            {{-- {{ route('bengkel.order.store', $order->id_order) }}--}}
+            <form  action="{{ route('user.report.store', $order->id_order) }}"
+                method="POST" enctype="multipart/form-data" class="mt-10 mb-10 gap-5">
+                @csrf
+
+                <div class="space-y-5">
+                    <div>
+                        <h1 class="font-semibold text-lg mb-2">Keterangan Order</h1>
+                        <div class="space-y-1 text-sm text-neutral-700">
+
+                            <p><span class="font-semibold">Nama Bengkel:</span> {{ $order->bengkel->nama_bengkel }}</p>
+
+                            <p><span class="font-semibold">Kategori:</span> {{ $order->layananBengkel->kategori ?? '-' }}</p>
+
+                            <p><span class="font-semibold">Layanan:</span> {{ $order->layananBengkel->nama_layanan ?? '-' }}</p>
+
+                            <p><span class="font-semibold">Dibuat pada:</span> 
+                                {{ $order->created_at->format('d M Y, H:i') }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <label class="font-semibold mb-3">Deskripsi Laporan</label>
+                        <textarea name="deskripsi" rows="5"
+                                class="w-full border rounded-lg p-3 mt-3"
+                                placeholder="Tuliskan laporan lengkap mengenai kondisi pesanan..."></textarea>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg text-center mt-4">
+                        Laporkan
+                    </button>
+
+                    <input type="hidden" name="id_order" value="{{ $order->id_order }}">
+                    <input type="hidden" name="id_bengkel" value="{{ $order->id_bengkel }}">
+                    <input type="hidden" name="id_user" value="{{ $order->id_user }}">
+                </div>
+            </form>
+
+        </div>
+        
+    </section>
 
 </x-layout-user>

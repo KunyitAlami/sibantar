@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bengkel;
 use Illuminate\Http\Request;
 use App\Models\BengkelModel;
 use App\Models\LayananBengkelModel;
+use App\Models\ReportFromBengkelModel;
 use App\Models\OrderModel;
 use Illuminate\Routing\Controller;
 use Carbon\Carbon;
@@ -50,21 +51,18 @@ class BengkelController extends Controller
         $layanan_bengkel = LayananBengkelModel::where('id_bengkel', $id_bengkel)->get();
 
         foreach ($orders as $o) {
-            // DEBUG: Tampilkan data mentah
             Log::info("=== DEBUG ORDER {$o->id_order} ===");
             Log::info("User Latitude RAW: [" . $o->user_latitude . "]");
             Log::info("User Longitude RAW: [" . $o->user_longitude . "]");
             Log::info("Bengkel Latitude RAW: [" . $o->bengkel_latitude . "]");
             Log::info("Bengkel Longitude RAW: [" . $o->bengkel_longitude . "]");
-            
-            // Reverse geocode
+ 
             if ($o->user_latitude && $o->user_longitude) {
                 $o->full_address = $this->reverseGeocode($o->user_latitude, $o->user_longitude);
             } else {
                 $o->full_address = null;
             }
 
-            // Hitung jarak
             $userLat = trim($o->user_latitude ?? '');
             $userLng = trim($o->user_longitude ?? '');
             $bengkelLat = trim($o->bengkel_latitude ?? '');
@@ -124,7 +122,6 @@ class BengkelController extends Controller
             Log::info("=== END DEBUG ===\n");
         }
 
-        // Statistik
         $ordersToday = OrderModel::where('id_bengkel', $id_bengkel)
             ->whereDate('created_at', Carbon::today())
             ->get();
@@ -151,6 +148,102 @@ class BengkelController extends Controller
         $order = OrderModel::findOrFail($orderId);
         return view('bengkel.dashboard.final-price', compact('order', 'orderId'));
     }
+
+    public function formTambahLayanan($id_bengkel){
+        return view ('bengkel.form.tambahLayanan', compact('id_bengkel'));
+    }
+    public function storeLayananBengkel(Request $request, $id_bengkel)
+    {
+        $validated = $request->validate([
+            'nama_layanan' => 'required|string|max:255',
+            'harga_awal'   => 'required|numeric|min:0',
+            'harga_akhir'  => 'required|numeric|min:0',
+            'deskripsi'    => 'required|string',
+            'kategori'     => 'required|string',
+        ]);
+
+        LayananBengkelModel::create([
+            'id_bengkel'   => $id_bengkel,
+            'nama_layanan' => $validated['nama_layanan'],
+            'harga_awal'   => $validated['harga_awal'],
+            'harga_akhir'  => $validated['harga_akhir'],
+            'deskripsi'    => $validated['deskripsi'],
+            'kategori'     => $validated['kategori'],
+        ]);
+
+        return redirect()
+            ->route('bengkel.dashboard', $id_bengkel)
+            ->with('success', 'Layanan berhasil ditambahkan!');
+    }
+
+    public function updateLayananBengkel(Request $request, $id_layanan_bengkel)
+    {
+        $validated = $request->validate([
+            'nama_layanan' => 'required|string|max:255',
+            'harga_awal' => 'required|numeric',
+            'harga_akhir' => 'required|numeric',
+            'deskripsi' => 'required|string',
+            'kategori' => 'required|string',
+            'id_bengkel' => 'required|numeric'
+        ]);
+
+        $layanan = LayananBengkelModel::findOrFail($id_layanan_bengkel);
+
+        $layanan->update([
+            'nama_layanan' => $validated['nama_layanan'],
+            'harga_awal'   => $validated['harga_awal'],
+            'harga_akhir'  => $validated['harga_akhir'],
+            'deskripsi'    => $validated['deskripsi'],
+            'kategori'     => $validated['kategori'],
+        ]);
+
+        // Redirect
+        return redirect()->route('bengkel.dashboard', $validated['id_bengkel'])->with('success', 'Layanan berhasil diperbarui!');
+    }
+
+    public function editLayanan($id_layanan_bengkel)
+    {
+        $layanan = LayananBengkelModel::findOrFail($id_layanan_bengkel);
+
+        return view('bengkel.form.editLayanan', [
+            'layanan_bengkel' => $layanan,
+            'id_layanan_bengkel' => $id_layanan_bengkel
+        ]);
+    }
+
+    public function reportOrder($id_order)
+    {
+        $order = OrderModel::with(['user', 'layananBengkel', 'bengkel'])
+            ->findOrFail($id_order);
+
+        return view('bengkel.form.lapor', compact('order'));
+    }
+
+
+    public function reportStore(Request $request, $id_order)
+    {
+        $request->validate([
+            'deskripsi' => 'required|min:10',
+            'id_bengkel' => 'required|integer',
+            'id_user' => 'required|integer',
+        ]);
+
+        ReportFromBengkelModel::create([
+            'id_order'    => $id_order,
+            'id_bengkel'  => $request->id_bengkel,
+            'id_user'     => $request->id_user,
+            'deskripsi'   => $request->deskripsi,
+        ]);
+
+        return redirect()
+            ->route('bengkel.dashboard', ['id_bengkel' => $request->id_bengkel])
+            ->with('success', 'Laporan berhasil dikirim!');
+    }
+
+
+
+
+
 
 
 }

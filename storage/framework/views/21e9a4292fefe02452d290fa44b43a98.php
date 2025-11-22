@@ -66,15 +66,32 @@
             </div>
 
             <div class="mb-4">
-                <select wire:model="currentStep" wire:change="updateStep($event.target.value)" class="w-full border rounded-lg p-2 text-base">
-                    <?php $__currentLoopData = $steps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <!--[if BLOCK]><![endif]--><?php if((int)$key >= $currentStep): ?>
-                            <option value="<?php echo e($key); ?>"><?php echo e($label); ?></option>
-                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                <?php
+                    $isFinished = $tracking->order->status === 'selesai';
+                ?>
+
+                <select 
+                    wire:model="currentStep" 
+                    wire:change="updateStep($event.target.value)" 
+                    class="w-full border rounded-lg p-2 text-base"
+                    <?php if($isFinished): ?> disabled <?php endif; ?>
+                >
+                    <!--[if BLOCK]><![endif]--><?php if($isFinished): ?>
+                        <option value="5">Selesai</option>
+                    <?php else: ?>
+                        <?php $__currentLoopData = $steps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <!--[if BLOCK]><![endif]--><?php if((int)$key >= $currentStep): ?>
+                                <option value="<?php echo e($key); ?>"><?php echo e($label); ?></option>
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </select>
-                <p class="text-xs text-neutral-500 mt-2">Pilih step untuk update status layanan.</p>
+                <p class="text-xs text-neutral-500 mt-2">
+                    Pilih step untuk update status layanan.
+                    <!--[if BLOCK]><![endif]--><?php if($isFinished): ?> Pesanan sudah selesai, tidak bisa diubah. <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                </p>
             </div>
+
         </div>
 
 

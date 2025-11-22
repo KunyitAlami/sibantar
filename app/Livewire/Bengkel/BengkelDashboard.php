@@ -14,10 +14,12 @@ class BengkelDashboard extends Component
 {
     public $id_bengkel;
     public $activePanel = 'about';
+    public $layanan;
 
     public function mount($id_bengkel)
     {
         $this->id_bengkel = $id_bengkel;
+        $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
         
     }
 
@@ -126,8 +128,31 @@ class BengkelDashboard extends Component
     {
         $this->render();
     }
+    
+    public function hapusLayanan($id_layanan_bengkel)
+    {
+        $layanan = LayananBengkelModel::find($id_layanan_bengkel);
+        
+        if (!$layanan || $layanan->id_bengkel != $this->id_bengkel) {
+            session()->flash('error', 'Layanan tidak ditemukan.');
+            return;
+        }
 
+        try {
+            $layanan->delete();
+            $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
+            
+            session()->flash('success', 'Layanan berhasil dihapus.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi kesalahan saat menghapus layanan.');
+            Log::error('Hapus layanan error: '.$e->getMessage());
+        }
+    }
 
+    public function editLayanan($id_layanan_bengkel)
+    {
+        return redirect()->route('bengkel.edit.layanan', $id_layanan_bengkel);
+    }
 
     public function render()
     {
@@ -135,32 +160,17 @@ class BengkelDashboard extends Component
         $orders = OrderModel::where('id_bengkel', $this->id_bengkel)
             ->with('user','layananBengkel', 'countDown')
             ->get();
-        $layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
 
         // Hitung jarak dan countdown untuk setiap order
         foreach ($orders as $order) {
-            $order->countdown_active = $order->countDown->status === 'pending';
+            $order->countdown_active = $order->countDown?->status === 'pending';
             $order->distance_km = $this->calculateDistance($order);
 
-            if ($order->countDown && $order->countDown->batas_konfirmasi) {
+            if ($order->countDown?->batas_konfirmasi) {
                 $clientZone = $order->client_timezone ?? 'Asia/Makassar';
-
                 $batas = Carbon::parse($order->countDown->batas_konfirmasi, $clientZone);
                 $now = Carbon::now($clientZone);
-
-                $order->countdown_ms = ($batas->timestamp * 1000) - ($now->timestamp * 1000);
-                
-                if ($order->countdown_ms < 0) {
-                    $order->countdown_ms = 0;
-                }
-
-                Log::info("Bengkel countdown - Order #{$order->id_order}", [
-                    'timezone' => $clientZone,
-                    'batas' => $batas->toDateTimeString(),
-                    'now' => $now->toDateTimeString(),
-                    'countdown_ms' => $order->countdown_ms,
-                    'countdown_seconds' => round($order->countdown_ms / 1000, 2)
-                ]);
+                $order->countdown_ms = max(($batas->timestamp * 1000) - ($now->timestamp * 1000), 0);
             } else {
                 $order->countdown_ms = null;
             }
@@ -169,7 +179,8 @@ class BengkelDashboard extends Component
         return view('livewire.bengkel.bengkel-dashboard', [
             'bengkel' => $bengkel,
             'orders' => $orders,
-            'layanan' => $layanan,
+            'layanan' => $this->layanan, // <- pakai property, bukan query baru
         ]);
     }
+
 }
