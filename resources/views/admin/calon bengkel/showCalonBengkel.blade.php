@@ -36,7 +36,7 @@
                         {{-- baris pertama (tiga pertanyaan) --}}
                         <div class="flex flex-col mb-8"> 
                             <h1 class="text-2xl font-bold text-black mb-4">Profile Pemilik Bengkel</h1>
-                            <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.</p>
+                            <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.12312312312321312321</p>
                         </div>
                         <div class="flex gap-10 ">
                             <!-- Username -->
