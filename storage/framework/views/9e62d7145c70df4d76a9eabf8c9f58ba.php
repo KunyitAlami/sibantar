@@ -3,7 +3,7 @@
     <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
-                <a href="{{ route('user.dashboard') }}" class="text-neutral-700 hover:text-primary-700">
+                <a href="<?php echo e(route('user.dashboard')); ?>" class="text-neutral-700 hover:text-primary-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
@@ -30,23 +30,23 @@
                     <p class="text-neutral-600 text-sm">Sedang menunggu konfirmasi<br>dari bengkel</p>
                 </div>
 
-                @if($order && $order->status !== 'ditolak')
+                <!--[if BLOCK]><![endif]--><?php if($order && $order->status !== 'ditolak'): ?>
                     <!-- Countdown Timer -->
                     <div class="card p-6 bg-warning-50 border-2 border-warning-200 text-center"
                          x-data="{
-                             countdown_ms: {{ $order->countdown_ms ?? 0 }},
+                             countdown_ms: <?php echo e($order->countdown_ms ?? 0); ?>,
                              now: 0,
-                             diff: {{ $order->countdown_ms ?? 0 }},
-                             isActive: {{ ($order->countdown_ms ?? 0) > 0 ? 'true' : 'false' }},
-                             isConfirmed: '{{ $order->countDown?->status ?? '' }}' === 'terkonfirmasi',
-                             orderStatus: '{{ $order->status }}'
+                             diff: <?php echo e($order->countdown_ms ?? 0); ?>,
+                             isActive: <?php echo e(($order->countdown_ms ?? 0) > 0 ? 'true' : 'false'); ?>,
+                             isConfirmed: '<?php echo e($order->countDown?->status ?? ''); ?>' === 'terkonfirmasi',
+                             orderStatus: '<?php echo e($order->status); ?>'
                          }"
                          x-init="
-                             console.log('Order #{{ $order->id_order }}', {
+                             console.log('Order #<?php echo e($order->id_order); ?>', {
                                  countdown_ms: countdown_ms,
                                  isActive: isActive,
                                  isConfirmed: isConfirmed,
-                                 countDownStatus: '{{ $order->countDown?->status ?? 'NULL' }}',
+                                 countDownStatus: '<?php echo e($order->countDown?->status ?? 'NULL'); ?>',
                                  orderStatus: orderStatus
                              });
                              
@@ -91,24 +91,24 @@
                             Pesanan otomatis dibatalkan jika tidak ada konfirmasi
                         </p>
                     </div>
-                @endif
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                 <!-- Status Pesanan -->
                 <div class="mt-4">
-                    @if($order && $order->status === 'ditolak')
+                    <!--[if BLOCK]><![endif]--><?php if($order && $order->status === 'ditolak'): ?>
                         <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-center space-y-2">
                             <div class="text-red-700 font-semibold">
                                 Pesanan ini telah ditolak oleh bengkel.
                             </div>
 
-                            <a href="{{ route('user.dashboard') }}" 
+                            <a href="<?php echo e(route('user.dashboard')); ?>" 
                                class="inline-block px-4 py-2 bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition">
                                 Ayo cari bengkel lain
                             </a>
                         </div>
-                    @endif
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-                    @if($order && $order->status === 'pending' && $order->countDown?->status === 'terkonfirmasi')
+                    <!--[if BLOCK]><![endif]--><?php if($order && $order->status === 'pending' && $order->countDown?->status === 'terkonfirmasi'): ?>
                         <!-- <div class="p-3 bg-green-50 border border-green-200 rounded-lg text-center space-y-2">
                             <div class="text-green-700 font-semibold">
                                 Pesanan sudah diterima bengkel!
@@ -117,9 +117,9 @@
                                 Silakan tunggu bengkel menentukan harga final
                             </p>
                         </div> -->
-                    @endif
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
             </div>
         </div>
     </section>
-</div>
+</div><?php /**PATH C:\laragon\www\sibantar\resources\views/livewire/user/waiting-confirmation.blade.php ENDPATH**/ ?>
