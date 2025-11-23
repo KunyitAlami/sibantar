@@ -50,20 +50,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.')
         ->group(function () {
 
-            // halaman awal admin
-            Route::get('/dashboard', fn() => view('admin.dashboard.index'))->name('dashboard.index');
-            // Kelola Bengkel (daftar)
-            Route::get('/bengkel', fn() => view('admin.bengkel.index'))->name('bengkel.index');
-            // Statistik dan Laporan
-            Route::get('/statistik', fn() => view('admin.statistik.index'))->name('statistik.index');
-            Route::get('/laporan', fn() => view('admin.laporan.index'))->name('laporan.index');
-            // halaman aktivitas terpisah
-            Route::get('/aktivitas', fn() => view('admin.aktivitas.index'))->name('aktivitas.index');
-            Route::get('/calon-bengkel/{id}', [AdminController::class, 'showCalonBengkel'])->name('calonBengkel.show');
-            Route::post('/calon-bengkel/{id}/approve', [AdminController::class, 'approveCalonBengkel'])->name('calonBengkel.approve');
-            
-            // Kelola User
-            Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
             Route::get('/dashboard', [AdminController::class, 'index'])
                 ->name('dashboard.index');
 

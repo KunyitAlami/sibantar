@@ -15,7 +15,7 @@
     <section class="py-8 bg-gradient-to-b from-neutral-50 to-white">
         <div class="container mx-auto px-4">
             <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 mb-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 mb-12">
                     <!-- Total Users -->
                     <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
                         <div class="flex items-center justify-between mb-4">

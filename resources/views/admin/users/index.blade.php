@@ -1,18 +1,19 @@
 <x-layout-admin>
     <x-slot:title>Kelola User - Admin SIBANTAR</x-slot:title>
 
-    <!-- Hero Section (reduced) -->
-    <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-4">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="max-w-6xl mx-auto">
-                <div class="flex items-center gap-3">
-                    <a href="/admin/dashboard" class="hover:bg-white/10 p-1.5 rounded-md transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-3 mb-4">
+                    <a href="/admin/dashboard" class="hover:bg-white/10 p-2 rounded-lg transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </a>
                     <div>
-                        <h1 class="text-2xl font-bold">Kelola Akun</h1>
+                        <h1 class="text-4xl font-bold">Kelola User</h1>
+                        <p class="text-primary-100 text-lg mt-1">Manajemen pengguna sistem SIBANTAR</p>
                     </div>
                 </div>
             </div>
@@ -26,22 +27,27 @@
                 
                 <!-- Filter & Search -->
                 <div class="bg-white rounded-2xl p-6 shadow-lg mb-6 border border-neutral-100">
-                    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                        <!-- Filter Dropdown (left) -->
-                        <div class="w-full sm:w-2/3">
-                            <label for="roleFilterSelect" class="sr-only">Filter role</label>
-                            <select id="roleFilterSelect" onchange="filterUsers(this.value)" class="w-full px-4 py-3 rounded-xl bg-neutral-100 text-neutral-700 text-sm font-semibold">
-                                <option value="all">Semua</option>
-                                <option value="admin">Admin</option>
-                                <option value="bengkel">Bengkel</option>
-                                <option value="user">User</option>
-                            </select>
+                    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                        <!-- Filter Tabs -->
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="filterUsers('all')" id="filter-all" class="filter-btn active px-6 py-2.5 rounded-xl font-semibold transition-all duration-300">
+                                Semua (15)
+                            </button>
+                            <button onclick="filterUsers('admin')" id="filter-admin" class="filter-btn px-6 py-2.5 rounded-xl font-semibold transition-all duration-300">
+                                Admin (5)
+                            </button>
+                            <button onclick="filterUsers('bengkel')" id="filter-bengkel" class="filter-btn px-6 py-2.5 rounded-xl font-semibold transition-all duration-300">
+                                Bengkel (7)
+                            </button>
+                            <button onclick="filterUsers('user')" id="filter-user" class="filter-btn px-6 py-2.5 rounded-xl font-semibold transition-all duration-300">
+                                User (3)
+                            </button>
                         </div>
 
-                        <!-- Search Bar (right) -->
-                        <div class="relative w-full sm:w-1/3">
-                            <input type="text" id="searchInput" placeholder="Cari user..." class="w-full pl-10 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none transition-colors">
-                            <svg class="w-5 h-5 absolute left-3 top-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Search Bar -->
+                        <div class="relative w-full sm:w-auto">
+                            <input type="text" id="searchInput" placeholder="Cari user..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none transition-colors">
+                            <svg class="w-5 h-5 absolute left-3 top-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
@@ -54,7 +60,7 @@
                         <table class="w-full">
                             <thead class="bg-gradient-to-r from-neutral-50 to-neutral-100">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">ID Akun</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">ID</th>
                                     <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Username</th>
                                     <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Email</th>
                                     <th class="px-6 py-4 text-left text-xs font-bold text-neutral-700 uppercase tracking-wider">Role</th>
@@ -303,25 +309,36 @@
         let currentFilter = 'all';
 
         // Filter functionality
-            function filterUsers(role) {
-                currentFilter = role;
-                const rows = document.querySelectorAll('.user-row');
-                let visibleCount = 0;
+        function filterUsers(role) {
+            currentFilter = role;
+            const rows = document.querySelectorAll('.user-row');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            let visibleCount = 0;
 
-                // Filter rows
-                rows.forEach(row => {
-                    const rowRole = row.getAttribute('data-role');
-                    if (role === 'all' || rowRole === role) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
+            // Update active button
+            filterBtns.forEach(btn => {
+                btn.classList.remove('active', 'bg-primary-600', 'text-white', 'shadow-md');
+                btn.classList.add('bg-neutral-100', 'text-neutral-600', 'hover:bg-neutral-200');
+            });
+            
+            const activeBtn = document.getElementById(`filter-${role}`);
+            activeBtn.classList.remove('bg-neutral-100', 'text-neutral-600', 'hover:bg-neutral-200');
+            activeBtn.classList.add('active', 'bg-primary-600', 'text-white', 'shadow-md');
 
-                // Show/hide empty state
-                document.getElementById('emptyState').classList.toggle('hidden', visibleCount > 0);
-            }
+            // Filter rows
+            rows.forEach(row => {
+                const rowRole = row.getAttribute('data-role');
+                if (role === 'all' || rowRole === role) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Show/hide empty state
+            document.getElementById('emptyState').classList.toggle('hidden', visibleCount > 0);
+        }
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', function(e) {
@@ -350,10 +367,7 @@
         });
 
         // Initialize with 'all' filter
-            // ensure dropdown is set to 'all' and filter applied
-            const select = document.getElementById('roleFilterSelect');
-            if (select) select.value = 'all';
-            filterUsers('all');
+        filterUsers('all');
     </script>
 
     <style>
@@ -365,15 +379,6 @@
             background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
             color: white;
             box-shadow: 0 4px 6px rgba(0, 102, 204, 0.3);
-        }
-        /* Sembunyikan avatar kecil di kolom username untuk tampilan lebih ringkas */
-        .user-row td > div > .rounded-full {
-            display: none;
-        }
-        /* Pastikan teks username tetap rata tengah-vertikal */
-        .user-row td > div > span {
-            display: inline-block;
-            vertical-align: middle;
         }
     </style>
 
