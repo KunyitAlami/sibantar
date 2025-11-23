@@ -28,7 +28,6 @@ return new class extends Migration
             $table->text('penjelasan_bengkel');
             $table->enum('status', ['diterima', 'belum_diterima'])->default('belum_diterima');
             $table->timestamps();
-
         });
     }
 

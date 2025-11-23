@@ -202,15 +202,12 @@
                     lonInput.value = lon;
                     userCoordinates = { lat, lon };
 
-                    // Update map view
                     map.setView([lat, lon], 15);
-                    
-                    // Remove old marker if exists
+
                     if (userMarker) {
                         map.removeLayer(userMarker);
                     }
-                    
-                    // Add new user marker (draggable)
+       
                     const userIcon = L.divIcon({
                         className: 'custom-marker',
                         html: `
@@ -228,7 +225,6 @@
                         draggable: true
                     }).addTo(map);
 
-                    // Add pulse circle
                     const pulseCircle = L.circle([lat, lon], {
                         radius: 50,
                         color: '#0051BA',
@@ -237,7 +233,6 @@
                         weight: 1
                     }).addTo(map);
 
-                    // Handle marker drag
                     userMarker.on('dragend', function(event) {
                         const marker = event.target;
                         const position = marker.getLatLng();
@@ -251,7 +246,6 @@
                         pulseCircle.setLatLng([newLat, newLon]);
                         addressDisplay.textContent = 'Memperbarui alamat...';
 
-                        // Update address & recalculate
                         reverseGeocode(newLat, newLon);
                         calculateDistanceAndOngkir(newLat, newLon);
                         drawRouteLine(newLat, newLon);
@@ -262,16 +256,12 @@
                         direction: 'top'
                     });
 
-                    // Get address
                     reverseGeocode(lat, lon);
-                    
-                    // Calculate distance & ongkir
+                   
                     calculateDistanceAndOngkir(lat, lon);
                     
-                    // Draw route line
                     drawRouteLine(lat, lon);
-
-                    // Fit map to show both markers
+                    
                     if (bengkelLat && bengkelLng) {
                         const bounds = L.latLngBounds([
                             [lat, lon],
@@ -377,8 +367,7 @@
                     if (data.routes && data.routes[0] && data.routes[0].geometry) {
                         const routeCoordinates = data.routes[0].geometry.coordinates;
                         const leafletCoordinates = routeCoordinates.map(coord => [coord[1], coord[0]]);
-                        
-                        // Main route line
+
                         routeLine = L.polyline(leafletCoordinates, {
                             color: '#0051BA',
                             weight: 5,
@@ -463,7 +452,6 @@
             const userLng = document.getElementById('userLongitude').value;
             const client_timezone = document.getElementById('client_timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-            // Ambil hidden input sesuai form
             const bengkelLat = document.getElementById('bengkelLatitude').value;
             const bengkelLng = document.getElementById('bengkelLongitude').value;
             const idBengkel = document.getElementById('idBengkel').value;
@@ -472,7 +460,6 @@
             const estimasiHarga = document.getElementById('estimasiHarga').value;
             const totalBayar = document.getElementById('totalBayar').value;
 
-            // Validation
             if (!userLat || !userLng || location === 'Mendeteksi lokasi Anda...' || location.includes('Gagal')) {
                 Swal.fire({
                     icon: 'warning',

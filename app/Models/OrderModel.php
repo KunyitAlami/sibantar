@@ -45,4 +45,9 @@ class OrderModel extends Model
     {
         return $this->hasOne(CountDownModel::class, 'id_order', 'id_order');
     }
+    public function review()
+    {
+        return $this->hasOne(ReviewsModel::class, 'id_order', 'id_order');
+    }
+
 }

@@ -11,26 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order', function (Blueprint $table) {
-            $table->id('id_order');
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_bengkel');
-            $table->unsignedBigInteger('id_layanan_bengkel');
-            $table->text('user_latitude');
-            $table->text('user_longitude');
-            $table->text('bengkel_latitude');
-            $table->text('bengkel_longitude');
-            $table->enum('status', ['menunggu_konfirmasi', 'pending', 'dibayar', 'diproses', 'selesai', 'ditolak', 'dibatalkan'])->default('menunggu_konfirmasi');
-            $table->string('estimasi_harga');
-            $table->text('total_bayar')->nullable();
-            $table->text('notes')->nullable();
-            $table->string('client_timezone', 50)->nullable();
-            $table->timestamps();
+            Schema::create('order', function (Blueprint $table) {
+                $table->id('id_order');
+                $table->unsignedBigInteger('id_user');
+                $table->unsignedBigInteger('id_bengkel');
+                $table->unsignedBigInteger('id_layanan_bengkel');
+                $table->text('user_latitude');
+                $table->text('user_longitude');
+                $table->text('bengkel_latitude');
+                $table->text('bengkel_longitude');
+                $table->enum('status', ['menunggu_konfirmasi', 'pending', 'dibayar', 'diproses', 'selesai', 'ditolak', 'dibatalkan'])->default('menunggu_konfirmasi');
+                $table->string('estimasi_harga');
+                $table->text('total_bayar')->nullable();
+                $table->text('notes')->nullable();
+                $table->string('client_timezone', 50)->nullable();
+                $table->timestamps();
 
-            $table->foreign('id_user')->references('id_user')->on('user')->cascade();
-            $table->foreign('id_bengkel')->references('id_bengkel')->on('bengkel')->cascade();
-            $table->foreign('id_layanan_bengkel')->references('id_layanan_bengkel')->on('layanan_bengkel')->cascade();
-        });
+                $table->foreign('id_user')->references('id_user')->on('user')->cascade();
+                $table->foreign('id_bengkel')->references('id_bengkel')->on('bengkel')->cascade();
+                $table->foreign('id_layanan_bengkel')->references('id_layanan_bengkel')->on('layanan_bengkel')->cascade();
+            });
     }
 
     /**

@@ -23,16 +23,7 @@ class AuthController extends Controller
     public function redirectToDashboard()
     {
         $user = Auth::user();
-        
-        // return match ($user->role) {
-        //     'admin' => redirect()->route('admin.dashboard.index'),
-        //     'bengkel' => redirect()->route('dashboard', [
-        //         'id_bengkel' => $user->bengkel->first()->id_bengkel
-        //     ]),
-        //     'user' => redirect()->route('user.dashboard'),
-        //     default => redirect()->route('landing_page'),
-        // };
-
+ 
         return match ($user->role) {
             'admin' => redirect()->route('admin.dashboard.index'),
             'bengkel' => redirect()->route('bengkel.dashboard', [
@@ -43,6 +34,50 @@ class AuthController extends Controller
         };
 
     }
+
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required',
+    //         'password' => 'required',
+    //     ]);
+
+    //     if ($credentials['email'] === 'dosentester') {
+    //         $user = UserModel::where('email', 'dosentester')->first();
+
+    //         if ($user && Hash::check($credentials['password'], $user->password)) {
+    //             Auth::login($user);
+    //             $request->session()->regenerate();
+
+    //             return redirect()->route('admin.dashboard.index');
+    //         }
+
+    //         return back()->withErrors([
+    //             'email' => 'Password salah untuk akun admin khusus!',
+    //         ]);
+    //     }
+
+    //     $loginField = filter_var($credentials['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+    //     $user = UserModel::where($loginField, $credentials['email'])->first();
+
+    //     if ($user && Hash::check($credentials['password'], $user->password)) {
+    //         Auth::login($user);
+    //         $request->session()->regenerate();
+
+    //         return match ($user->role) {
+    //             'admin' => redirect()->route('admin.dashboard.index'),
+    //             'bengkel' => redirect()->route('bengkel.dashboard', [
+    //                 'id_bengkel' => $user->bengkel->first()->id_bengkel
+    //             ]),
+    //             'user' => redirect()->route('user.dashboard'),
+    //             default => redirect()->route('landing_page'),
+    //         };
+    //     }
+
+    //     return back()->withErrors([
+    //         'email' => 'Akun tidak ditemukan! Pastikan email atau username benar.',
+    //     ]);
+    // }
 
     public function login(Request $request)
     {
@@ -55,9 +90,14 @@ class AuthController extends Controller
             $user = UserModel::where('email', 'dosentester')->first();
 
             if ($user && Hash::check($credentials['password'], $user->password)) {
+                if ($user->skor > 3) {
+                    return back()->withErrors([
+                        'email' => 'Akun ini diblokir karena skor terlalu tinggi!',
+                    ]);
+                }
+
                 Auth::login($user);
                 $request->session()->regenerate();
-
                 return redirect()->route('admin.dashboard.index');
             }
 
@@ -70,6 +110,12 @@ class AuthController extends Controller
         $user = UserModel::where($loginField, $credentials['email'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
+            if ($user->skor > 3) {
+                return back()->withErrors([
+                    'email' => 'Akun diblokir karena skor melebihi batas (skor > 3).',
+                ]);
+            }
+
             Auth::login($user);
             $request->session()->regenerate();
 

@@ -16,6 +16,15 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="<?php echo e(route('admin.dashboard.index')); ?>" class="font-medium <?php echo e(request()->routeIs('admin.dashboard.index') ? 'active' : ''); ?>">Dashboard</a></li>
                 <li><a href="<?php echo e(route('admin.users.index')); ?>" class="font-medium <?php echo e(request()->routeIs('admin.users.index') ? 'active' : ''); ?>">Kelola User</a></li>
+                <li>
+                    <form id="logout-form-nav" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                        <?php echo csrf_field(); ?>
+                    </form>
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-nav').submit();" 
+                    class="font-medium text-error">
+                        Log out
+                    </a>
+                </li>
             </ul>
         </div>
         
@@ -31,6 +40,12 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li><a href="<?php echo e(route('admin.dashboard.index')); ?>" class="font-medium">Dashboard</a></li>
                     <li><a href="<?php echo e(route('admin.users.index')); ?>" class="font-medium">Kelola User</a></li>
+                    <li>
+                        <form id="logout-form-mobile" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                            <?php echo csrf_field(); ?>
+                        </form>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Logout</a>
+                    </li>
                 </ul>
             </div>
             
