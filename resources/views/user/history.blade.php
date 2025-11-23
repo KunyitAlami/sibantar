@@ -74,52 +74,58 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
-                        <span class="font-bold text-xl text-primary-700">
-                                    Rp {{ number_format($order->tracking->finalPrice, 0, ',', '.') }}
-                        </span>
-                        <div class="flex gap-2">
-                            <a href="{{ route('user.report.order', ['id_order' => $order->id_order]) }}" class="btn btn-sm btn-outline btn-error">
-                                Lapor
-                            </a>
-                            <a href="{{ route('user.invoice', $order->id_order) }}" 
-                            class="btn btn-sm btn-outline btn-error">
-                            Invoice
-                            </a>
-                            <a href="{{ route('user.order-tracking', ['id' => $order->id_order]) }}" class="btn btn-sm btn-outline btn-error">
-                                Detail Order
-                            </a>
+                    @if ($order->status === 'ditolak')
+                        <div class="py-3 text-center text-sm font-semibold text-error-600 border border-error-500 rounded-xl bg-error-50">
+                            Detail Order Tidak Tersedia Karena Order Ditolak
                         </div>
-                    </div>
-                    {{-- rating dan review --}}
-                    <div class="mt-10 mb-5">
-                            @if ($order->review)
-                                <p>Rating Bengkel: 
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $order->review->ratingBengkel)
-                                            ★
-                                        @else
-                                            ☆
-                                        @endif
-                                    @endfor
-                                </p>
-                                <p>Rating Layanan: 
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $order->review->ratingLayanan)
-                                            ★
-                                        @else
-                                            ☆
-                                        @endif
-                                    @endfor
-                                </p>
-                            @else
-                                <p>
-                                    <a href="{{ route('user.review', ['id_order' => $order->id_order]) }}" class="text-gray-600 italic underline">
-                                        Belum ada review
-                                    </a>
-                                </p>
-                            @endif
-                    </div>
+                    @else
+                        <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
+                            <span class="font-bold text-xl text-primary-700">
+                                        Rp {{ number_format($order->tracking->finalPrice, 0, ',', '.') }}
+                            </span>
+                            <div class="flex gap-2">
+                                <a href="{{ route('user.report.order', ['id_order' => $order->id_order]) }}" class="btn btn-sm btn-outline btn-error">
+                                    Lapor
+                                </a>
+                                <a href="{{ route('user.invoice', $order->id_order) }}" 
+                                class="btn btn-sm btn-outline btn-error">
+                                Invoice
+                                </a>
+                                <a href="{{ route('user.order-tracking', ['id' => $order->id_order]) }}" class="btn btn-sm btn-outline btn-error">
+                                    Detail Order
+                                </a>
+                            </div>
+                        </div>
+                        {{-- rating dan review --}}
+                        <div class="mt-10 mb-5">
+                                @if ($order->review)
+                                    <p>Rating Bengkel: 
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $order->review->ratingBengkel)
+                                                ★
+                                            @else
+                                                ☆
+                                            @endif
+                                        @endfor
+                                    </p>
+                                    <p>Rating Layanan: 
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $order->review->ratingLayanan)
+                                                ★
+                                            @else
+                                                ☆
+                                            @endif
+                                        @endfor
+                                    </p>
+                                @else
+                                    <p>
+                                        <a href="{{ route('user.review', ['id_order' => $order->id_order]) }}" class="text-gray-600 italic underline">
+                                            Belum ada review
+                                        </a>
+                                    </p>
+                                @endif
+                        </div>
+                    @endif
                 </div>
             @endforeach
 

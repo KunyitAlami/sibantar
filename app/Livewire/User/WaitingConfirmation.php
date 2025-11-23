@@ -29,11 +29,20 @@ class WaitingConfirmation extends Component
         if (!$this->order) {
             abort(404, 'Order tidak ditemukan');
         }
+        
         $this->order->countdown_ms = $this->calculateCountdown();
         $this->order->countdown_active = $this->isCountdownActive();
         $this->order->countdown_confirmed = optional($this->order->countDown)->status === 'terkonfirmasi';
+        
+        // Auto redirect jika sudah dikonfirmasi
         if (optional($this->order->countDown)->status === 'terkonfirmasi') {
             return redirect()->route('user.order-tracking', ['id' => $this->orderId]);
+        }
+
+        // Redirect jika countdown habis dan status masih pending
+        if ($this->order->countdown_ms <= 0 && $this->order->status === 'pending') {
+            // Berikan sedikit delay untuk UX yang lebih smooth
+            session()->flash('countdown_expired', true);
         }
     }
 
@@ -44,6 +53,15 @@ class WaitingConfirmation extends Component
         if (optional($this->order->countDown)->status === 'terkonfirmasi') {
             return redirect()->route('user.order-tracking', ['id' => $this->orderId]);
         }
+    }
+
+    // Method baru: dipanggil dari frontend saat countdown habis
+    public function handleCountdownExpired()
+    {
+        $this->loadOrder();
+        
+        // Refresh halaman atau redirect ke dashboard setelah beberapa saat
+        $this->dispatch('countdown-expired');
     }
 
     protected function calculateCountdown()

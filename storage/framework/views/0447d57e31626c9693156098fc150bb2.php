@@ -84,53 +84,59 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
-                        <span class="font-bold text-xl text-primary-700">
-                                    Rp <?php echo e(number_format($order->tracking->finalPrice, 0, ',', '.')); ?>
-
-                        </span>
-                        <div class="flex gap-2">
-                            <a href="<?php echo e(route('user.report.order', ['id_order' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
-                                Lapor
-                            </a>
-                            <a href="<?php echo e(route('user.invoice', $order->id_order)); ?>" 
-                            class="btn btn-sm btn-outline btn-error">
-                            Invoice
-                            </a>
-                            <a href="<?php echo e(route('user.order-tracking', ['id' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
-                                Detail Order
-                            </a>
+                    <?php if($order->status === 'ditolak'): ?>
+                        <div class="py-3 text-center text-sm font-semibold text-error-600 border border-error-500 rounded-xl bg-error-50">
+                            Detail Order Tidak Tersedia Karena Order Ditolak
                         </div>
-                    </div>
-                    
-                    <div class="mt-10 mb-5">
-                            <?php if($order->review): ?>
-                                <p>Rating Bengkel: 
-                                    <?php for($i = 1; $i <= 5; $i++): ?>
-                                        <?php if($i <= $order->review->ratingBengkel): ?>
-                                            ★
-                                        <?php else: ?>
-                                            ☆
-                                        <?php endif; ?>
-                                    <?php endfor; ?>
-                                </p>
-                                <p>Rating Layanan: 
-                                    <?php for($i = 1; $i <= 5; $i++): ?>
-                                        <?php if($i <= $order->review->ratingLayanan): ?>
-                                            ★
-                                        <?php else: ?>
-                                            ☆
-                                        <?php endif; ?>
-                                    <?php endfor; ?>
-                                </p>
-                            <?php else: ?>
-                                <p>
-                                    <a href="<?php echo e(route('user.review', ['id_order' => $order->id_order])); ?>" class="text-gray-600 italic underline">
-                                        Belum ada review
-                                    </a>
-                                </p>
-                            <?php endif; ?>
-                    </div>
+                    <?php else: ?>
+                        <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
+                            <span class="font-bold text-xl text-primary-700">
+                                        Rp <?php echo e(number_format($order->tracking->finalPrice, 0, ',', '.')); ?>
+
+                            </span>
+                            <div class="flex gap-2">
+                                <a href="<?php echo e(route('user.report.order', ['id_order' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
+                                    Lapor
+                                </a>
+                                <a href="<?php echo e(route('user.invoice', $order->id_order)); ?>" 
+                                class="btn btn-sm btn-outline btn-error">
+                                Invoice
+                                </a>
+                                <a href="<?php echo e(route('user.order-tracking', ['id' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
+                                    Detail Order
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-10 mb-5">
+                                <?php if($order->review): ?>
+                                    <p>Rating Bengkel: 
+                                        <?php for($i = 1; $i <= 5; $i++): ?>
+                                            <?php if($i <= $order->review->ratingBengkel): ?>
+                                                ★
+                                            <?php else: ?>
+                                                ☆
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                    </p>
+                                    <p>Rating Layanan: 
+                                        <?php for($i = 1; $i <= 5; $i++): ?>
+                                            <?php if($i <= $order->review->ratingLayanan): ?>
+                                                ★
+                                            <?php else: ?>
+                                                ☆
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                    </p>
+                                <?php else: ?>
+                                    <p>
+                                        <a href="<?php echo e(route('user.review', ['id_order' => $order->id_order])); ?>" class="text-gray-600 italic underline">
+                                            Belum ada review
+                                        </a>
+                                    </p>
+                                <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
