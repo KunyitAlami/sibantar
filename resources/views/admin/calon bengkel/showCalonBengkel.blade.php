@@ -11,7 +11,8 @@
                         <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
                     </div>
                 </div>
-                <!-- Judul dan ringkasan dihapus sesuai permintaan -->
+                <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-1 sm:mb-2">Calon Mitra Bengkel Baru SIBANTAR</h1>
+                <p class="text-sm sm:text-base text-neutral-600">Lorem ipsum dolor, sit amet consectetur adipisicing.</p>
             </div>
 
             <!-- Register Card -->
