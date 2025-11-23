@@ -1,4 +1,4 @@
-<div wire:poll.5000ms="loadTracking">
+<div wire:poll.500ms="loadTracking">
     <!-- Progress Layanan -->
     <div class="card p-6 mb-4">
         <h3 class="font-bold text-neutral-900 mb-4">Progress Layanan</h3>

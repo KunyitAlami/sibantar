@@ -317,10 +317,18 @@ class UserController extends Controller
             abort(403, 'Unauthorized access');
         }
 
-        $orders = OrderModel::with(['bengkel', 'layananBengkel', 'user', 'review'])
+        $orders = OrderModel::with([
+                'bengkel',
+                'layananBengkel',
+                'user',
+                'review',
+                'tracking'
+            ])
             ->where('id_user', $id_user)
             ->orderBy('created_at', 'desc')
             ->get();
+
+
 
         return view('user.history', [
             'orders' => $orders,
@@ -404,7 +412,7 @@ class UserController extends Controller
     
     public function invoice($id_order)
     {
-        $order = OrderModel::with(['user', 'bengkel'])->findOrFail($id_order);
+        $order = OrderModel::with(['user', 'bengkel', 'tracking'])->findOrFail($id_order);
 
         $pdf = Pdf::loadView('user.invoice', compact('order'))
                     ->setPaper('A4', 'portrait');

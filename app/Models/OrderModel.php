@@ -50,4 +50,10 @@ class OrderModel extends Model
         return $this->hasOne(ReviewsModel::class, 'id_order', 'id_order');
     }
 
+    public function tracking()
+    {
+        return $this->hasOne(OrderTrackingModel::class, 'id_order', 'id_order');
+    }
+
+
 }

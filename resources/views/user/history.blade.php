@@ -76,7 +76,7 @@
 
                     <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
                         <span class="font-bold text-xl text-primary-700">
-                                    Rp {{ number_format($order->total_bayar, 0, ',', '.') }}
+                                    Rp {{ number_format($order->tracking->finalPrice, 0, ',', '.') }}
                         </span>
                         <div class="flex gap-2">
                             <a href="{{ route('user.report.order', ['id_order' => $order->id_order]) }}" class="btn btn-sm btn-outline btn-error">

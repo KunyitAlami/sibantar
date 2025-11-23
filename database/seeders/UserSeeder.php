@@ -78,6 +78,7 @@ class UserSeeder extends Seeder
 
             // USER ACCOUNT
             ['username'=>'user_resmi', 'role'=>'user', 'skor'=>0, 'email'=>'user@gmail.com', 'password' => Hash::make('user123'), 'wa_number'=>'089876543210', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'Zahra Nabila', 'role'=>'user', 'skor'=>0, 'email'=>'zahranabila@gmail.com', 'password' => Hash::make('user123'), 'wa_number'=>'089876543210', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
 
         ]);
     }

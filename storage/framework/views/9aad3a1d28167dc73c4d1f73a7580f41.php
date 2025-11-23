@@ -374,7 +374,7 @@
                             </span>
                         </td>
                         <td><?php echo e($order->layananBengkel->kategori ?? '-'); ?></td>
-                        <td class="text-right">Rp <?php echo e(number_format($order->estimasi_harga, 0, ',', '.')); ?></td>
+                        <td class="text-right">Rp <?php echo e(number_format($order->tracking->finalPrice, 0, ',', '.')); ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -385,7 +385,7 @@
             <table class="summary-table">
                 <tr class="summary-row">
                     <td><strong>Estimasi Harga Layanan:</strong></td>
-                    <td class="text-right">Rp <?php echo e(number_format($order->estimasi_harga, 0, ',', '.')); ?></td>
+                    <td class="text-right">Rp <?php echo e(number_format($order->tracking->finalPrice, 0, ',', '.')); ?></td>
                 </tr>
                 <tr class="summary-row">
                     <td><strong>Biaya Layanan Platform:</strong></td>
@@ -397,7 +397,7 @@
                 </tr>
                 <tr class="total-row">
                     <td><strong>TOTAL PEMBAYARAN:</strong></td>
-                    <td class="text-right"><strong>Rp <?php echo e(number_format($order->total_bayar, 0, ',', '.')); ?></strong></td>
+                    <td class="text-right"><strong>Rp <?php echo e(number_format($order->tracking->finalPrice, 0, ',', '.')); ?></strong></td>
                 </tr>
             </table>
         </div>
