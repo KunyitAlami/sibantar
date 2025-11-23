@@ -35,7 +35,9 @@
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Total User</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">1,234</p>
+                        <p class="text-3xl font-bold text-neutral-900 mb-2"><?php echo e($user->count()); ?></p>
+                        <p class="text-xs text-success-600 font-medium">Total pengguna SIBANTAR</p>
+
                     </div>
 
                     <!-- Total Bengkel -->
@@ -48,7 +50,8 @@
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Total Bengkel</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">89</p>
+                        <p class="text-3xl font-bold text-neutral-900 mb-2"><?php echo e($bengkel->count()); ?></p>
+                        <p class="text-xs text-success-600 font-medium">Total mitra bengkel SIBANTAR</p>
                     </div>
 
                     <!-- Total Transaksi -->
@@ -61,40 +64,31 @@
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Transaksi</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">456</p>
+                        <p class="text-3xl font-bold text-neutral-900 mb-2"><?php echo e($order->count()); ?></p>
+                        <p class="text-xs text-neutral-500 font-medium">Pertolongan yang berhasil di SIBANTAR</p>
                     </div>
 
                     <!-- Revenue -->
-                    <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-warning-100 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-warning-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="text-sm text-neutral-600 mb-1">Revenue</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">Rp 125jt</p>
-                    </div>
+                    
                 </div>
 
-                
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('create-management-buttons', []);
 
+$__html = app('livewire')->mount($__name, $__params, 'lw-1399337649-0', $__slots ?? [], get_defined_vars());
 
-    <style>
-        .filter-btn {
-            background: #f5f5f5;
-            color: #666;
-        }
-        .filter-btn:hover {
-            background: #e5e5e5;
-        }
-        .filter-btn.active {
-            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-            color: white;
-            box-shadow: 0 4px 6px rgba(0, 102, 204, 0.3);
-        }
-    </style>
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
