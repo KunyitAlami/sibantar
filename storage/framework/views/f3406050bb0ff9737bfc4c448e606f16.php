@@ -1,1 +1,0 @@
-components.navbar-guest<?php /**PATH C:\Users\Asus\Downloads\Disk D\project\sibantar\storage\framework\views/f62bd2e1516856596e641ef45ac43086.blade.php ENDPATH**/ ?>

@@ -11,8 +11,7 @@
                         <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
                     </div>
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-1 sm:mb-2">Calon Mitra Bengkel Baru SIBANTAR</h1>
-                <p class="text-sm sm:text-base text-neutral-600">Lorem ipsum dolor, sit amet consectetur adipisicing.</p>
+                <!-- Judul dan ringkasan dihapus sesuai permintaan -->
             </div>
 
             <!-- Register Card -->
@@ -38,7 +37,7 @@
                         {{-- baris pertama (tiga pertanyaan) --}}
                         <div class="flex flex-col mb-8"> 
                             <h1 class="text-2xl font-bold text-black mb-4">Profile Pemilik Bengkel</h1>
-                            <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.</p>
+                            <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.12312312312321312321</p>
                         </div>
                         <div class="flex gap-10 ">
                             <!-- Username -->
