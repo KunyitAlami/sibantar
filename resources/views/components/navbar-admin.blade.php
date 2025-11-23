@@ -15,7 +15,10 @@
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
                 <li><a href="{{ route('admin.dashboard.index') }}" class="font-medium {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.users.index') }}" class="font-medium {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Kelola User</a></li>
+                <li><a href="{{ route('admin.users.index') }}" class="font-medium {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Kelola Akun</a></li>
+                <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium {{ request()->routeIs('admin.bengkel.index') ? 'active' : '' }}">Kelola Bengkel</a></li>
+                <li><a href="{{ route('admin.statistik.index') }}" class="font-medium {{ request()->routeIs('admin.statistik.index') ? 'active' : '' }}">Statistik</a></li>
+                <li><a href="{{ route('admin.laporan.index') }}" class="font-medium {{ request()->routeIs('admin.laporan.index') ? 'active' : '' }}">Laporan</a></li>
             </ul>
         </div>
         
@@ -30,7 +33,10 @@
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li><a href="{{ route('admin.dashboard.index') }}" class="font-medium">Dashboard</a></li>
-                    <li><a href="{{ route('admin.users.index') }}" class="font-medium">Kelola User</a></li>
+                    <li><a href="{{ route('admin.users.index') }}" class="font-medium">Kelola Akun</a></li>
+                    <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium">Kelola Bengkel</a></li>
+                    <li><a href="{{ route('admin.statistik.index') }}" class="font-medium">Statistik</a></li>
+                    <li><a href="{{ route('admin.laporan.index') }}" class="font-medium">Laporan</a></li>
                 </ul>
             </div>
             
@@ -46,6 +52,10 @@
                         <span>{{ Auth::user()->name }} (Admin)</span>
                     </li>
                     <li><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></li>
+                    <li><a href="{{ route('admin.users.index') }}">Kelola Akun</a></li>
+                    <li><a href="{{ route('admin.bengkel.index') }}">Kelola Bengkel</a></li>
+                    <li><a href="{{ route('admin.statistik.index') }}">Statistik</a></li>
+                    <li><a href="{{ route('admin.laporan.index') }}">Laporan</a></li>
                     <li>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf

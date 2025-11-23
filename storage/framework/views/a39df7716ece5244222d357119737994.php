@@ -7,25 +7,25 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <button wire:click="kelolaUser"
                         class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 focus:outline-none
-                        {{ ($activePanel ?? 'user') === 'user' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600' }}">
+                        <?php echo e(($activePanel ?? 'user') === 'user' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600'); ?>">
                         Kelola Akun
                     </button>
 
                     <button wire:click="kelolaBengkel"
                         class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 focus:outline-none
-                        {{ ($activePanel ?? 'user') === 'bengkel' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600' }}">
+                        <?php echo e(($activePanel ?? 'user') === 'bengkel' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600'); ?>">
                         Kelola Bengkel
                     </button>
 
                     <button wire:click="kelolaTransaksi"
                         class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 focus:outline-none
-                        {{ ($activePanel ?? 'user') === 'transaksi' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600' }}">
+                        <?php echo e(($activePanel ?? 'user') === 'transaksi' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600'); ?>">
                         Transaksi
                     </button>
 
                     <button wire:click="kelolaLaporan"
                         class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 focus:outline-none
-                        {{ ($activePanel ?? 'user') === 'laporan' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600' }}">
+                        <?php echo e(($activePanel ?? 'user') === 'laporan' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-primary-600 border-2 border-primary-600'); ?>">
                         Laporan
                     </button>
                 </div>
@@ -35,29 +35,29 @@
             <div class="w-full">
                 <h2 class="text-xl font-bold text-neutral-900 mb-4">Aktivitas Terbaru</h2>
 
-                @if($activePanel === 'user')
+                <!--[if BLOCK]><![endif]--><?php if($activePanel === 'user'): ?>
                     <div class="flex flex-wrap gap-2 mb-4">
                         <button wire:click="setRoleFilter('all')"
                             class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                            {{ $roleFilter === 'all' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                            <?php echo e($roleFilter === 'all' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600'); ?>">
                             Semua
                         </button>
 
                         <button wire:click="setRoleFilter('admin')"
                             class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                            {{ $roleFilter === 'admin' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                            <?php echo e($roleFilter === 'admin' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600'); ?>">
                             Admin
                         </button>
 
                         <button wire:click="setRoleFilter('bengkel')"
                             class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                            {{ $roleFilter === 'bengkel' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                            <?php echo e($roleFilter === 'bengkel' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600'); ?>">
                             Bengkel
                         </button>
 
                         <button wire:click="setRoleFilter('user')"
                             class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                            {{ $roleFilter === 'user' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                            <?php echo e($roleFilter === 'user' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600'); ?>">
                             User
                         </button>
                     </div>
@@ -74,67 +74,70 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-neutral-100">
-                                @foreach($users as $user)
+                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr class="hover:bg-neutral-50">
-                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $user->id_user }}</td>
-                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $user->username }}</td>
-                                    <td class="px-4 py-3 text-sm text-neutral-700">{{ $user->email }}</td>
+                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($user->id_user); ?></td>
+                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($user->username); ?></td>
+                                    <td class="px-4 py-3 text-sm text-neutral-700"><?php echo e($user->email); ?></td>
                                     <td class="px-4 py-3 text-sm font-medium text-neutral-900">
-                                        @if ($user->role == 'admin')
+                                        <!--[if BLOCK]><![endif]--><?php if($user->role == 'admin'): ?>
                                             <span class="px-3 py-1 text-xs font-semibold text-primary-700 bg-primary-100 rounded-full">
-                                                {{ $user->role }}
+                                                <?php echo e($user->role); ?>
+
                                             </span>
-                                        @elseif ($user->role == 'bengkel')
+                                        <?php elseif($user->role == 'bengkel'): ?>
                                             <span class="px-3 py-1 text-xs font-semibold text-secondary-700 bg-secondary-100 rounded-full">
-                                                {{ $user->role }}
+                                                <?php echo e($user->role); ?>
+
                                             </span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="px-3 py-1 text-xs font-semibold text-success-700 bg-success-100 rounded-full">
-                                                {{ $user->role }}
+                                                <?php echo e($user->role); ?>
+
                                             </span>
-                                        @endif
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                     </td>
-                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $user->wa_number }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($user->wa_number); ?></td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                             </tbody>
                         </table>
                     </div>
-                @elseif($activePanel === 'bengkel')
+                <?php elseif($activePanel === 'bengkel'): ?>
                     <div class="overflow-x-auto">
-                        {{-- Tab buttons for bengkel lists --}}
+                        
                         <div class="flex flex-wrap gap-2 mb-4">
                             <button wire:click="setBengkelTab('calon')"
                                 class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                                {{ ($bengkelTab ?? 'calon') === 'calon' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                                <?php echo e(($bengkelTab ?? 'calon') === 'calon' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600'); ?>">
                                 Calon Bengkel
                             </button>
 
                             <button wire:click="setBengkelTab('daftar')"
                                 class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300
-                                {{ ($bengkelTab ?? 'calon') === 'daftar' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600' }}">
+                                <?php echo e(($bengkelTab ?? 'calon') === 'daftar' ? 'bg-primary-600 text-white shadow-md' : 'bg-neutral-100 text-neutral-600'); ?>">
                                 Bengkel Terdaftar
                             </button>
                         </div>
 
-                        {{-- bagian calon bengkel --}}
+                        
                         <div>
-                                {{-- spacer (reduced) --}}
+                                
                                 <div class="flex flex-col mb-2"> 
                                     <!-- Judul daftar calon bengkel dihapus -->
                                 </div>
 
-                            @php
+                            <?php
                                 $belumDiterima = $calonbengkels->where('status', 'belum_diterima');
-                            @endphp
+                            ?>
 
-                            @if(($bengkelTab ?? 'calon') === 'calon')
-                                @if($belumDiterima->isEmpty())
+                            <!--[if BLOCK]><![endif]--><?php if(($bengkelTab ?? 'calon') === 'calon'): ?>
+                                <!--[if BLOCK]><![endif]--><?php if($belumDiterima->isEmpty()): ?>
                                 <div class="text-center py-12 text-neutral-500">
                                     <p class="font-semibold">Belum ada calon Mitra baru</p> 
                                     <p class="text-sm mt-1">Calon Mitra akan muncul di sini</p> 
                                 </div>
-                                @else
+                                <?php else: ?>
                                 <div> 
                                     <table class="min-w-full divide-y divide-neutral-200">
                                         <thead class="bg-neutral-100">
@@ -149,38 +152,39 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-neutral-100">
-                                            @foreach($belumDiterima as $b)
+                                            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $belumDiterima; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <tr class="hover:bg-neutral-50">
-                                                    <td class="w-24 px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->id_calon_bengkel }}</td>
-                                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->nama_bengkel }}</td>
-                                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->kecamatan }}</td>
-                                                    <td class="px-4 py-3 text-sm text-neutral-700">{{ $b->alamat_lengkap ?? '-' }}</td>
+                                                    <td class="w-24 px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->id_calon_bengkel); ?></td>
+                                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->nama_bengkel); ?></td>
+                                                    <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->kecamatan); ?></td>
+                                                    <td class="px-4 py-3 text-sm text-neutral-700"><?php echo e($b->alamat_lengkap ?? '-'); ?></td>
                                                     <td class="px-4 py-3 text-sm font-medium text-neutral-900">
-                                                        @if (!empty($b->jam_operasional))
-                                                            {{ $b->jam_operasional }}
-                                                        @else
-                                                            {{ $b->jam_buka }} - {{ $b->jam_tutup }} WITA
-                                                        @endif
+                                                        <!--[if BLOCK]><![endif]--><?php if(!empty($b->jam_operasional)): ?>
+                                                            <?php echo e($b->jam_operasional); ?>
+
+                                                        <?php else: ?>
+                                                            <?php echo e($b->jam_buka); ?> - <?php echo e($b->jam_tutup); ?> WITA
+                                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                                     </td>
                                                     <td class="px-4 py-3 text-sm font-medium text-neutral-900">Belum Diterima</td>
                                                     <td class="px-4 py-3">
-                                                        <button type="button" onclick="window.location='{{ route('admin.calonBengkel.show', $b->id_calon_bengkel) }}'" class="px-3 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition">
+                                                        <button type="button" onclick="window.location='<?php echo e(route('admin.calonBengkel.show', $b->id_calon_bengkel)); ?>'" class="px-3 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition">
                                                             Detail
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                                         </tbody>
                                     </table>
                                 </div>
-                                @endif
-                            @endif
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
 
-                        {{-- bagian bengkel --}}
+                        
                         <div>
-                            @if(($bengkelTab ?? 'calon') === 'daftar')
-                            {{-- spacer (reduced) --}}
+                            <?php if(($bengkelTab ?? 'calon') === 'daftar'): ?>
+                            
                             <div class="flex flex-col mb-2"> 
                                 <!-- Judul profile mita bengkel dihapus -->
                             </div>
@@ -198,36 +202,38 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-neutral-100">
-                                        @foreach($bengkels as $b)
+                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $bengkels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr class="hover:bg-neutral-50">
-                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->id_bengkel }}</td>
+                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->id_bengkel); ?></td>
                                             <td class="px-4 py-3 text-sm font-medium text-neutral-900">
-                                                @if($b->id_user)
-                                                    {{ $b->id_user }}
-                                                @else
+                                                <!--[if BLOCK]><![endif]--><?php if($b->id_user): ?>
+                                                    <?php echo e($b->id_user); ?>
+
+                                                <?php else: ?>
                                                     <span class="italic text-gray-500">tidak ada id_user untuk bengkel ini</span>
-                                                @endif
+                                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                             </td>
-                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->nama_bengkel }}</td>
-                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->kecamatan }}</td>
-                                            <td class="px-4 py-3 text-sm text-neutral-700">{{ $b->alamat_lengkap ?? '-' }}</td>
-                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->jam_operasional }}</td>
-                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900">{{ $b->status }}</td>
+                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->nama_bengkel); ?></td>
+                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->kecamatan); ?></td>
+                                            <td class="px-4 py-3 text-sm text-neutral-700"><?php echo e($b->alamat_lengkap ?? '-'); ?></td>
+                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->jam_operasional); ?></td>
+                                            <td class="px-4 py-3 text-sm font-medium text-neutral-900"><?php echo e($b->status); ?></td>
                                         </tr>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                                     </tbody>
                                 </table>
                             </div>
-                            @endif
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
-                @else
+                <?php else: ?>
                     <div class="text-center py-12 text-neutral-500">
                         <p class="font-semibold">Belum ada aktivitas</p>
                         <p class="text-sm mt-1">Aktivitas akan muncul di sini</p>
                     </div>
-                @endif
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
     </div>
 </div>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/livewire/create-management-buttons.blade.php ENDPATH**/ ?>

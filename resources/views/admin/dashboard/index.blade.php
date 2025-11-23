@@ -15,7 +15,7 @@
     <section class="py-8 bg-gradient-to-b from-neutral-50 to-white">
         <div class="container mx-auto px-4">
             <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 mb-12">
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 mb-12">
                     <!-- Total Users -->
                     <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
                         <div class="flex items-center justify-between mb-4">
@@ -27,7 +27,6 @@
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Total User</p>
                         <p class="text-3xl font-bold text-neutral-900 mb-2">1,234</p>
-                        <p class="text-xs text-success-600 font-medium">↑ 12% dari bulan lalu</p>
                     </div>
 
                     <!-- Total Bengkel -->
@@ -41,7 +40,6 @@
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Total Bengkel</p>
                         <p class="text-3xl font-bold text-neutral-900 mb-2">89</p>
-                        <p class="text-xs text-success-600 font-medium">↑ 5 bengkel baru</p>
                     </div>
 
                     <!-- Total Transaksi -->
@@ -55,7 +53,6 @@
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Transaksi</p>
                         <p class="text-3xl font-bold text-neutral-900 mb-2">456</p>
-                        <p class="text-xs text-neutral-500 font-medium">Bulan ini</p>
                     </div>
 
                     <!-- Revenue -->
@@ -69,12 +66,10 @@
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Revenue</p>
                         <p class="text-3xl font-bold text-neutral-900 mb-2">Rp 125jt</p>
-                        <p class="text-xs text-neutral-500 font-medium">Bulan ini</p>
                     </div>
                 </div>
 
-                <livewire:create-management-buttons />
-                <br> <br>
+                
 {{-- 
                 <!-- Management Section -->
                 <div class="bg-white rounded-2xl p-8 shadow-lg mb-8 border border-neutral-100">
