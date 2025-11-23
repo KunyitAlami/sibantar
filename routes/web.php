@@ -62,6 +62,16 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/users', fn() => view('admin.users.index'))
                 ->name('users.index');
 
+            // Kelola Bengkel, Laporan, Statistik (halaman admin baru)
+            Route::get('/bengkel', [AdminController::class, 'manageBengkel'])
+                ->name('bengkel.index');
+
+            Route::get('/laporan', fn() => view('admin.laporan.index'))
+                ->name('laporan.index');
+
+            Route::get('/statistik', fn() => view('admin.statistik.index'))
+                ->name('statistik.index');
+
             Route::get('/tambah-user', [AdminController::class, 'tambahUser'])
                 ->name('tambah-user');
 
