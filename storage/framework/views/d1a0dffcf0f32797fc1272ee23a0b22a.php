@@ -1,5 +1,14 @@
-<x-layout-admin>
-    <x-slot:title>Admin Dashboard - SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal2e6fb18f75884c4fed4e10444e669251 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2e6fb18f75884c4fed4e10444e669251 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-admin','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-admin'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Admin Dashboard - SIBANTAR <?php $__env->endSlot(); ?>
 
     <!-- Hero Section with Gradient -->
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-12">
@@ -26,9 +35,7 @@
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Total User</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">{{ $user->count() }}</p>
-                        <p class="text-xs text-success-600 font-medium">Total pengguna SIBANTAR</p>
-
+                        <p class="text-3xl font-bold text-neutral-900 mb-2">1,234</p>
                     </div>
 
                     <!-- Total Bengkel -->
@@ -41,8 +48,7 @@
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Total Bengkel</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">{{ $bengkel->count() }}</p>
-                        <p class="text-xs text-success-600 font-medium">Total mitra bengkel SIBANTAR</p>
+                        <p class="text-3xl font-bold text-neutral-900 mb-2">89</p>
                     </div>
 
                     <!-- Total Transaksi -->
@@ -55,12 +61,11 @@
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Transaksi</p>
-                        <p class="text-3xl font-bold text-neutral-900 mb-2">{{ $order->count() }}</p>
-                        <p class="text-xs text-neutral-500 font-medium">Pertolongan yang berhasil di SIBANTAR</p>
+                        <p class="text-3xl font-bold text-neutral-900 mb-2">456</p>
                     </div>
 
                     <!-- Revenue -->
-                    {{-- <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-12 h-12 bg-warning-100 rounded-xl flex items-center justify-center">
                                 <svg class="w-6 h-6 text-warning-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,12 +75,12 @@
                         </div>
                         <p class="text-sm text-neutral-600 mb-1">Revenue</p>
                         <p class="text-3xl font-bold text-neutral-900 mb-2">Rp 125jt</p>
-                        <p class="text-xs text-neutral-500 font-medium">Bulan ini</p>
-                    </div> --}}
+                    </div>
                 </div>
 
-                <livewire:create-management-buttons />
-{{-- 
+                
+
+
     <style>
         .filter-btn {
             background: #f5f5f5;
@@ -89,6 +94,16 @@
             color: white;
             box-shadow: 0 4px 6px rgba(0, 102, 204, 0.3);
         }
-    </style> --}}
+    </style>
 
-</x-layout-admin>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $attributes = $__attributesOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $component = $__componentOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__componentOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/admin/dashboard/index.blade.php ENDPATH**/ ?>

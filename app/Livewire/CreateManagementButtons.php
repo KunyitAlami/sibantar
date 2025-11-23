@@ -19,10 +19,20 @@ class CreateManagementButtons extends Component
     public $user;
     public $bengkels = [];
     public $calonbengkels = [];
+
+    public $bengkelTab = 'calon';
+
     public $reportBengkel = [];
     public $reportUser = [];
     public $skors = [];
+
     public $roleFilter = 'all';
+
+    public function mount()
+    {
+        // default to user panel and load users so the dashboard shows data on first render
+        $this->kelolaUser();
+    }
 
     public function kelolaUser() {
         $this->activePanel = 'user';
@@ -33,7 +43,13 @@ class CreateManagementButtons extends Component
         $this->activePanel = 'bengkel';
         $this->bengkels = BengkelModel::all();
         $this->calonbengkels = CalonBengkelModel::all();
+        $this->bengkelTab = 'calon';
         $this->users = []; 
+    }
+
+    public function setBengkelTab($tab = 'calon')
+    {
+        $this->bengkelTab = $tab;
     }
     private function loadUsers()
     {

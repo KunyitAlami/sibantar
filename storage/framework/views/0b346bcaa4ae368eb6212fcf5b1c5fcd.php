@@ -1,5 +1,14 @@
-<x-layout-admin>
-    <x-slot:title>Kelola User - Admin SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal2e6fb18f75884c4fed4e10444e669251 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2e6fb18f75884c4fed4e10444e669251 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-admin','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-admin'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Kelola User - Admin SIBANTAR <?php $__env->endSlot(); ?>
 
     <!-- Hero Section (reduced) -->
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-4">
@@ -377,4 +386,14 @@
         }
     </style>
 
-</x-layout-admin>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $attributes = $__attributesOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $component = $__componentOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__componentOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/admin/users/index.blade.php ENDPATH**/ ?>
