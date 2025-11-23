@@ -30,6 +30,15 @@ class AdminController extends RoutingController
         ));
     }
 
+    // Manage Bengkel listing for admin
+    public function manageBengkel()
+    {
+        $bengkels = BengkelModel::all();
+        $calonBengkels = CalonBengkelModel::all();
+
+        return view('admin.bengkel.index', compact('bengkels', 'calonBengkels'));
+    }
+
 
     public function showCalonBengkel($id)
     {

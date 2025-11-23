@@ -16,6 +16,9 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="{{ route('admin.dashboard.index') }}" class="font-medium {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}">Dashboard</a></li>
                 <li><a href="{{ route('admin.users.index') }}" class="font-medium {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Kelola User</a></li>
+                <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium {{ request()->routeIs('admin.bengkel.*') ? 'active' : '' }}">Kelola Bengkel</a></li>
+                <li><a href="{{ route('admin.laporan.index') }}" class="font-medium {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">Laporan</a></li>
+                <li><a href="{{ route('admin.statistik.index') }}" class="font-medium {{ request()->routeIs('admin.statistik.*') ? 'active' : '' }}">Statistik</a></li>
                 <li>
                     <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
@@ -40,6 +43,9 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li><a href="{{ route('admin.dashboard.index') }}" class="font-medium">Dashboard</a></li>
                     <li><a href="{{ route('admin.users.index') }}" class="font-medium">Kelola User</a></li>
+                    <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium">Kelola Bengkel</a></li>
+                    <li><a href="{{ route('admin.laporan.index') }}" class="font-medium">Laporan</a></li>
+                    <li><a href="{{ route('admin.statistik.index') }}" class="font-medium">Statistik</a></li>
                     <li>
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
@@ -61,6 +67,7 @@
                         <span>{{ Auth::user()->name }} (Admin)</span>
                     </li>
                     <li><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></li>
+                    <li><a href="{{ route('admin.bengkel.index') }}">Kelola Bengkel</a></li>
                     <li>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
