@@ -16,8 +16,8 @@
             <!-- Logo & Title -->
             <div class="text-center mb-6 sm:mb-8">
                 <div class="flex justify-center mb-3 sm:mb-4">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-primary-700 rounded-2xl flex items-center justify-center">
-                        <img src="<?php echo e(asset('images/logo.png')); ?>" alt="SIBANTAR Logo" class="w-8 h-8 sm:w-10 sm:h-10 object-contain">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center">
+                        <img src="<?php echo e(asset('images/logo.png')); ?>" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
                     </div>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-1 sm:mb-2">Buat Akun Baru</h1>

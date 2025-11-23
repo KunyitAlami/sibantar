@@ -61,14 +61,24 @@
                     @php
                         // Dynamic status badge
                         $statusColor = match($order->status) {
-                            'pending' => 'bg-yellow-100 text-yellow-700',  // ← ubah dari 'menunggu' ke 'pending'
+                            'pending' => 'bg-yellow-100 text-yellow-700',
                             'dibayar' => 'bg-green-100 text-green-700',
                             'diproses' => 'bg-blue-100 text-blue-700',
                             'selesai'  => 'bg-green-100 text-green-700',
                             'gagal'    => 'bg-red-100 text-red-700',
+                            'ditolak'  => 'bg-red-100 text-red-700',
                             'dibatalkan' => 'bg-gray-100 text-gray-700',
                             default    => 'bg-gray-100 text-gray-700',
                         };
+                        $statusLabels = [
+                            'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
+                            'pending' => 'Pending',
+                            'dibayar' => 'Dibayar',
+                            'diproses' => 'Diproses',
+                            'selesai' => 'Selesai',
+                            'ditolak' => 'Ditolak',
+                            'dibatalkan' => 'Dibatalkan',
+                        ];
                     @endphp
 
                     <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-neutral-200 hover:shadow-md transition-all">
@@ -83,24 +93,21 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                     </svg>
-                                    
-                                    {{-- DEBUG: tampilkan apapun yang ada --}}
                                     <span>
                                         @if(isset($order->distance_km) && $order->distance_km)
                                             {{ $order->distance_km }} km dari bengkel
                                         @else
-                                            Jarak tidak tersedia (distance_km: {{ var_export($order->distance_km ?? 'null', true) }})
+                                            Jarak tidak tersedia
                                         @endif
                                     </span>
                                 </div>
+
                                 {{-- Kategori --}}
                                 <div class="flex items-center gap-2 text-sm text-neutral-500 mt-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                     </svg>
-                                    
-                                    {{-- DEBUG: tampilkan apapun yang ada --}}
                                     <span>
                                         @if(isset($order->layananBengkel->kategori) && $order->layananBengkel->kategori)
                                             Kategori: {{ $order->layananBengkel->kategori }}
@@ -109,14 +116,13 @@
                                         @endif
                                     </span>
                                 </div>
+
                                 {{-- Nama Layanan --}}
-                                <div class="flex items-center gap-2 text-sm text-neutral-500 mt-1 ">
+                                <div class="flex items-center gap-2 text-sm text-neutral-500 mt-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
-                                    
-                                    {{-- DEBUG: tampilkan apapun yang ada --}}
                                     <span>
                                         @if(isset($order->layananBengkel->nama_layanan) && $order->layananBengkel->nama_layanan)
                                             Jenis Layanan: {{ $order->layananBengkel->nama_layanan }}
@@ -127,8 +133,8 @@
                                 </div>
                             </div>
                             
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
-                                {{ ucfirst($order->status) }}
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusColor[$order->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
                             </span>
                         </div>
                         
@@ -138,18 +144,20 @@
                                 Harga: <span class="font-medium">Rp {{ number_format($order->total_bayar ?? 0, 0, ',', '.') }}</span>
                             </p>
                             <p class="text-sm text-neutral-600">
-                                Status: <span class="font-medium">{{ ucfirst($order->status) }}</span>
+                                Status: <span class="font-medium">{{ $statusLabels[$order->status] ?? ucfirst($order->status) }}</span>
                             </p>
                         </div>
+
                         {{-- Footer --}}
-                        <div wire:poll.1000ms class="mt-3 text-sm text-neutral-600"
+                        <div class="mt-3 text-sm text-neutral-600"
                             x-data="{
                                 countdown_ms: {{ $order->countdown_ms ?? 0 }},
                                 now: 0,
                                 diff: {{ $order->countdown_ms ?? 0 }},
                                 isActive: {{ $order->countdown_active ? 'true' : 'false' }},
-                                isConfirmed: '{{ $order->countDown?->status ?? '' }}' !== 'tidak_dikonfirmasi',
-                                orderStatus: '{{ $order->status }}'
+                                isConfirmed: '{{ $order->countDown?->status ?? '' }}' === 'terkonfirmasi',
+                                orderStatus: '{{ $order->status }}',
+                                autoRejectTriggered: false
                             }" 
                             x-init="
                                 console.log('Order #{{ $order->id_order }}', {
@@ -164,88 +172,95 @@
                                     let interval = setInterval(() => {
                                         now += 1000;
                                         diff = countdown_ms - now;
-                                        if(diff <= 0){
+                                        
+                                        // AUTO REJECT ketika timer habis
+                                        if(diff <= 0 && !autoRejectTriggered){
                                             diff = 0;
                                             isActive = false;
-                                            isConfirmed = true;
-                                            $wire.handleCountdownAction({{ $order->id_order }});
+                                            autoRejectTriggered = true;
+                                            
+                                            console.log('⏰ Timer habis! Auto-rejecting order #{{ $order->id_order }}');
+                                            
+                                            // Panggil method auto reject dari Livewire
+                                            $wire.autoRejectOrder({{ $order->id_order }});
+                                            
                                             clearInterval(interval);
                                         }
                                     }, 1000);
                                 }
                             "
                         >
-                        {{-- Countdown Display --}}
-                        @if($order->countdown_ms !== null && $order->countdown_ms > 0)
-                            <div class="mb-3">
-                                <span x-show="!isConfirmed && diff > 0"
-                                    x-text="'Sisa waktu: ' + Math.floor(diff/60000).toString().padStart(2,'0') + ':' + Math.floor((diff%60000)/1000).toString().padStart(2,'0')"
-                                    class="font-semibold text-red-600">
-                                </span>
+                            {{-- Countdown Display --}}
+                            @if($order->countdown_ms !== null && $order->countdown_ms > 0 && $order->status !== 'ditolak')
+                                <div class="mb-3">
+                                    <span x-show="!isConfirmed && diff > 0"
+                                        x-text="'Sisa waktu: ' + Math.floor(diff/60000).toString().padStart(2,'0') + ':' + Math.floor((diff%60000)/1000).toString().padStart(2,'0')"
+                                        class="font-semibold text-red-600">
+                                    </span>
 
-                                <span x-show="isConfirmed" class="font-semibold text-green-600">
-                                    Pesanan sudah dikonfirmasi
-                                </span>
+                                    <span x-show="isConfirmed" class="font-semibold text-green-600">
+                                        ✓ Pesanan sudah dikonfirmasi
+                                    </span>
 
-                                {{-- Jika waktu habis tapi order belum dikonfirmasi --}}
-                                <span x-show="!isConfirmed && diff <= 0 && '{{ $order->countDown?->status }}' === 'tidak_dikonfirmasi' && '{{ $order->status }}' !== 'pending'"
-                                    class="font-semibold text-red-600">
-                                    Waktu habis - Order otomatis ditolak
-                                </span>
-                            </div>
-                        @endif
+                                    {{-- Jika waktu habis --}}
+                                    <span x-show="!isConfirmed && diff <= 0"
+                                        class="font-semibold text-red-600">
+                                        ⏰ Waktu habis - Menolak pesanan otomatis...
+                                    </span>
+                                </div>
+                            @endif
 
-                        {{-- Tombol Terima/Tolak - Hanya muncul jika countDown.status = 'tidak_dikonfirmasi' dan belum dikonfirmasi --}}
-                        @if($order->countDown?->status === 'tidak_dikonfirmasi' && !$order->countdown_confirmed)
-                            <div class="grid grid-cols-2 gap-2 mt-4" x-show="!isConfirmed">
-                                <button wire:click="rejectOrder({{ $order->id_order }})" 
-                                        @click="isConfirmed = true; orderStatus = 'ditolak'; $el.disabled = true"
-                                        class="py-2.5 text-sm font-semibold text-white bg-red-600 border border-red-700 rounded-lg hover:bg-red-700 transition-all">
-                                    Tolak Pesanan
-                                </button>
-                                <button wire:click="acceptOrder({{ $order->id_order }})" 
-                                        @click="isConfirmed = true; orderStatus = 'pending'; $el.disabled = true"
-                                        class="py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all">
-                                    Terima Pesanan
-                                </button>
-                            </div>
-                        @endif
+                            {{-- Tombol Terima/Tolak --}}
+                            @if($order->countDown?->status === 'tidak_dikonfirmasi' && !$order->countdown_confirmed && $order->status !== 'ditolak')
+                                <div class="grid grid-cols-2 gap-2 mt-4" x-show="!isConfirmed && diff > 0">
+                                    <button wire:click="rejectOrder({{ $order->id_order }})" 
+                                            @click="isConfirmed = true; orderStatus = 'ditolak'; $el.disabled = true"
+                                            class="py-2.5 text-sm font-semibold text-white bg-red-600 border border-red-700 rounded-lg hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Tolak Pesanan
+                                    </button>
+                                    <button wire:click="acceptOrder({{ $order->id_order }})" 
+                                            @click="isConfirmed = true; orderStatus = 'pending'; $el.disabled = true"
+                                            class="py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Terima Pesanan
+                                    </button>
+                                </div>
+                            @endif
 
-                        {{-- Tombol Lihat Detail - HANYA MUNCUL jika order.status = 'pending' DAN sudah dikonfirmasi --}}
-                        @if($order->status === 'pending' && $order->countDown?->status === 'terkonfirmasi')
-                            <div class="mt-4">
-                                <button 
-                                    wire:click="gotoFinalPrice({{ $order->id_order }})"
-                                    class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
-                                >
-                                    Lihat Detail & Tentukan Harga Final
-                                </button>
-                            </div>
-                        @endif
+                            {{-- Tombol Lihat Detail - pending --}}
+                            @if($order->status === 'pending' && $order->countDown?->status === 'terkonfirmasi')
+                                <div class="mt-4">
+                                    <button 
+                                        wire:click="gotoFinalPrice({{ $order->id_order }})"
+                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
+                                    >
+                                        Lihat Detail & Tentukan Harga Final
+                                    </button>
+                                </div>
+                            @endif
 
-                        {{-- Tombol Lihat Detail - HANYA MUNCUL jika order.status = 'selesai' DAN sudah dikonfirmasi --}}
-                        @if($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi')
-                            <div class="mt-4">
-                                <button 
-                                    wire:click="gotoFinalPrice({{ $order->id_order }})"
-                                    class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
-                                >
-                                    Cek Detail Pesanan
-                                </button>
-                            </div>
-                        @endif
+                            {{-- Tombol Lihat Detail - selesai --}}
+                            @if($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi')
+                                <div class="mt-4">
+                                    <button 
+                                        wire:click="gotoFinalPrice({{ $order->id_order }})"
+                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
+                                    >
+                                        Cek Detail Pesanan
+                                    </button>
+                                </div>
+                            @endif
 
-                        {{-- Info untuk order yang sudah ditolak --}}
-                        @if($order->status === 'ditolak')
-                            <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <p class="text-sm text-red-700">
-                                    ❌ Pesanan ini telah ditolak
-                                    @if($order->countDown?->status === 'tidak_dikonfirmasi')
-                                        (Waktu konfirmasi habis)
-                                    @endif
-                                </p>
-                            </div>
-                        @endif
+                            {{-- Info untuk order yang sudah ditolak --}}
+                            @if($order->status === 'ditolak')
+                                <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="text-sm text-red-700">
+                                        ❌ Pesanan ini telah ditolak
+                                        @if($order->countDown?->status === 'tidak_dikonfirmasi')
+                                            <span class="block mt-1">(Waktu konfirmasi habis - ditolak otomatis)</span>
+                                        @endif
+                                    </p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @empty
@@ -343,6 +358,28 @@
                 <div class="card p-5 shadow-md">
                     <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
                     @forelse($orders as $order)
+                        @php
+                            // Dynamic status badge
+                            $statusColor = match($order->status) {
+                                'pending' => 'bg-yellow-100 text-yellow-700',
+                                'dibayar' => 'bg-green-100 text-green-700',
+                                'diproses' => 'bg-blue-100 text-blue-700',
+                                'selesai'  => 'bg-green-100 text-green-700',
+                                'gagal'    => 'bg-red-100 text-red-700',
+                                'ditolak'  => 'bg-red-100 text-red-700',
+                                'dibatalkan' => 'bg-gray-100 text-gray-700',
+                                default    => 'bg-gray-100 text-gray-700',
+                            };
+                            $statusLabels = [
+                                'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
+                                'pending' => 'Pending',
+                                'dibayar' => 'Dibayar',
+                                'diproses' => 'Diproses',
+                                'selesai' => 'Selesai',
+                                'ditolak' => 'Ditolak',
+                                'dibatalkan' => 'Dibatalkan',
+                            ];
+                        @endphp
                         <div class="booking-card card p-4 hover:shadow-lg transition-shadow mb-6" data-status="in-progress">
                             <div class="flex items-start justify-between mb-2">
                                 <div>
@@ -350,7 +387,7 @@
                                     <p class="text-xs text-neutral-500 mt-2">Tanggal Order: {{ $order->created_at }}</p>
                                 </div>
                                 <span class="px-2.5 py-1 bg-info-100 text-info-700 text-xs font-semibold rounded-full whitespace-nowrap">
-                                    {{ $order->status }}
+                                    {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
                                 </span>
                             </div>
 

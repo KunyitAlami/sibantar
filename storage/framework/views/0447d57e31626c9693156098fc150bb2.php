@@ -28,6 +28,28 @@
     <section class="py-4 pb-24">
         <div class="container mx-auto px-4">
             <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                        // Dynamic status badge
+                        $statusColor = match($order->status) {
+                            'pending' => 'bg-yellow-100 text-yellow-700',
+                            'dibayar' => 'bg-green-100 text-green-700',
+                            'diproses' => 'bg-blue-100 text-blue-700',
+                            'selesai'  => 'bg-green-100 text-green-700',
+                            'gagal'    => 'bg-red-100 text-red-700',
+                            'ditolak'  => 'bg-red-100 text-red-700',
+                            'dibatalkan' => 'bg-gray-100 text-gray-700',
+                            default    => 'bg-gray-100 text-gray-700',
+                        };
+                        $statusLabels = [
+                            'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
+                            'pending' => 'Pending',
+                            'dibayar' => 'Dibayar',
+                            'diproses' => 'Diproses',
+                            'selesai' => 'Selesai',
+                            'ditolak' => 'Ditolak',
+                            'dibatalkan' => 'Dibatalkan',
+                        ];
+                    ?>
                 <!-- Booking Card 1 - In Progress -->
                 <div class="booking-card card p-4 hover:shadow-lg transition-shadow mb-6" data-status="in-progress">
                     <div class="flex items-start justify-between mb-2">
@@ -36,7 +58,7 @@
                             <p class="text-xs text-neutral-500 mt-2">Tanggal Order: <?php echo e($order->created_at); ?></p>
                         </div>
                         <span class="px-2.5 py-1 bg-info-100 text-info-700 text-xs font-semibold rounded-full whitespace-nowrap">
-                            <?php echo e($order->status); ?>
+                            <?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?>
 
                         </span>
                     </div>
@@ -82,7 +104,6 @@
                     </div>
                     
                     <div class="mt-10 mb-5">
-                        <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php if($order->review): ?>
                                 <p>Rating Bengkel: 
                                     <?php for($i = 1; $i <= 5; $i++): ?>
@@ -109,7 +130,6 @@
                                     </a>
                                 </p>
                             <?php endif; ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
