@@ -11,7 +11,6 @@
                         <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
                     </div>
                 </div>
-                <!-- Judul dan ringkasan dihapus sesuai permintaan -->
             </div>
 
             <!-- Register Card -->
