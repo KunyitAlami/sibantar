@@ -16,8 +16,6 @@ class WaitingConfirmation extends Component
     {
         $this->orderId = $orderId;
         $this->loadOrder();
-        
-        // Check redirect conditions setelah load
         $this->checkRedirect();
     }
 
@@ -31,18 +29,18 @@ class WaitingConfirmation extends Component
         if (!$this->order) {
             abort(404, 'Order tidak ditemukan');
         }
-
-        // Hitung countdown_ms dan attach ke order object
         $this->order->countdown_ms = $this->calculateCountdown();
         $this->order->countdown_active = $this->isCountdownActive();
         $this->order->countdown_confirmed = optional($this->order->countDown)->status === 'terkonfirmasi';
+        if (optional($this->order->countDown)->status === 'terkonfirmasi') {
+            return redirect()->route('user.order-tracking', ['id' => $this->orderId]);
+        }
     }
 
     protected function checkRedirect()
     {
         if (!$this->order) return;
 
-        // Redirect jika sudah dikonfirmasi
         if (optional($this->order->countDown)->status === 'terkonfirmasi') {
             return redirect()->route('user.order-tracking', ['id' => $this->orderId]);
         }
@@ -77,7 +75,6 @@ class WaitingConfirmation extends Component
                && $this->calculateCountdown() > 0;
     }
 
-    // Computed property untuk backward compatibility (kalau ada yang pakai)
     public function getCountdownProperty()
     {
         return $this->calculateCountdown();

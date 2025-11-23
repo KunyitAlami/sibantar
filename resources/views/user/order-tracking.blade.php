@@ -17,17 +17,6 @@
     <section class="py-6 pb-24">
         <div class="container mx-auto px-4">
             <div class="max-w-md mx-auto">
-
-                <!-- Status Header -->
-                {{-- <div class="text-center mb-6">
-                    <div class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h1 class="text-2xl font-bold text-neutral-900 mb-2">Pesanan Sedang Diproses</h1>
-                    <p class="text-sm text-neutral-600">Status terbaru akan ditampilkan di sini</p>
-                </div> --}}
                 <div class="text-center mb-6">
 
                     {{-- ICON berdasarkan status --}}
