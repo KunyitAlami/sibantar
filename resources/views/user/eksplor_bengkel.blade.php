@@ -43,7 +43,7 @@
         <div class="px-4 py-3 flex items-center justify-center gap-3">
             <!-- Search Info -->
             <div class="flex-1 min-w-0 justify-center">
-                <h1 class="text-2xl font-bold text-neutral-900 truncate">Ayo Eksplorasi Bengkel di Kota Banjarmasin</h1>
+                <h1 class="text-2xl font-bold text-neutral-900 truncate">Cari Bengkel</h1>
             </div>
         </div>
     </header>

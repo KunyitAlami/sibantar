@@ -19,10 +19,6 @@
     
     <section class="px-4">
         <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
-            <div class="flex flex-col gap-4 justify-center text-center">
-                <h1>Form Edit Layanan</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam quasi voluptates.</p>
-            </div>
             {{-- action="{{ route('bengkel.layanan.store') }}" --}}
             <form action="{{ route('bengkel.layanan.update', $id_layanan_bengkel) }}" method="POST" class="mt-10 mb-10 gap-5">
                 @csrf
@@ -42,7 +38,7 @@
                     {{-- HARGA --}}
                     <div class="flex flex-col md:flex-row gap-5">
                         <div class="flex-1">
-                            <label class="block font-medium text-neutral-800 mb-1">Harga Awal</label>
+                            <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Terendah</label>
                             <input type="number" name="harga_awal" required value="{{ $layanan_bengkel->harga_awal }}"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
                         </div>
@@ -50,7 +46,7 @@
 
 
                         <div class="flex-1">
-                            <label class="block font-medium text-neutral-800 mb-1">Harga Akhir</label>
+                            <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Tertinggi</label>
                             <input type="number" name="harga_akhir" required value="{{ $layanan_bengkel->harga_akhir }}"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
                         </div>
