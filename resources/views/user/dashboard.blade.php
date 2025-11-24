@@ -37,7 +37,7 @@
         <div class="container mx-auto px-4 py-12 lg:py-20">
             <div class="max-w-2xl mx-auto text-center">
                 <h1 class="mb-4">
-                    Selamat Datang di SIBANTAR
+                    Selamat Datang di <span class="text-orange-400">SIBANTAR</span>
                 </h1>
                 <p class="text-primary-100 text-sm lg:text-base mb-8">
                     Temukan bengkel terdekat dengan cepat dan aman<br class="hidden lg:block">
@@ -68,10 +68,10 @@
                             <select name="nama_layanan" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
                                 <option disabled selected value="">Pilih jenis kerusakan</option>
                                 <option value="Ban Bocor">Ban Bocor</option>
-                                <option value="Aki Tekor">Aki Tekor</option>
+                                <option value="Aki Tekor">Aki Soak</option>
                                 <option value="Mesin Mati">Mesin Mati</option>
                                 <option value="Kecelakaan">Kecelakaan</option>
-                                <option value="Lainnya">Lainnya</option>
+                                <!-- <option value="Lainnya">Lainnya</option> -->
                             </select>
                         </div>
 
@@ -81,7 +81,7 @@
                                 <span class="label-text text-white font-medium text-base">Lokasi anda sekarang:</span>
                             </label>
 
-                            <div id="map" class="rounded-xl border-2 border-white/20" style="height: 300px; width: 100%;"></div>
+                            <div id="map" class="rounded-xl border-2 border-white/20" style="height: 200px; width: 100%;"></div>
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
                         </div>
@@ -136,7 +136,7 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-neutral-900 mb-2">Live Status</h3>
-                    <p class="text-sm text-neutral-600">Pantau status di website</p>
+                    <p class="text-sm text-neutral-600">Pantau status realtime</p>
                 </div>
 
                 <!-- Feature 4: Pembayaran Mudah -->
@@ -147,7 +147,7 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-neutral-900 mb-2">Pembayaran Mudah</h3>
-                    <p class="text-sm text-neutral-600">Cash atau Cashless</p>
+                    <p class="text-sm text-neutral-600">Bayar dengan metode Cashless</p>
                 </div>
 
             </div>

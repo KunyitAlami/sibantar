@@ -12,115 +12,110 @@
     <section class="py-6 pb-32">
         <div class="container mx-auto px-4">
             <div class="max-w-md mx-auto">
-                
-                <!-- Page Title -->
-                <div class="mb-6 text-center">
-                    <h1 class="text-2xl font-bold text-neutral-900">Konfirmasi Pesanan</h1>
-                    <p class="text-sm text-neutral-600 mt-1">Lengkapi data pemesanan Anda</p>
-                </div>
-
-                <!-- Bengkel Info -->
-                <div class="card p-4 mb-4">
-                    <h4 class="font-semibold text-neutral-900 mb-1"><?php echo e($bengkel->nama_bengkel); ?></h4>
-                    <p class="text-sm text-neutral-600"><?php echo e($bengkel->alamat_lengkap); ?></p>
-                    <div class="flex items-center gap-2 mt-2">
-                        <div class="flex text-warning-500">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                        </div>
-                        <span class="text-sm text-neutral-600">4.8</span>
-                        <span class="text-neutral-400">•</span>
-                        <span class="text-sm text-neutral-600" id="distanceDisplay">Menghitung jarak...</span>
+                <div class="card p-6 md:p-8 bg-white shadow-lg">
+                    <!-- Page Title -->
+                    <div class="mb-6 text-center">
+                        <h1 class="text-2xl font-bold text-neutral-900">Konfirmasi Pesanan</h1>
+                        <p class="text-sm text-neutral-600 mt-1">Lengkapi data pemesanan Anda</p>
                     </div>
-                </div>
 
-                <!-- Form -->
-                <form id="orderForm" action="<?php echo e(route('user.order_store')); ?>" method="POST" class="space-y-4">
-                    <?php echo csrf_field(); ?>
-                    <!-- Hidden inputs for bengkel coordinates -->
-                    <input type="hidden" name="client_timezone" id="client_timezone">
-                    <input type="hidden" id="bengkelLatitude" name="bengkel_latitude" value="<?php echo e($bengkel->latitude ?? ''); ?>">
-                    <input type="hidden" id="bengkelLongitude" name="bengkel_longitude" value="<?php echo e($bengkel->longitude ?? ''); ?>">
-                    <input type="hidden" id="idBengkel" name="id_bengkel" value="<?php echo e($bengkel->id_bengkel ?? ''); ?>">
-                    <input type="hidden" id="idLayanan" name="id_layanan_bengkel" value="<?php echo e($layanan_bengkel->id_layanan_bengkel ?? ''); ?>">
-                    <input type="hidden" id="idUser" name="id_user" value="<?php echo e($id_user->id_user ?? ''); ?>">
-                    <input type="hidden" id="status" name="status" value="pending">
-                    <input type="hidden" id="estimasiHarga"  name="estimasi_harga" value="<?php echo e($layanan_bengkel->harga_akhir ?? ''); ?>">
-                    <input type="hidden" id="totalBayar" name="total_bayar" id="totalBayar" value="">
-
-                    <!-- Lokasi Anda -->
-                    <div>
-                        <label class="block text-sm font-semibold text-neutral-900 mb-2">Lokasi Anda</label>
-                        <div class="alert alert-info mb-2 py-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span class="text-xs">Geser pin untuk menyesuaikan lokasi Anda</span>
-                        </div>
-                        <div class="relative">
-                            <!-- Map Container -->
-                            <div id="map" class="w-full h-48 rounded-xl overflow-hidden bg-neutral-200 border-2 border-primary-200"></div>
-                            <!-- Address Display -->
-                            <div class="mt-2 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                                <p class="text-xs font-medium text-neutral-700">Alamat</p>
-                                <p class="text-xs text-neutral-600" id="userAddress">Mendeteksi lokasi Anda...</p>
+                    <!-- Bengkel Info -->
+                    <div class="card p-4 mb-4 bg-neutral-50">
+                        <h4 class="font-semibold text-neutral-900 mb-1"><?php echo e($bengkel->nama_bengkel); ?></h4>
+                        <p class="text-sm text-neutral-600"><?php echo e($bengkel->alamat_lengkap); ?></p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <div class="flex text-warning-500">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
                             </div>
-                            <input type="hidden" id="userLatitude" name="user_latitude">
-                            <input type="hidden" id="userLongitude" name="user_longitude">
+                            <span class="text-sm text-neutral-600">4.8</span>
+                            <span class="text-neutral-400">•</span>
+                            <span class="text-sm text-neutral-600" id="distanceDisplay">Menghitung jarak...</span>
                         </div>
                     </div>
 
-                    <!-- Catatan -->
-                    <div>
-                        <label class="block text-sm font-semibold text-neutral-900 mb-2">Catatan (Opsional)</label>
-                        
-                        <textarea 
-                            id="orderNotes" 
-                            name="notes"
-                            placeholder="Tambahkan catatan untuk bengkel..." 
-                            class="textarea textarea-bordered w-full text-sm p-2" 
-                            rows="3"></textarea>
-                    </div>
+                    <!-- Form -->
+                    <form id="orderForm" action="<?php echo e(route('user.order_store')); ?>" method="POST" class="space-y-4">
+                        <?php echo csrf_field(); ?>
+                        <!-- Hidden inputs for bengkel coordinates -->
+                        <input type="hidden" name="client_timezone" id="client_timezone">
+                        <input type="hidden" id="bengkelLatitude" name="bengkel_latitude" value="<?php echo e($bengkel->latitude ?? ''); ?>">
+                        <input type="hidden" id="bengkelLongitude" name="bengkel_longitude" value="<?php echo e($bengkel->longitude ?? ''); ?>">
+                        <input type="hidden" id="idBengkel" name="id_bengkel" value="<?php echo e($bengkel->id_bengkel ?? ''); ?>">
+                        <input type="hidden" id="idLayanan" name="id_layanan_bengkel" value="<?php echo e($layanan_bengkel->id_layanan_bengkel ?? ''); ?>">
+                        <input type="hidden" id="idUser" name="id_user" value="<?php echo e($id_user->id_user ?? ''); ?>">
+                        <input type="hidden" id="status" name="status" value="pending">
+                        <input type="hidden" id="estimasiHarga"  name="estimasi_harga" value="<?php echo e($layanan_bengkel->harga_akhir ?? ''); ?>">
+                        <input type="hidden" id="totalBayar" name="total_bayar" id="totalBayar" value="">
 
-                    <!-- Rincian Biaya -->
-                    <div class="card p-4 bg-neutral-50 mb-10 border border-black">
-                        <h5 class="font-semibold text-neutral-900 mb-3">Rincian Biaya</h5>
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-neutral-600">Biaya Layanan</span>
-                                <span class="font-medium text-neutral-900" id="servicePrice">
-                                    Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?>
+                        <!-- Lokasi Anda -->
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-900 mb-2">Lokasi Anda</label>
+                            <div class="alert alert-info mb-2 py-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span class="text-xs">Geser pin untuk menyesuaikan lokasi Anda</span>
+                            </div>
+                            <div class="relative">
+                                <!-- Map Container -->
+                                <div id="map" class="w-full h-48 rounded-xl overflow-hidden bg-neutral-200 border-2 border-primary-200"></div>
+                                <!-- Address Display -->
+                                <div class="mt-2 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                                    <p class="text-xs font-medium text-neutral-700">Alamat</p>
+                                    <p class="text-xs text-neutral-600" id="userAddress">Mendeteksi lokasi Anda...</p>
+                                </div>
+                                <input type="hidden" id="userLatitude" name="user_latitude">
+                                <input type="hidden" id="userLongitude" name="user_longitude">
+                            </div>
+                        </div>
 
-                                </span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-neutral-600" id="ongkirLabel">Ongkir (Menghitung...)</span>
-                                <span class="font-medium text-neutral-900" id="ongkirPrice">Rp 0</span>
-                            </div>
-                            <div class="border-t border-neutral-200 pt-2 mt-2">
-                                <div class="flex justify-between">
-                                    <span class="font-semibold text-neutral-900">Total</span>
-                                    <span class="font-bold text-primary-700 text-lg" id="totalPrice">Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?></span>
+                        <!-- Catatan -->
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-900 mb-2">Catatan (Opsional)</label>
+                            <textarea 
+                                id="orderNotes" 
+                                name="notes"
+                                placeholder="Tambahkan catatan untuk bengkel..." 
+                                class="textarea textarea-bordered w-full text-sm p-2" 
+                                rows="3"></textarea>
+                        </div>
+
+                        <!-- Rincian Biaya -->
+                        <div class="card p-4 bg-neutral-50 mb-6 border border-black">
+                            <h5 class="font-semibold text-neutral-900 mb-3">Rincian Biaya</h5>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-neutral-600">Biaya Layanan</span>
+                                    <span class="font-medium text-neutral-900" id="servicePrice">
+                                        Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?>
+
+                                    </span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-neutral-600" id="ongkirLabel">Ongkir (Menghitung...)</span>
+                                    <span class="font-medium text-neutral-900" id="ongkirPrice">Rp 0</span>
+                                </div>
+                                <div class="border-t border-neutral-200 pt-2 mt-2">
+                                    <div class="flex justify-between">
+                                        <span class="font-semibold text-neutral-900">Total</span>
+                                        <span class="font-bold text-primary-700 text-lg" id="totalPrice">Rp <?php echo e(number_format($layanan_bengkel->harga_akhir, 0, ',', '.')); ?></span>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="flex gap-3 mt-6">
+                                <a href="<?php echo e(url()->previous()); ?>" class="flex-1 btn btn-outline text-center">
+                                    Batal
+                                </a>
+                                <button type="button" onclick="confirmOrder()" class="flex-1 btn btn-primary">
+                                    Konfirmasi
+                                </button>
+                            </div>
                         </div>
-                        
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Bottom Action Buttons -->
-    <section class="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 py-4 z-50">
-        <div class="container mx-auto px-4">
-            <div class="max-w-md mx-auto flex gap-3">
-                <a href="<?php echo e(url()->previous()); ?>" class="flex-1 btn btn-outline text-center">
-                    Batal
-                </a>
-                <button type="button" onclick="confirmOrder()" class="flex-1 btn btn-primary">
-                    Konfirmasi
-                </button>
-            </div>
-        </div>
-    </section>
+    <!-- Bottom Action Buttons removed, now inside form -->
 
     <?php $__env->startPush('scripts'); ?>
     <!-- Leaflet CSS & JS -->
@@ -133,7 +128,7 @@
 
     <script>
         // Configuration
-        const ONGKIR_PER_KM = 15000; // Rp 15.000 per km
+        const ONGKIR_PER_KM = 5000; // Rp 15.000 per km
         const SERVICE_PRICE = <?php echo e($layanan_bengkel->harga_akhir); ?>;
         
         // Get bengkel coordinates from backend

@@ -72,7 +72,13 @@
 
 
                 <!-- Progress Layanan -->
-                @livewire('bengkel.order-progress', ['orderId' => $orderId])
+                @if($order->status == 'ditolak')
+                    <div class="card bg-error-50 text-center mt-4">
+                        <a href="{{ route('user.dashboard') }}" class="btn btn-primary rounded-full px-6 py-2">Cari Bengkel Lain</a>
+                    </div>
+                @else
+                    @livewire('bengkel.order-progress', ['orderId' => $orderId])
+                @endif
             </div>
         </div>
     </section>

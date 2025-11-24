@@ -62,7 +62,7 @@
         
         <div class="bg-white rounded-2xl p-5 mb-4 shadow-md border border-neutral-100 mt-4 ml-4 mr-4">
             <div class="mb-4">
-                <h1 class="font-bold text-2xl">Current Step Saat ini</h1>
+                <h1 class="font-bold text-2xl">Progress Pelayanan</h1>
             </div>
 
             <div class="mb-4">
@@ -97,7 +97,7 @@
 
         <!-- Final Price Form -->
         <div class="bg-white rounded-2xl p-6 shadow-md border border-neutral-100 mt-4 ml-4 mr-4">
-            <h2 class="text-xl font-bold text-neutral-900 mb-5">Rincian Biaya Final</h2>
+            <h2 class="text-xl font-bold text-neutral-900 mb-5">Rincian Biaya Akhir</h2>
 
             <form wire:submit.prevent="submitFinalPrice">
                 <!-- Service Price -->

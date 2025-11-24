@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class BengkelDashboard extends Component
 {
     public $id_bengkel;
-    public $activePanel = 'about';
+    public $activePanel = 'order';
     public $layanan;
     
     // Cache untuk menghindari re-calculation

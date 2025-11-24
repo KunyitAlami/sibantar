@@ -13,6 +13,8 @@ class OrderTrackingModel extends Model
         'id_order',
         'current_step',
         'finalPrice',
+        'servicePrice',
+        'deliveryFee',
         'midtrans_order_id',
         'midtrans_status',
     ];

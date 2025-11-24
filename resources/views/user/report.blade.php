@@ -193,7 +193,7 @@
                               d="M15 19l-7-7 7-7"/>
                     </svg>
                 </a>
-                <h1 class="font-bold text-lg text-neutral-900">Kembali ke Beranda</h1>
+                <h1 class="font-bold text-lg text-neutral-900">Laporan Pesanan</h1>
             </div>
         </div>
     </section>
@@ -201,17 +201,13 @@
     {{-- Form --}}
     
     <section class="px-4">
-        <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
-            <div class="flex flex-col gap-4 justify-center text-center">
-                <h1>Form Laporkan Pesanan</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam quasi voluptates.</p>
-            </div>
+        <div class="max-w-3xl mx-auto bg-white p-4 rounded-xl shadow-sm mb-20">
             {{-- {{ route('bengkel.order.store', $order->id_order) }}--}}
             <form  action="{{ route('user.report.store', $order->id_order) }}"
-                method="POST" enctype="multipart/form-data" class="mt-10 mb-10 gap-5">
+                method="POST" enctype="multipart/form-data" class="mt-2 mb-2">
                 @csrf
 
-                <div class="space-y-5">
+                <div class="space-y-4">
                     <div>
                         <h1 class="font-semibold text-lg mb-2">Keterangan Order</h1>
                         <div class="space-y-1 text-sm text-neutral-700">
@@ -238,7 +234,7 @@
                     </div>
 
                     <button type="submit"
-                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg text-center mt-4">
+                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-full text-center mt-4">
                         Laporkan
                     </button>
 

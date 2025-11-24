@@ -26,7 +26,7 @@
 
     
     
-    <section class="px-4">
+    <section class="px-6">
         <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm mb-20">
             
             <form action="<?php echo e(route('bengkel.layanan.store', $id_bengkel)); ?>" method="POST" class="mt-10 mb-10 gap-5">
@@ -79,7 +79,7 @@
 
                 
                 <button type="submit"
-                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg text-center mt-4">
+                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-full text-center mt-4">
                     Tambah Layanan
                 </button>
 

@@ -350,6 +350,28 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Show a read-only review page for an order. If no review exists, redirect back.
+     */
+    public function showReview($id_order)
+    {
+        $order = OrderModel::with('review', 'bengkel')->findOrFail($id_order);
+
+        if (Auth::id() != $order->id_user) {
+            abort(403, 'Unauthorized access');
+        }
+
+        if (!$order->review) {
+            return redirect()->route('user.history', ['id_user' => Auth::id()])
+                             ->with('info', 'Belum ada review untuk order ini.');
+        }
+
+        return view('user.review_show', [
+            'order' => $order,
+            'review' => $order->review,
+        ]);
+    }
+
     public function saveReview(Request $request, $id_order)
     {
         $order = OrderModel::findOrFail($id_order);

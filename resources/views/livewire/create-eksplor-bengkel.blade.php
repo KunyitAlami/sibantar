@@ -1,8 +1,6 @@
 <div class="max-w-7xl mx-auto px-4 py-6">
     <!-- Filter Kecamatan -->
-    <div class="card p-6 mb-6">
-        <h2 class="text-xl font-bold text-neutral-900 mb-4">Filter Bengkel per Kecamatan</h2>
-        
+    <div class="card p-4 mb-4">
         <div class="w-full max-w-md">
             <label for="kecamatanSelect" class="sr-only">Pilih Kecamatan</label>
             <select id="kecamatanSelect" 

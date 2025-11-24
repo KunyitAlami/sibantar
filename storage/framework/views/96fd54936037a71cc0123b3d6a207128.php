@@ -10,11 +10,24 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('title', null, []); ?> Tentang Kami - SIBANTAR <?php $__env->endSlot(); ?>
 
+    <!-- Header -->
+    <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center gap-4 py-4">
+                <a href="<?php echo e(route('user.dashboard')); ?>" class="text-neutral-700 hover:text-primary-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="font-bold text-lg text-neutral-900">Tentang SIBANTAR</h1>
+            </div>
+        </div>
+    </section>
+
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-primary-700 to-primary-900 text-white py-8 lg:py-24">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center mb-4">
-                <h2 class="text-3xl font-bold text-white mb-4">Tentang SIBANTAR</h2>
                 <p class="text-white leading-relaxed">
                     SIBANTAR adalah platform digital yang menghubungkan pemilik kendaraan dengan bengkel motor terpercaya. 
                     Kami berkomitmen untuk memberikan kemudahan dalam mencari dan memesan layanan bengkel dengan transparansi harga 

@@ -1,28 +1,28 @@
 <div class="space-y-6">
     
     <div class="flex gap-3">
-        <button wire:click="setPanel('about')" 
-            class="px-4 py-2 rounded-lg font-semibold 
-                <?php echo e($activePanel === 'about' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            About Bengkel
-        </button>
-
         <button wire:click="setPanel('order')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 <?php echo e($activePanel === 'order' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            Daftar Pesanan
+            Pesanan
+        </button>
+
+        <button wire:click="setPanel('about')" 
+            class="px-4 py-2 rounded-lg font-semibold 
+                <?php echo e($activePanel === 'about' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
+            About
         </button>
 
         <button wire:click="setPanel('layanan')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 <?php echo e($activePanel === 'layanan' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            Daftar Layanan
+            Layanan
         </button>
 
         <button wire:click="setPanel('report')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 <?php echo e($activePanel === 'report' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            Report
+            Lapor
         </button>
     </div>
 
@@ -50,8 +50,7 @@
                 <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
                 <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <?php
-                        // Dynamic status badge
-                        $statusColor = match($order->status) {
+                        $statusColor = [
                             'pending' => 'bg-yellow-100 text-yellow-700',
                             'dibayar' => 'bg-green-100 text-green-700',
                             'diproses' => 'bg-blue-100 text-blue-700',
@@ -59,8 +58,9 @@
                             'gagal'    => 'bg-red-100 text-red-700',
                             'ditolak'  => 'bg-red-100 text-red-700',
                             'dibatalkan' => 'bg-gray-100 text-gray-700',
-                            default    => 'bg-gray-100 text-gray-700',
-                        };
+                            'menunggu_konfirmasi' => 'bg-yellow-100 text-yellow-700',
+                            'berhasil' => 'bg-green-100 text-green-700',
+                        ];
                         $statusLabels = [
                             'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
                             'pending' => 'Pending',
@@ -69,6 +69,8 @@
                             'selesai' => 'Selesai',
                             'ditolak' => 'Ditolak',
                             'dibatalkan' => 'Dibatalkan',
+                            'gagal' => 'Gagal',
+                            'berhasil' => 'Berhasil',
                         ];
                     ?>
 
@@ -136,9 +138,6 @@
                         <div class="p-3 border-t border-b bg-neutral-50 rounded-lg">
                             <p class="text-sm text-neutral-600 mt-1">
                                 Harga: <span class="font-medium">Rp <?php echo e(number_format($order->total_bayar ?? 0, 0, ',', '.')); ?></span>
-                            </p>
-                            <p class="text-sm text-neutral-600">
-                                Status: <span class="font-medium"><?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?></span>
                             </p>
                         </div>
 
@@ -237,7 +236,7 @@
                                 <div class="mt-4">
                                     <button 
                                         wire:click="gotoFinalPrice(<?php echo e($order->id_order); ?>)"
-                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
+                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-full hover:bg-blue-700 transition-all"
                                     >
                                         Cek Detail Pesanan
                                     </button>
@@ -248,9 +247,9 @@
                             <!--[if BLOCK]><![endif]--><?php if($order->status === 'ditolak'): ?>
                                 <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                                     <p class="text-sm text-red-700">
-                                        ❌ Pesanan ini telah ditolak
+                                        Pesanan ini telah ditolak
                                         <!--[if BLOCK]><![endif]--><?php if($order->countDown?->status === 'tidak_dikonfirmasi'): ?>
-                                            <span class="block mt-1">(Waktu konfirmasi habis - ditolak otomatis)</span>
+                                            <span class="block mt-1">Waktu konfirmasi habis - ditolak otomatis</span>
                                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                     </p>
                                 </div>

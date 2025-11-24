@@ -17,6 +17,7 @@ use App\Livewire\Bengkel\OrderTrackingBengkel;
 
 // TANPA LOGIN
 Route::get('/', fn() => view('landing_page'))->name('landing_page');
+Route::get('/user/search', fn() => view('user.search'))->name('user.search');
 Route::get('/about_us', function () {return view('about_us');})->name('about_us');
 
 // Authentikasi dan segala macamnya
@@ -158,6 +159,10 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/review/{id_order}', [UserController::class, 'review'])
                 ->name('review');
+
+            // Read-only review view (show only)
+            Route::get('/review/{id_order}/show', [UserController::class, 'showReview'])
+                ->name('review.show');
 
             Route::post('/review-store/{id_order}', [UserController::class, 'saveReview'])
                 ->name('review.store');

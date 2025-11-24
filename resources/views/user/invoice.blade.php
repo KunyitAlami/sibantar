@@ -4,433 +4,255 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice #{{ $order->id_order }}</title>
+
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-        
-        body {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            line-height: 1.6;
-            font-size: 12px;
-        }
-        
+
         .container {
-            padding: 40px;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 35px 40px;
         }
-        
-        .header {
-            display: table;
-            width: 100%;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #2563eb;
-            padding-bottom: 20px;
-        }
-        
-        .header-left {
-            display: table-cell;
-            width: 60%;
-            vertical-align: middle;
-        }
-        
-        .header-right {
-            display: table-cell;
-            width: 40%;
-            text-align: right;
-            vertical-align: middle;
-        }
-        
-        .logo {
-            max-width: 150px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        
-        .company-name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2563eb;
-            margin-bottom: 5px;
-        }
-        
-        .company-tagline {
-            color: #666;
-            font-size: 11px;
-        }
-        
-        .invoice-title {
-            font-size: 32px;
-            font-weight: bold;
-            color: #1e40af;
-            margin-bottom: 5px;
-        }
-        
-        .invoice-number {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .info-section {
-            display: table;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-        
-        .info-left, .info-right {
-            display: table-cell;
-            width: 50%;
-            vertical-align: top;
-        }
-        
+
+        /* BOX INFO */
         .info-box {
-            background-color: #f8fafc;
-            padding: 15px;
+            background: #f8fafc;
             border-radius: 5px;
-            margin-bottom: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
         }
-        
+
         .info-title {
             font-size: 11px;
-            color: #64748b;
-            text-transform: uppercase;
             font-weight: bold;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 6px;
+            text-transform: uppercase;
         }
-        
-        .info-content {
-            font-size: 12px;
-            line-height: 1.8;
-        }
-        
+
         .info-content strong {
             display: inline-block;
-            width: 120px;
-            color: #475569;
+            width: 110px;
+            color: #334155;
         }
-        
+
+        /* STATUS */
         .status-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
             font-weight: bold;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        
-        .status-pending {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        
-        .status-dikonfirmasi {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .status-diproses {
-            background-color: #e0e7ff;
-            color: #4338ca;
-        }
-        
-        .status-selesai {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-dibatalkan {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-        
-        .table-container {
-            margin-bottom: 30px;
-        }
-        
-        .table-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #1e293b;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
+
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-dikonfirmasi { background: #dbeafe; color: #1e40af; }
+        .status-diproses { background: #e0e7ff; color: #4338ca; }
+        .status-selesai { background: #d1fae5; color: #065f46; }
+        .status-dibatalkan { background: #fee2e2; color: #991b1b; }
+
+        /* TABLE LAYANAN */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
-        
+
         thead {
-            background-color: #2563eb;
-            color: white;
+            background: #2563eb;
+            color: #fff;
         }
-        
+
         th {
-            padding: 12px 10px;
-            text-align: left;
-            font-weight: bold;
-            font-size: 11px;
+            padding: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 11px;
         }
-        
+
         td {
-            padding: 12px 10px;
+            padding: 10px;
             border-bottom: 1px solid #e2e8f0;
         }
-        
-        tbody tr:hover {
-            background-color: #f8fafc;
-        }
-        
+
         .text-right {
             text-align: right;
         }
-        
+
+        /* SUMMARY */
         .summary-table {
-            width: 350px;
-            float: right;
-            margin-top: 20px;
+            width: 300px;
+            margin-left: auto;
+            margin-top: 10px;
         }
-        
-        .summary-table td {
-            padding: 8px 10px;
-            border: none;
-        }
-        
-        .summary-row {
-            font-size: 12px;
-            color: #475569;
-        }
-        
-        .total-row {
-            font-size: 16px;
-            font-weight: bold;
-            color: #1e293b;
-            border-top: 2px solid #2563eb !important;
-            background-color: #f1f5f9;
-        }
-        
-        .notes-section {
-            clear: both;
-            margin-top: 40px;
-            padding: 15px;
-            background-color: #fffbeb;
-            border-left: 4px solid #f59e0b;
-            border-radius: 5px;
-        }
-        
-        .notes-title {
-            font-weight: bold;
-            color: #92400e;
-            margin-bottom: 5px;
-            font-size: 12px;
-        }
-        
-        .notes-content {
-            color: #78350f;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-        
+
+        /* FOOTER */
         .footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
             text-align: center;
-            color: #64748b;
+            margin-top: 45px;
+            padding-top: 20px;
+            border-top: 1px solid #cbd5e1;
             font-size: 10px;
-        }
-        
-        .footer-divider {
-            margin: 15px 0;
-        }
-        
-        .contact-info {
-            margin-top: 10px;
-            line-height: 1.8;
-        }
-        
-        .highlight-box {
-            background-color: #eff6ff;
-            border: 1px solid #bfdbfe;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        
-        .location-icon::before {
-            content: "📍 ";
-        }
-        
-        .phone-icon::before {
-            content: "📞 ";
-        }
-        
-        .email-icon::before {
-            content: "✉️ ";
-        }
-        
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
+            color: #64748b;
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left">
-                <img src="{{ public_path('images/logo.png') }}" alt="SIBANTAR Logo" class="logo">
-                <div class="company-name">SIBANTAR</div>
-                <div class="company-tagline">Sistem Informasi Bengkel Antar</div>
-            </div>
-            <div class="header-right">
-                <div class="invoice-title">INVOICE</div>
-                <div class="invoice-number">#{{ str_pad($order->id_order, 6, '0', STR_PAD_LEFT) }}</div>
-            </div>
-        </div>
-        
-        <!-- Info Section -->
-        <div class="info-section">
-            <div class="info-left">
+
+<div class="container">
+
+    <!-- ================= HEADER (2 KOLOM) ================= -->
+    <table style="width: 100%; margin-bottom: 25px;">
+        <tr>
+            <!-- LEFT -->
+            <td style="width: 50%; vertical-align: top;">
+                <img src="{{ public_path('images/logo.png') }}"
+                     style="max-width: 140px; margin-bottom: 8px;">
+                
+                <div style="font-size: 24px; font-weight: bold; color: #2563eb;">
+                    SIBANTAR
+                </div>
+                <div style="font-size: 11px; color: #64748b;">
+                    Sistem Bantuan Perjalanan Darurat
+                </div>
+            </td>
+
+            <!-- RIGHT -->
+            <td style="width: 50%; vertical-align: top; text-align: right;">
+                <div style="font-size: 32px; font-weight: bold; color: #1e40af;">
+                    INVOICE
+                </div>
+                <div style="font-size: 14px; color: #475569; margin-top: 5px;">
+                    #{{ str_pad($order->id_order, 6, '0', STR_PAD_LEFT) }}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ================= INFO SECTION (2 KOLOM) ================= -->
+    <table style="width: 100%; margin-bottom: 20px;">
+        <tr>
+            <!-- LEFT COLUMN -->
+            <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+
                 <div class="info-box">
                     <div class="info-title">Informasi Pelanggan</div>
                     <div class="info-content">
                         <strong>Nama:</strong> {{ $order->user->username }}<br>
                         <strong>Email:</strong> {{ $order->user->email }}<br>
-                        <strong>No. WhatsApp:</strong> {{ $order->user->wa_number ?? '-' }}<br>
-                        <strong>ID User:</strong> #{{ $order->user->id_user }}
+                        <strong>No. WA:</strong> {{ $order->user->wa_number ?? '-' }}
                     </div>
                 </div>
-                
+
                 <div class="info-box">
                     <div class="info-title">Lokasi Pelanggan</div>
                     <div class="info-content">
-                        <span class="location-icon"></span>
                         Lat: {{ number_format($order->user_latitude, 6) }}<br>
-                        <span style="margin-left: 20px;">Long: {{ number_format($order->user_longitude, 6) }}</span>
+                        Long: {{ number_format($order->user_longitude, 6) }}
                     </div>
                 </div>
-            </div>
-            
-            <div class="info-right">
+
+            </td>
+
+            <!-- RIGHT COLUMN -->
+            <td style="width: 50%; vertical-align: top; padding-left: 10px;">
+
                 <div class="info-box">
                     <div class="info-title">Informasi Bengkel</div>
                     <div class="info-content">
-                        <strong>Nama Bengkel:</strong> {{ $order->bengkel->nama_bengkel }}<br>
+                        <strong>Nama:</strong> {{ $order->bengkel->nama_bengkel }}<br>
                         <strong>Kecamatan:</strong> {{ $order->bengkel->kecamatan }}<br>
-                        <strong>Alamat:</strong> {{ $order->bengkel->alamat_lengkap }}<br>
-                        <strong>Jam Operasional:</strong> {{ $order->bengkel->jam_operasional }}
+                        <strong>Alamat:</strong> {{ $order->bengkel->alamat_lengkap }}
                     </div>
                 </div>
-                
+
                 <div class="info-box">
                     <div class="info-title">Detail Pesanan</div>
                     <div class="info-content">
-                        <strong>Tanggal Order:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}<br>
-                        <strong>Status:</strong> 
+                        <strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}<br>
+
+                        <strong>Status:</strong>
                         <span class="status-badge status-{{ strtolower($order->status) }}">
                             {{ ucfirst($order->status) }}
                         </span>
                     </div>
                 </div>
-            </div>
+
+            </td>
+        </tr>
+    </table>
+
+    <!-- ================= DETAIL LAYANAN ================= -->
+    <div style="font-size: 14px; font-weight: bold; margin-bottom: 6px;">
+        Detail Layanan
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">No</th>
+                <th style="width: 40%;">Layanan</th>
+                <th style="width: 30%;">Kategori</th>
+                <th style="width: 20%;" class="text-right">Harga</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><strong>{{ $order->layananBengkel->nama_layanan ?? 'Layanan Bengkel' }}</strong></td>
+                <td>{{ $order->layananBengkel->kategori ?? '-' }}</td>
+                <td class="text-right">
+                    Rp {{ number_format(optional($order->tracking)->finalPrice ?? 0, 0, ',', '.') }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ================= SUMMARY ================= -->
+    <table class="summary-table">
+        <tr>
+            <td><strong>Harga Layanan + Biaya Platform</strong></td>
+            <td class="text-right">
+                Rp {{ number_format(optional($order->tracking)->finalPrice ?? 0, 0, ',', '.') }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- ================= NOTES ================= -->
+    @if($order->notes)
+    <div style="
+        margin-top: 30px;
+        background: #fffbeb;
+        border-left: 4px solid #f59e0b;
+        padding: 12px;
+        border-radius: 4px;">
+        <div style="font-weight: bold; color: #92400e; margin-bottom: 4px;">
+            Catatan Pesanan:
         </div>
-        
-        <!-- Service Details Table -->
-        <div class="table-container">
-            <div class="table-title">Detail Layanan</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">No</th>
-                        <th style="width: 40%;">Layanan</th>
-                        <th style="width: 30%;">Kategori</th>
-                        <th style="width: 20%;" class="text-right">Estimasi Harga</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <strong>{{ $order->layananBengkel->nama_layanan ?? 'Layanan Bengkel' }}</strong><br>
-                            <span style="color: #64748b; font-size: 11px;">
-                                {{ $order->layananBengkel->deskripsi ?? '-' }}
-                            </span>
-                        </td>
-                        <td>{{ $order->layananBengkel->kategori ?? '-' }}</td>
-                        <td class="text-right">Rp {{ number_format($order->tracking->finalPrice, 0, ',', '.') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Summary -->
-        <div class="clearfix">
-            <table class="summary-table">
-                <tr class="summary-row">
-                    <td><strong>Estimasi Harga Layanan:</strong></td>
-                    <td class="text-right">Rp {{ number_format($order->tracking->finalPrice, 0, ',', '.') }}</td>
-                </tr>
-                <tr class="summary-row">
-                    <td><strong>Biaya Layanan Platform:</strong></td>
-                    <td class="text-right">Rp 0</td>
-                </tr>
-                <tr class="summary-row">
-                    <td><strong>Pajak & Layanan:</strong></td>
-                    <td class="text-right">Rp 0</td>
-                </tr>
-                <tr class="total-row">
-                    <td><strong>TOTAL PEMBAYARAN:</strong></td>
-                    <td class="text-right"><strong>Rp {{ number_format($order->tracking->finalPrice, 0, ',', '.') }}</strong></td>
-                </tr>
-            </table>
-        </div>
-        
-        <!-- Notes Section -->
-        @if($order->notes)
-        <div class="notes-section">
-            <div class="notes-title">Catatan Pesanan:</div>
-            <div class="notes-content">{{ $order->notes }}</div>
-        </div>
-        @endif
-        
-        <!-- Additional Info -->
-        <div class="highlight-box" style="margin-top: 30px;">
-            <strong style="color: #1e40af;">Informasi Penting:</strong><br>
-            <span style="font-size: 11px; color: #475569;">
-                • Simpan invoice ini sebagai bukti transaksi<br>
-                • Total pembayaran adalah estimasi dan dapat berubah setelah pemeriksaan kendaraan<br>
-                • Untuk pertanyaan lebih lanjut, hubungi bengkel melalui informasi kontak di atas<br>
-                • Pastikan untuk tiba sesuai waktu yang telah ditentukan
-            </span>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <strong style="color: #1e293b;">Terima kasih telah menggunakan layanan SIBANTAR</strong>
-            <div class="footer-divider">───────────────────────────────</div>
-            <div class="contact-info">
-                <span class="email-icon"></span> support@sibantar.com | 
-                <span class="phone-icon"></span> +62 812-3456-7890<br>
-                www.sibantar.com
-            </div>
-            <div style="margin-top: 15px; color: #94a3b8; font-size: 9px;">
-                Invoice ini dibuat secara otomatis oleh sistem SIBANTAR pada {{ \Carbon\Carbon::now()->format('d F Y, H:i:s') }}<br>
-                Dokumen ini sah dan tidak memerlukan tanda tangan
-            </div>
+
+        <div style="color: #78350f; font-size: 11px;">
+            {{ $order->notes }}
         </div>
     </div>
+    @endif
+
+    <!-- ================= FOOTER ================= -->
+    <div class="footer">
+        <strong style="color:#1e293b;">Terima kasih telah menggunakan layanan SIBANTAR</strong>
+        <br>support@sibantar.com | +62 812-3456-7890  
+        <br>www.sibantar.com  
+        <br><br>
+        <span style="color:#9ca3af;">
+            Invoice dibuat otomatis pada {{ \Carbon\Carbon::now()->format('d F Y, H:i:s') }}
+        </span>
+    </div>
+
+</div>
+
 </body>
 </html>
