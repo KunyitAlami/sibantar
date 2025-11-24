@@ -26,9 +26,6 @@
     <section class="py-6 pb-24">
         <div class="container mx-auto px-4">
             <div class="max-w-md mx-auto">
-
-                <!-- Status Header -->
-                
                 <div class="text-center mb-6">
 
                     
@@ -84,7 +81,12 @@
 
 
                 <!-- Progress Layanan -->
-                <?php
+                <?php if($order->status == 'ditolak'): ?>
+                    <div class="card bg-error-50 text-center mt-4">
+                        <a href="<?php echo e(route('user.dashboard')); ?>" class="btn btn-primary rounded-full px-6 py-2">Cari Bengkel Lain</a>
+                    </div>
+                <?php else: ?>
+                    <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -100,6 +102,7 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>

@@ -15,52 +15,60 @@
 
     <!-- Form Review -->
     <section class="container mx-auto px-4 py-6">
-        <form action="{{ route('user.review.store', ['id_order' => $order->id_order]) }}" method="POST">
-            @csrf
+        <div class="max-w-xl mx-auto">
+            <form action="{{ route('user.review.store', ['id_order' => $order->id_order]) }}" method="POST">
+                @csrf
+                <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                    <!-- Heading -->
+                    <h2 class="text-lg font-bold text-neutral-900 mb-3">Beri Review</h2>
 
-            <!-- Rating Bengkel -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Rating Bengkel</label>
-                <div class="flex gap-1">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <label>
-                            <input type="radio" name="ratingBengkel" value="{{ $i }}" class="hidden" 
-                                {{ isset($review) && $review->ratingBengkel == $i ? 'checked' : '' }}>
-                            <span class="cursor-pointer text-2xl {{ isset($review) && $review->ratingBengkel >= $i ? 'text-yellow-400' : 'text-gray-300' }}">★</span>
-                        </label>
-                    @endfor
+                    <!-- Rating Bengkel -->
+                    <div class="mb-3">
+                        <label class="block text-neutral-900 font-medium mb-0">Rating Bengkel</label>
+                        <div class="flex items-center gap-2 text-2xl">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="ratingBengkel" value="{{ $i }}" class="hidden" 
+                                        {{ isset($review) && $review->ratingBengkel == $i ? 'checked' : '' }}>
+                                    <span class="inline-block px-1 py-0.5 rounded hover:text-yellow-500 {{ isset($review) && $review->ratingBengkel >= $i ? 'text-yellow-500' : 'text-gray-400' }}">★</span>
+                                </label>
+                            @endfor
+                        </div>
+                        @error('ratingBengkel') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Rating Layanan -->
+                    <div class="mb-3">
+                        <label class="block text-neutral-900 font-medium mb-0">Rating Layanan</label>
+                        <div class="flex items-center gap-2 text-2xl">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="ratingLayanan" value="{{ $i }}" class="hidden" 
+                                        {{ isset($review) && $review->ratingLayanan == $i ? 'checked' : '' }}>
+                                    <span class="inline-block px-1 py-0.5 rounded hover:text-yellow-500 {{ isset($review) && $review->ratingLayanan >= $i ? 'text-yellow-500' : 'text-gray-400' }}">★</span>
+                                </label>
+                            @endfor
+                        </div>
+                        @error('ratingLayanan') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="mb-3">
+                        <label for="comment" class="block text-neutral-900 font-medium mb-2">Komentar (Opsional)</label>
+                        <textarea name="comment" id="comment" rows="4" 
+                            class="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            placeholder="Tulis komentar...">{{ $review->comment ?? old('comment') }}</textarea>
+                        @error('comment') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" class="w-full bg-primary-700 text-white px-4 py-3 rounded-lg hover:bg-primary-600 transition font-semibold">
+                            Kirim Review
+                        </button>
+                    </div>
                 </div>
-                @error('ratingBengkel') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-            </div>
-
-            <!-- Rating Layanan -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Rating Layanan</label>
-                <div class="flex gap-1">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <label>
-                            <input type="radio" name="ratingLayanan" value="{{ $i }}" class="hidden" 
-                                {{ isset($review) && $review->ratingLayanan == $i ? 'checked' : '' }}>
-                            <span class="cursor-pointer text-2xl {{ isset($review) && $review->ratingLayanan >= $i ? 'text-yellow-400' : 'text-gray-300' }}">★</span>
-                        </label>
-                    @endfor
-                </div>
-                @error('ratingLayanan') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-            </div>
-
-            <!-- Comment -->
-            <div class="mb-4">
-                <label for="comment" class="block text-gray-700 font-semibold mb-2">Komentar (Opsional)</label>
-                <textarea name="comment" id="comment" rows="4" 
-                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="Tulis komentar...">{{ $review->comment ?? old('comment') }}</textarea>
-                @error('comment') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-            </div>
-
-            <button type="submit" class="bg-primary-700 text-white px-4 py-2 rounded hover:bg-primary-600 transition">
-                Kirim Review
-            </button>
-        </form>
+            </form>
+        </div>
     </section>
 
     <script>
@@ -70,13 +78,13 @@
             stars.forEach((s, i) => {
                 if(inputs[i].checked) {
                     for(let j = 0; j <= i; j++) {
-                        stars[j].classList.add('text-yellow-400');
+                        stars[j].classList.add('text-yellow-500');
                     }
                     for(let j = i+1; j < stars.length; j++) {
-                        stars[j].classList.remove('text-yellow-400');
+                        stars[j].classList.remove('text-yellow-500');
                     }
                 } else if(!Array.from(inputs).some(inp => inp.checked)) {
-                    s.classList.remove('text-yellow-400');
+                    s.classList.remove('text-yellow-500');
                 }
             });
         };
@@ -86,8 +94,8 @@
                 const parent = this.parentNode.parentNode;
                 const stars = parent.querySelectorAll('span');
                 stars.forEach((s, i) => {
-                    if(i <= Array.from(stars).indexOf(this)) s.classList.add('text-yellow-400');
-                    else s.classList.remove('text-yellow-400');
+                    if(i <= Array.from(stars).indexOf(this)) s.classList.add('text-yellow-500');
+                    else s.classList.remove('text-yellow-500');
                 });
             });
 
@@ -104,7 +112,7 @@
             });
         });
 
-        document.querySelectorAll('.mb-4').forEach(container => updateStars(container));
+        document.querySelectorAll('.mb-3').forEach(container => updateStars(container));
     </script>
 
 </x-layout-user>
