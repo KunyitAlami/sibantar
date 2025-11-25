@@ -164,7 +164,7 @@ class AdminController extends RoutingController
 
         $user->save();
 
-        return redirect()->route('admin.dashboard.index')
+        return redirect()->route('admin.users.index')
                         ->with('success', 'User berhasil diupdate!');
     }
 
@@ -215,6 +215,47 @@ class AdminController extends RoutingController
             'id_calon_bengkel'=>$id_calon_bengkel,
         ]);
     }
+
+    public function cekReportUser($id_report_from_user)
+    {
+        $report = ReportFromUserModel::with(['user','bengkel','order'])
+            ->findOrFail($id_report_from_user);
+
+        return view('admin.laporan.laporanDetail', [
+            'report' => $report,
+            'type'   => 'user',
+        ]);
+    }
+
+    public function cekReportBengkel($id_report_from_bengkel)
+    {
+        $report = ReportFromBengkelModel::with(['user','bengkel','order'])
+            ->findOrFail($id_report_from_bengkel);
+
+        return view('admin.laporan.laporanDetail', [
+            'report' => $report,
+            'type'   => 'bengkel', 
+        ]);
+    }
+
+    public function hapusReport($type, $id)
+    {
+        if ($type === 'user') {
+            $report = ReportFromUserModel::findOrFail($id);
+        } elseif ($type === 'bengkel') {
+            $report = ReportFromBengkelModel::findOrFail($id);
+        } else {
+            abort(404);
+        }
+
+        $report->delete();
+
+        return redirect()
+            ->route('admin.laporan.index')
+            ->with('success', 'Laporan berhasil dihapus.');
+    }
+
+
 
 
 }

@@ -103,6 +103,15 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/cek-aktivitas/bengkel/{id_bengkel}', [AdminController::class, 'cekAktivitas'])
                 ->name('cekAktivitas');
 
+            Route::get('/cek-aduan/bengkel/{id_report_from_bengkel}', [AdminController::class, 'cekReportBengkel'])
+                ->name('cek-aduan-bengkel');
+
+            Route::get('/cek-aduan/user/{id_report_from_user}', [AdminController::class, 'cekReportUser'])
+                ->name('cek-aduan-user');
+            Route::delete('/laporan/hapus/{type}/{id}', [AdminController::class, 'hapusReport'])
+                ->name('laporan.hapus');
+
+
 
         });
 

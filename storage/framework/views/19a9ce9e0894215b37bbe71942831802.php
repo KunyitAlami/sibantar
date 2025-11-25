@@ -61,7 +61,7 @@
                 <!--[if BLOCK]><![endif]--><?php if($orders->isEmpty()): ?>
                     <p class="text-neutral-500">Belum ada pesanan.</p>
                 <?php else: ?>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php
                         $statusColor = [
@@ -88,7 +88,7 @@
                         ];
                     ?>
 
-                    <div class="bg-white rounded-xl p-5 shadow-sm border border-neutral-200 hover:shadow-md transition-all">
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-neutral-200 hover:shadow-md transition-all flex flex-col h-full">
                         
                         <div class="flex items-start justify-between mb-3">
                             <div>
@@ -156,7 +156,7 @@
                         </div>
 
                         
-                        <div class="mt-3 text-sm text-neutral-600"
+                        <div class="mt-3 text-sm text-neutral-600 flex flex-col"
                             x-data="{
                                 countdown_ms: <?php echo e($order->countdown_ms ?? 0); ?>,
                                 now: 0,
@@ -217,51 +217,51 @@
                                 </div>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-                            
+                                
                             <!--[if BLOCK]><![endif]--><?php if($order->countDown?->status === 'tidak_dikonfirmasi' && !$order->countdown_confirmed && $order->status !== 'ditolak'): ?>
                                 <div class="grid grid-cols-2 gap-2 mt-4" x-show="!isConfirmed && diff > 0">
-                                    <button wire:click="rejectOrder(<?php echo e($order->id_order); ?>)" 
+                                        <button wire:click="rejectOrder(<?php echo e($order->id_order); ?>)" 
                                             @click="isConfirmed = true; orderStatus = 'ditolak'; $el.disabled = true"
-                                            class="py-2.5 text-sm font-semibold text-white bg-red-600 border border-red-700 rounded-lg hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                            class="flex items-center justify-center text-center py-2.5 text-sm font-semibold text-white bg-red-600 border border-red-700 rounded-lg hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                         Tolak Pesanan
                                     </button>
-                                    <button wire:click="acceptOrder(<?php echo e($order->id_order); ?>)" 
+                                        <button wire:click="acceptOrder(<?php echo e($order->id_order); ?>)" 
                                             @click="isConfirmed = true; orderStatus = 'pending'; $el.disabled = true"
-                                            class="py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                            class="flex items-center justify-center text-center py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                         Terima Pesanan
                                     </button>
                                 </div>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-                            
+                                
                             <!--[if BLOCK]><![endif]--><?php if($order->status === 'pending' && $order->countDown->status === 'terkonfirmasi'): ?>
                                 <div class="mt-4">
                                     <button 
                                         wire:click="gotoFinalPrice(<?php echo e($order->id_order); ?>)"
-                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
+                                        class="w-full h-12 flex items-center justify-center text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
                                     >
                                         Lihat Detail & Tentukan Harga Final
                                     </button>
                                 </div>
                             
                             <?php elseif($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi'): ?>
-                                <div class="space-y-2 mt-4 flex flex-col text-center">
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                                     
-                                    <a href="<?php echo e(route('bengkel.order-tracking', ['orderId' => $order->id_order])); ?>"
-                                    class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all">
+                                                <a href="<?php echo e(route('bengkel.order-tracking', ['orderId' => $order->id_order])); ?>"
+                                                    class="flex items-center justify-center text-center w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all">
                                         Cek Detail Pesanan
                                     </a>
 
                                     
                                     <!--[if BLOCK]><![endif]--><?php if($order->has_review ?? false): ?>
-                                        <a href="<?php echo e(route('bengkel.cekReview.order', ['id_order' => $order->id_order])); ?>"
-                                        class="w-full py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50">
+                                                     <a href="<?php echo e(route('bengkel.cekReview.order', ['id_order' => $order->id_order])); ?>"
+                                                         class="flex items-center justify-center text-center w-full py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50">
                                             Lihat Review Pelanggan
                                         </a>
                                     <?php else: ?>
                                         <button 
                                             disabled
-                                            class="w-full py-2.5 text-sm font-semibold text-neutral-400 bg-neutral-200 border border-neutral-300 rounded-lg cursor-not-allowed"
+                                            class="flex items-center justify-center text-center w-full py-2.5 text-sm font-semibold text-neutral-400 bg-neutral-200 border border-neutral-300 rounded-lg cursor-not-allowed"
                                         >
                                             Belum Ada Review dari Pelanggan
                                         </button>
@@ -270,16 +270,6 @@
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                             
-                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'ditolak'): ?>
-                                <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                    <p class="text-sm text-red-700">
-                                        Pesanan ini telah ditolak
-                                        <!--[if BLOCK]><![endif]--><?php if($order->countDown?->status === 'tidak_dikonfirmasi'): ?>
-                                            <span class="block mt-1">Waktu konfirmasi habis - ditolak otomatis</span>
-                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                    </p>
-                                </div>
-                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
@@ -293,17 +283,16 @@
         
         <!--[if BLOCK]><![endif]--><?php if($activePanel === 'layanan'): ?>
             <div class="card p-4 sm:p-5 shadow-md">
-                <h2 class="text-lg sm:text-xl font-bold mb-3">Daftar Layanan</h2>
+                <div class="flex flex-col sm:flex-row items-center justify-between mb-3 gap-3">
+                    <h2 class="text-lg sm:text-xl font-bold">Daftar Layanan</h2>
 
-                <div class="flex flex-col gap-2 mb-4">
-
-                    <a href="<?php echo e(route('bengkel.tambahLayanan', ['id_bengkel' => $bengkel->id_bengkel])); ?>" 
-                    class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white transition-all text-center">
-                        Tambah Layanan Baru
+                    <a href="<?php echo e(route('bengkel.tambahLayanan', ['id_bengkel' => $bengkel->id_bengkel])); ?>"
+                       class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-semibold border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span>Tambah Layanan</span>
                     </a>
-
-                    
-
                 </div>
 
 
@@ -464,7 +453,7 @@
 
                                         </span>
                                         <div class="flex gap-2">
-                                            <a href="<?php echo e(route('bengkel.report.order', $order->id_order)); ?>" class="btn btn-sm btn-outline btn-error">
+                                            <a href="<?php echo e(route('bengkel.report.order', $order->id_order)); ?>" class="btn btn-sm btn-outline btn-error flex items-center justify-center text-center">
                                                 Lapor
                                             </a>
                                         </div>
