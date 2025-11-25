@@ -77,6 +77,9 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
+            // flash success so Notyf shows a welcome toast after login
+            $request->session()->flash('success', 'Berhasil masuk. Selamat datang!');
+
             return match ($user->role) {
                 'admin' => redirect()->route('admin.dashboard.index'),
                 'bengkel' => redirect()->route('bengkel.dashboard', [
@@ -109,19 +112,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'wa_number' => 'required|string|max:20',
+            'username' => 'required|string|max:25',
+            'email' => ['required','email','unique:users,email','regex:/^[A-Za-z0-9._%+-]+@gmail\.com$/i'],
+            'password' => ['required','min:8','confirmed','regex:/^(?=.*[A-Za-z])(?=.*\d).+$/' ],
+            'wa_number' => ['required','string','max:15','regex:/^[0-9]{1,15}$/'],
         ], [
             'username.required' => 'Username wajib diisi.',
+            'username.max' => 'Username maksimal 25 karakter.',
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
+            'email.regex' => 'Email harus menggunakan domain @gmail.com.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
-            'wa_number.required' => 'Nomor WhatsApp wajib diisi.',
+            'password.regex' => 'Password harus mengandung huruf dan angka.',
+            'wa_number.required' => 'Nomor Telepon wajib diisi.',
+            'wa_number.max' => 'Nomor Telepon maksimal 15 karakter.',
+            'wa_number.regex' => 'Nomor Telepon hanya boleh berisi angka.',
         ]);
 
 

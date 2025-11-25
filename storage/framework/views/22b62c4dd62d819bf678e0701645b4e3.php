@@ -1,5 +1,14 @@
-<x-layout>
-    <x-slot:title>Daftar - SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Daftar - SIBANTAR <?php $__env->endSlot(); ?>
 
     <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
         <div class="w-full max-w-md">
@@ -12,18 +21,18 @@
 
             <!-- Register Card -->
             <div class="card p-6 sm:p-8">
-                <form method="POST" action="{{ route('register.post') }}" class="space-y-4 sm:space-y-5" novalidate>
-                    @csrf
+                <form method="POST" action="<?php echo e(route('register.post')); ?>" class="space-y-4 sm:space-y-5" novalidate>
+                    <?php echo csrf_field(); ?>
 
-                    @if ($errors->any())
+                    <?php if($errors->any()): ?>
                         <div class="mb-4 text-danger-600">
                             <ul class="list-disc pl-5">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Nama Lengkap -->
                     <div>
@@ -34,16 +43,30 @@
                             type="text" 
                             id="username" 
                             name="username" 
-                            class="input @error('username') border-danger-500 @enderror" 
+                            class="input <?php $__errorArgs = ['username'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                             placeholder="Masukkan username"
-                            value="{{ old('username') }}"
+                            value="<?php echo e(old('username')); ?>"
                             required 
                             autofocus
                             maxlength="25"
                         >
-                        @error('username')
-                            <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['username'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Email -->
@@ -55,16 +78,30 @@
                             type="text" 
                             id="email" 
                             name="email" 
-                            class="input @error('email') border-danger-500 @enderror" 
+                            class="input <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                             placeholder="email@gmail.com"
-                            value="{{ old('email') }}"
+                            value="<?php echo e(old('email')); ?>"
                             required
                             pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
                         >
                         <p id="emailError" class="mt-1 text-sm text-danger-600 hidden"></p>
-                        @error('email')
-                            <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Nomor Telepon -->
@@ -84,9 +121,16 @@
                         >
 
                         <p id="waError" class="mt-1 text-sm text-danger-600 hidden"></p>
-                        @error('wa_number')
-                            <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['wa_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Password -->
@@ -99,7 +143,14 @@
                                 type="password" 
                                 id="password" 
                                 name="password" 
-                                class="input @error('password') border-danger-500 @enderror" 
+                                class="input <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                 placeholder="Minimal 8 karakter (huruf + angka)"
                                 required
                                 minlength="8"
@@ -118,9 +169,16 @@
                                 </svg>
                             </button>
                         </div>
-                        @error('password')
-                            <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Konfirmasi Password -->
@@ -155,21 +213,7 @@
                     </div>
 
                     <!-- Terms & Conditions -->
-                    {{-- <div class="flex items-start pt-1">
-                        <input 
-                            type="checkbox" 
-                            id="terms" 
-                            name="terms" 
-                            class="w-4 h-4 mt-0.5 text-primary-700 border-neutral-300 rounded focus:ring-primary-500 flex-shrink-0"
-                            required
-                        >
-                        <label for="terms" class="ml-2 text-xs sm:text-sm text-neutral-700 leading-tight">
-                            Saya setuju dengan 
-                            <a href="#" class="text-primary-700 hover:text-primary-800 font-medium">Syarat & Ketentuan</a> 
-                            dan 
-                            <a href="#" class="text-primary-700 hover:text-primary-800 font-medium">Kebijakan Privasi</a>
-                        </label>
-                    </div> --}}
+                    
 
                     <!-- Submit Button -->
                     <div class="pt-2">
@@ -258,7 +302,7 @@
                         }
                         return valid;
                     }
-                    document.querySelector('form[action="{{ route('register.post') }}"]')?.addEventListener('submit', validateRegisterForm);
+                    document.querySelector('form[action="<?php echo e(route('register.post')); ?>"]')?.addEventListener('submit', validateRegisterForm);
                     </script>
                 </form>
             </div>
@@ -266,14 +310,14 @@
             <!-- Login Link -->
             <p class="text-center mt-5 sm:mt-6 text-sm text-neutral-600">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-primary-700 hover:text-primary-800 font-semibold">
+                <a href="<?php echo e(route('login')); ?>" class="text-primary-700 hover:text-primary-800 font-semibold">
                     Masuk sekarang
                 </a>
             </p>
 
             <p class="text-center mt-2 sm:mt-2 text-sm text-neutral-600 ">
                 Ingin Menjadi Mitra?
-                <a href="{{ route('registerBengkel') }}" class="text-primary-700 hover:text-primary-800 font-semibold">
+                <a href="<?php echo e(route('registerBengkel')); ?>" class="text-primary-700 hover:text-primary-800 font-semibold">
                     Daftar menjadi Mitra SIBANTAR
                 </a>
             </p>
@@ -281,7 +325,7 @@
         </div>
     </section>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         function togglePassword(inputId, eyeOpenId, eyeClosedId) {
             const passwordInput = document.getElementById(inputId);
@@ -299,6 +343,16 @@
             }
         }
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $attributes = $__attributesOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__attributesOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/Auth/register.blade.php ENDPATH**/ ?>

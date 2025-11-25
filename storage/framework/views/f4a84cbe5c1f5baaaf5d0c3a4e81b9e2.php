@@ -58,7 +58,11 @@
         <div wire:poll.keep-alive.1000ms="loadOrders">
             <div class="card p-5 shadow-md">
                 <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
-                <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <!--[if BLOCK]><![endif]--><?php if($orders->isEmpty()): ?>
+                    <p class="text-neutral-500">Belum ada pesanan.</p>
+                <?php else: ?>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php
                         $statusColor = [
                             'pending' => 'bg-yellow-100 text-yellow-700',
@@ -84,7 +88,7 @@
                         ];
                     ?>
 
-                    <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-neutral-200 hover:shadow-md transition-all">
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-neutral-200 hover:shadow-md transition-all">
                         
                         <div class="flex items-start justify-between mb-3">
                             <div>
@@ -278,8 +282,7 @@
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <p class="text-neutral-500">Belum ada pesanan.</p>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
