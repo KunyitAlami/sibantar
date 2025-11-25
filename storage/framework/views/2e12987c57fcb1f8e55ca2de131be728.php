@@ -72,9 +72,6 @@
     <section class="py-12 bg-gradient-to-b from-neutral-50 to-white">
         <div class="container mx-auto px-4">
             <div class="max-w-6xl mx-auto">
-                <h1 class="text-3xl font-bold mb-2">Daftar Calon Mitra Bengkel SIBANTAR</h1>
-                <p class="text-neutral-500 mb-6">Ini adalah daftar calon daftar mitra bengkel SIBANTAR</p>
-
                 <!-- Filter control (calon / terdaftar) -->
                 <div class="bg-white rounded-2xl p-4 shadow-sm mb-6 border border-neutral-100">
                     <div class="flex items-center justify-between">

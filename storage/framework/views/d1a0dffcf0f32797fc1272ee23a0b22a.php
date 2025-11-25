@@ -24,7 +24,7 @@
     <section class="py-8 bg-gradient-to-b from-neutral-50 to-white">
         <div class="container mx-auto px-4">
             <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 mb-12">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-12 mb-12">
                     <!-- Total Users -->
                     <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100">
                         <div class="flex items-center justify-between mb-4">
@@ -67,27 +67,9 @@
                         <p class="text-3xl font-bold text-neutral-900 mb-2"><?php echo e($order->count()); ?></p>
                         <p class="text-xs text-neutral-500 font-medium">Pertolongan yang berhasil di SIBANTAR</p>
                     </div>
-
-                    <!-- Revenue -->
-                    
                 </div>
 
-                <?php
-$__split = function ($name, $params = []) {
-    return [$name, $params];
-};
-[$__name, $__params] = $__split('create-management-buttons', []);
-
-$__html = app('livewire')->mount($__name, $__params, 'lw-1399337649-0', $__slots ?? [], get_defined_vars());
-
-echo $__html;
-
-unset($__html);
-unset($__name);
-unset($__params);
-unset($__split);
-if (isset($__slots)) unset($__slots);
-?>
+                
 
 
  <?php echo $__env->renderComponent(); ?>

@@ -7,7 +7,6 @@
             <a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="btn btn-ghost text-xl px-2 lg:px-4">
                 <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-8 h-8 lg:w-10 lg:h-10 object-contain">
                 <span class="font-bold text-primary">SIBANTAR</span>
-                <span class="text-sm text-warning hidden sm:inline">Bengkel</span>
             </a>
         </div>
         
@@ -32,7 +31,7 @@
                     </form>
                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-nav').submit();" 
                        class="font-medium text-error">
-                        Sign out
+                        Log out
                     </a>
                 </li>
             </ul>
@@ -54,7 +53,7 @@
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Sign out</a>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Log out</a>
                     </li>
                 </ul>
             </div>

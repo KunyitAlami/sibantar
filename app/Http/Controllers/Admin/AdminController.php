@@ -45,6 +45,15 @@ class AdminController extends RoutingController
         return view('admin.bengkel.index', compact('bengkels', 'calonBengkels'));
     }
 
+    // Laporan page for admin (moved from dashboard/Livewire)
+    public function laporan()
+    {
+        $reportBengkel = ReportFromBengkelModel::all();
+        $reportUser = ReportFromUserModel::all();
+
+        return view('admin.laporan.index', compact('reportBengkel', 'reportUser'));
+    }
+
     // Users listing for admin
     public function users()
     {

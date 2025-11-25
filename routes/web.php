@@ -76,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/bengkel', [AdminController::class, 'manageBengkel'])
                 ->name('bengkel.index');
 
-            Route::get('/laporan', fn() => view('admin.laporan.index'))
+            Route::get('/laporan', [AdminController::class, 'laporan'])
                 ->name('laporan.index');
 
             Route::get('/statistik', fn() => view('admin.statistik.index'))

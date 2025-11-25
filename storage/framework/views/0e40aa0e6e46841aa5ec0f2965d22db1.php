@@ -1,5 +1,14 @@
-<x-layout-admin>
-    <x-slot:title>Laporan - Admin</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal2e6fb18f75884c4fed4e10444e669251 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2e6fb18f75884c4fed4e10444e669251 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-admin','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-admin'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Laporan - Admin <?php $__env->endSlot(); ?>
 
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-4 md:py-4">
         <div class="container mx-auto px-4">
@@ -18,7 +27,7 @@
         </div>
     </section>
     
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         (function(){
             const select = document.getElementById('filter-select');
@@ -47,7 +56,7 @@
             }
         })();
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
     <section class="py-8">
         <div class="container mx-auto px-4">
@@ -85,47 +94,47 @@
                                 </tr>
                             </thead>
                             <tbody id="laporan-rows" class="divide-y divide-neutral-100">
-                                @if(isset($reportBengkel))
-                                    @foreach($reportBengkel as $rb)
+                                <?php if(isset($reportBengkel)): ?>
+                                    <?php $__currentLoopData = $reportBengkel; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr class="hover:bg-neutral-50 align-middle" data-source="bengkel">
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $rb->id_report_from_bengkel }}</td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $rb->id_order }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($rb->id_report_from_bengkel); ?></td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($rb->id_order); ?></td>
                                             <td class="px-6 py-4 text-sm font-medium text-neutral-900">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-secondary-100 text-secondary-700">Bengkel</span>
                                             </td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $rb->user->username ?? '-' }}</td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $rb->bengkel->nama_bengkel ?? '-' }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($rb->user->username ?? '-'); ?></td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($rb->bengkel->nama_bengkel ?? '-'); ?></td>
                                             <td class="px-6 py-4 text-sm text-neutral-900 text-left">
-                                                <div class="max-w-xl truncate" title="{{ $rb->deskripsi }}">{{ Str::limit($rb->deskripsi, 120) ?? '-' }}</div>
+                                                <div class="max-w-xl truncate" title="<?php echo e($rb->deskripsi); ?>"><?php echo e(Str::limit($rb->deskripsi, 120) ?? '-'); ?></div>
                                             </td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $rb->created_at->format('d/m/Y H:i') }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($rb->created_at->format('d/m/Y H:i')); ?></td>
                                             <td class="px-4 py-2">
                                                 <button type="button" class="inline-flex items-center px-3 py-1.5 rounded-md border border-primary-600 text-primary-600 bg-white hover:bg-primary-600 hover:text-white transition text-sm">Detail</button>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
 
-                                @if(isset($reportUser))
-                                    @foreach($reportUser as $ru)
+                                <?php if(isset($reportUser)): ?>
+                                    <?php $__currentLoopData = $reportUser; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ru): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr class="hover:bg-neutral-50 align-middle" data-source="user">
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $ru->id_report_from_user }}</td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $ru->id_order }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($ru->id_report_from_user); ?></td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($ru->id_order); ?></td>
                                             <td class="px-6 py-4 text-sm font-medium text-neutral-900">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success-100 text-success-700">User</span>
                                             </td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $ru->user->username ?? '-' }}</td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $ru->bengkel->nama_bengkel ?? '-' }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($ru->user->username ?? '-'); ?></td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($ru->bengkel->nama_bengkel ?? '-'); ?></td>
                                             <td class="px-6 py-4 text-sm text-neutral-900 text-left">
-                                                <div class="max-w-xl truncate" title="{{ $ru->deskripsi }}">{{ Str::limit($ru->deskripsi, 120) ?? '-' }}</div>
+                                                <div class="max-w-xl truncate" title="<?php echo e($ru->deskripsi); ?>"><?php echo e(Str::limit($ru->deskripsi, 120) ?? '-'); ?></div>
                                             </td>
-                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $ru->created_at->format('d/m/Y H:i') }}</td>
+                                            <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($ru->created_at->format('d/m/Y H:i')); ?></td>
                                             <td class="px-4 py-2">
                                                 <button type="button" class="inline-flex items-center px-3 py-1.5 rounded-md border border-primary-600 text-primary-600 bg-white hover:bg-primary-600 hover:text-white transition text-sm">Detail</button>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
 
                                 <tr id="no-results" class="text-center text-neutral-500" style="display:none;">
                                     <td colspan="8" class="py-8">Tidak ada aduan yang sesuai filter.</td>
@@ -138,4 +147,14 @@
             </div>
         </div>
     </section>
-</x-layout-admin>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $attributes = $__attributesOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $component = $__componentOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__componentOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/admin/laporan/index.blade.php ENDPATH**/ ?>
