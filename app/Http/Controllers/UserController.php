@@ -16,6 +16,129 @@ use App\Models\ReviewsModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 class UserController extends Controller
 {
+    // public function search(Request $request)
+    // {
+    //     $request->validate([
+    //         'vehicle_type' => 'required',
+    //         'nama_layanan' => 'required',
+    //         'latitude'     => 'required|numeric',
+    //         'longitude'    => 'required|numeric',
+    //     ]);
+
+    //     $vehicleType = $request->vehicle_type;
+    //     $namaLayanan = $request->nama_layanan; 
+    //     $userLat     = $request->latitude;
+    //     $userLng     = $request->longitude;
+
+    //     Log::info('Search Request', [
+    //         'vehicle' => $vehicleType,
+    //         'layanan' => $namaLayanan,
+    //         'user_lat' => $userLat,
+    //         'user_lng' => $userLng
+    //     ]);
+
+    //     $bengkel = BengkelModel::with(['layananBengkel' => function($query) use ($vehicleType) {
+    //             $query->where('kategori', $vehicleType);
+    //         }])
+    //         ->get();
+
+    //     Log::info('Total bengkel (tanpa filter status): ' . $bengkel->count());
+        
+    //     if ($bengkel->count() === 0) {
+    //         $bengkel = BengkelModel::with('layananBengkel')->get();
+    //         Log::info('Total bengkel (dengan semua layanan): ' . $bengkel->count());
+    //     }
+
+    //     $bengkel = $bengkel->map(function($item) use ($userLat, $userLng, $vehicleType, $namaLayanan) {
+    //         $coordinates = $this->parseGoogleMapsLink($item->link_gmaps);
+            
+    //         if ($coordinates) {
+    //             $bengkelLat = $coordinates['lat'];
+    //             $bengkelLng = $coordinates['lng'];
+    //             $distance = $this->calculateDistance($userLat, $userLng, $bengkelLat, $bengkelLng);
+                
+    //             $item->latitude = $bengkelLat;
+    //             $item->longitude = $bengkelLng;
+    //             $item->distance_km = round($distance, 1);
+    //             $item->distance_text = $distance < 1 
+    //                 ? round($distance * 1000) . ' m' 
+    //                 : round($distance, 1) . ' km';
+    //             $timeMinutes = round(($distance / 30) * 60);
+    //             $item->estimated_time = $timeMinutes < 60 
+    //                 ? $timeMinutes . ' menit'
+    //                 : floor($timeMinutes / 60) . ' jam ' . ($timeMinutes % 60) . ' menit';
+                
+    //             Log::info("Bengkel {$item->nama_bengkel}: lat={$bengkelLat}, lng={$bengkelLng}, distance={$distance}km");
+    //         } else {
+    //             Log::warning("Cannot parse coordinates for bengkel: {$item->nama_bengkel}, link: {$item->link_gmaps}");
+    //             $item->latitude = null;
+    //             $item->longitude = null;
+    //             $item->distance_km = 999;
+    //             $item->distance_text = 'N/A';
+    //             $item->estimated_time = 'N/A';
+    //         }
+
+    //         $relevantLayanan = $item->layananBengkel
+    //             ->where('kategori', $vehicleType)
+    //             ->filter(function($layanan) use ($namaLayanan) {
+    //                 return stripos($layanan->nama_layanan, $namaLayanan) !== false;
+    //             })
+    //             ->first();
+
+    //         if (!$relevantLayanan) {
+    //             $relevantLayanan = $item->layananBengkel
+    //                 ->where('kategori', $vehicleType)
+    //                 ->first();
+    //         }
+
+    //         if (!$relevantLayanan) {
+    //             $relevantLayanan = $item->layananBengkel->first();
+    //         }
+
+    //         $item->relevant_layanan = $relevantLayanan;
+    //         $item->estimasi_harga_display = $relevantLayanan 
+    //             ? 'Rp ' . number_format($relevantLayanan->harga_awal, 0, ',', '.') . ' - Rp ' . number_format($relevantLayanan->harga_akhir, 0, ',', '.')
+    //             : 'Hubungi Bengkel';
+
+    //         $item->average_rating = 4.5 + (rand(0, 10) / 10);
+    //         $item->total_reviews = rand(50, 200);
+
+    //         return $item;
+    //     });
+
+    //     $bengkel = $bengkel->filter(function($item) {
+    //         return $item->latitude !== null && $item->longitude !== null;
+    //     });
+
+    //     $bengkel = $bengkel->sortBy('distance_km')->values();
+
+    //     Log::info('Bengkel with valid coordinates: ' . $bengkel->count());
+
+    //     $bengkelDataForJs = $bengkel->map(function($item) {
+    //         return [
+    //             'id' => $item->id_bengkel,
+    //             'name' => $item->nama_bengkel,
+    //             'lat' => $item->latitude,
+    //             'lng' => $item->longitude,
+    //             'rating' => $item->average_rating,
+    //             'reviews' => $item->total_reviews,
+    //             'distance' => $item->distance_text,
+    //             'distance_km' => $item->distance_km,
+    //             'price' => $item->estimasi_harga_display, 
+    //             'layanan' => $item->relevant_layanan->nama_layanan ?? 'Lainnya', 
+    //         ];
+    //     })->values()->toArray();
+
+    //     return view('user.search', [
+    //         'vehicleType' => $vehicleType,
+    //         'nama_layanan' => $namaLayanan,
+    //         'latitude'    => $userLat,
+    //         'longitude'   => $userLng,
+    //         'bengkelList' => $bengkel,
+    //         'bengkelDataJs' => $bengkelDataForJs,
+    //     ]);
+    // }
+
     public function search(Request $request)
     {
         $request->validate([
@@ -38,15 +161,22 @@ class UserController extends Controller
         ]);
 
         $bengkel = BengkelModel::with(['layananBengkel' => function($query) use ($vehicleType) {
-                $query->where('kategori', $vehicleType);
-            }])
-            ->get();
+                    $query->where('kategori', $vehicleType);
+                }])
+                ->join('status_real_time_bengkel', 'bengkel.id_bengkel', '=', 'status_real_time_bengkel.id_bengkel')
+                ->where('status_real_time_bengkel.status', 'buka')
+                ->select('bengkel.*')
+                ->get();
 
-        Log::info('Total bengkel (tanpa filter status): ' . $bengkel->count());
+        Log::info('Total bengkel yang buka: ' . $bengkel->count());
         
         if ($bengkel->count() === 0) {
-            $bengkel = BengkelModel::with('layananBengkel')->get();
-            Log::info('Total bengkel (dengan semua layanan): ' . $bengkel->count());
+            $bengkel = BengkelModel::with('layananBengkel')
+                ->join('status_real_time_bengkel', 'bengkel.id_bengkel', '=', 'status_real_time_bengkel.id_bengkel')
+                ->where('status_real_time_bengkel.status', 'buka')
+                ->select('bengkel.*')
+                ->get();
+            Log::info('Total bengkel yang buka (dengan semua layanan): ' . $bengkel->count());
         }
 
         $bengkel = $bengkel->map(function($item) use ($userLat, $userLng, $vehicleType, $namaLayanan) {

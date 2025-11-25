@@ -52,6 +52,21 @@ class BengkelController extends Controller
         $orders = OrderModel::where('id_bengkel', $id_bengkel)->get();
         $layanan_bengkel = LayananBengkelModel::where('id_bengkel', $id_bengkel)->get();
 
+        $statusBengkel = StatusRealTimeBengkelModel::where('id_bengkel', $id_bengkel)->first();
+
+        if (!$statusBengkel) {
+            $statusBengkel = StatusRealTimeBengkelModel::create([
+                'id_bengkel' => $id_bengkel,
+                'status' => 'tutup'
+            ]);
+            Log::info('Status bengkel baru dibuat', ['id_bengkel' => $id_bengkel, 'status' => 'tutup']);
+        }
+        
+        Log::info('Status Bengkel Loaded', [
+            'id_bengkel' => $id_bengkel,
+            'status' => $statusBengkel->status
+        ]);
+
         foreach ($orders as $o) {
             Log::info("=== DEBUG ORDER {$o->id_order} ===");
             Log::info("User Latitude RAW: [" . $o->user_latitude . "]");
@@ -140,7 +155,8 @@ class BengkelController extends Controller
             'ordersToday',
             'totalOrdersToday',
             'totalIncomeToday',
-            'LayananTotal'
+            'LayananTotal',
+            'statusBengkel'
         ));
     }
 
