@@ -225,7 +225,7 @@ class BengkelController extends Controller
         ]);
 
         return redirect()
-            ->route('bengkel.dashboard', $id_bengkel)
+            ->route('bengkel.dashboard', ['id_bengkel' => $id_bengkel, 'panel' => 'layanan'])
             ->with('success', 'Layanan berhasil ditambahkan!');
     }
 

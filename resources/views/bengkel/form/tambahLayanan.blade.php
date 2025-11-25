@@ -20,7 +20,7 @@
     <section class="px-6">
         <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm mb-20">
             {{-- action="{{ route('bengkel.layanan.store') }}" --}}
-            <form action="{{ route('bengkel.layanan.store', $id_bengkel) }}" method="POST" class="mt-10 mb-10 gap-5">
+            <form action="{{ route('bengkel.layanan.store', $id_bengkel) }}" method="POST" class="mt-10 mb-10 gap-5 p-6">
                 @csrf
                 <div class="space-y-5">
 

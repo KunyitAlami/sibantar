@@ -3,7 +3,7 @@
 
     
     <div class="sm:hidden">
-        <select wire:change="setPanel($event.target.value)" aria-label="Pilih panel" class="block w-full bg-white border border-neutral-200 rounded-full px-4 py-2 text-sm font-semibold" style="height: 55px;">
+        <select wire:change="setPanel($event.target.value)" aria-label="Pilih panel" class="block w-full bg-white border border-neutral-200 rounded-full px-4 py-2 text-sm font-semibold">
             <option value="order" <?php if($activePanel === 'order'): echo 'selected'; endif; ?>>Pesanan</option>
             <option value="layanan" <?php if($activePanel === 'layanan'): echo 'selected'; endif; ?>>Layanan</option>
             <option value="report" <?php if($activePanel === 'report'): echo 'selected'; endif; ?>>Lapor</option>
@@ -373,96 +373,101 @@
             <div wire:poll.1000ms="loadOrders">
                 <div class="card p-5 shadow-md">
                     <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
-                    <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <?php
-                            // Dynamic status badge
-                            $statusColor = match($order->status) {
-                                'pending' => 'bg-yellow-100 text-yellow-700',
-                                'dibayar' => 'bg-green-100 text-green-700',
-                                'diproses' => 'bg-blue-100 text-blue-700',
-                                'selesai'  => 'bg-green-100 text-green-700',
-                                'gagal'    => 'bg-red-100 text-red-700',
-                                'ditolak'  => 'bg-red-100 text-red-700',
-                                'dibatalkan' => 'bg-gray-100 text-gray-700',
-                                default    => 'bg-gray-100 text-gray-700',
-                            };
-                            $statusLabels = [
-                                'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
-                                'pending' => 'Pending',
-                                'dibayar' => 'Dibayar',
-                                'diproses' => 'Diproses',
-                                'selesai' => 'Selesai',
-                                'ditolak' => 'Ditolak',
-                                'dibatalkan' => 'Dibatalkan',
-                            ];
-                        ?>
-                        <div class="booking-card card p-4 hover:shadow-lg transition-shadow mb-6" data-status="in-progress">
-                            <div class="flex items-start justify-between mb-2">
-                                <div>
-                                    <h3 class="font-bold text-neutral-900"><?php echo e($order->user->username); ?></h3>
-                                    <p class="text-xs text-neutral-500 mt-2">Tanggal Order: <?php echo e($order->created_at); ?></p>
-                                </div>
-                                <!--[if BLOCK]><![endif]--><?php if($order->status === 'ditolak'): ?>
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-red-100 text-red-700">
-                                        <?php echo e($statusLabels[$order->status] ?? 'Ditolak'); ?>
 
-                                    </span>
-                                <?php elseif($order->status === 'selesai'): ?>
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-green-100 text-green-700">
-                                        <?php echo e($statusLabels[$order->status] ?? 'Selesai'); ?>
-
-                                    </span>
-                                <?php elseif(isset($statusColor[$order->status])): ?>
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap <?php echo e($statusColor[$order->status]); ?>">
-                                        <?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?>
-
-                                    </span>
-                                <?php else: ?>
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-gray-100 text-gray-800">
-                                        <?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?>
-
-                                    </span>
-                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                            </div>
-
-                            <div class="space-y-1 mb-3">
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span class="text-sm text-neutral-600">Jenis Pelayanan: <?php echo e($order->layananBengkel->nama_layanan); ?></span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span class="text-sm text-neutral-600">Jenis Kendaraaan: <?php echo e($order->layananBengkel->kategori); ?></span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span class="text-sm text-neutral-600 truncate"><?php echo e($order->bengkel->alamat_lengkap); ?></span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
-                                <span class="font-bold text-xl text-primary-700">
-                                    Rp <?php echo e(number_format($order->total_bayar, 0, ',', '.')); ?>
-
-                                </span>
-                                <div class="flex gap-2">
-                                    <a href="<?php echo e(route('bengkel.report.order', $order->id_order)); ?>" class="btn btn-sm btn-outline btn-error">
-                                        Lapor
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <!--[if BLOCK]><![endif]--><?php if($orders->isEmpty()): ?>
                         <p class="text-neutral-500">Belum ada pesanan, anda tidak bisa melaporkan pesanan</p>
+                    <?php else: ?>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php
+                                    // Dynamic status badge
+                                    $statusColor = match($order->status) {
+                                        'pending' => 'bg-yellow-100 text-yellow-700',
+                                        'dibayar' => 'bg-green-100 text-green-700',
+                                        'diproses' => 'bg-blue-100 text-blue-700',
+                                        'selesai'  => 'bg-green-100 text-green-700',
+                                        'gagal'    => 'bg-red-100 text-red-700',
+                                        'ditolak'  => 'bg-red-100 text-red-700',
+                                        'dibatalkan' => 'bg-gray-100 text-gray-700',
+                                        default    => 'bg-gray-100 text-gray-700',
+                                    };
+                                    $statusLabels = [
+                                        'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
+                                        'pending' => 'Pending',
+                                        'dibayar' => 'Dibayar',
+                                        'diproses' => 'Diproses',
+                                        'selesai' => 'Selesai',
+                                        'ditolak' => 'Ditolak',
+                                        'dibatalkan' => 'Dibatalkan',
+                                    ];
+                                ?>
+
+                                <div class="booking-card card p-4 hover:shadow-lg transition-shadow" data-status="in-progress">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div>
+                                            <h3 class="font-bold text-neutral-900"><?php echo e($order->user->username); ?></h3>
+                                            <p class="text-xs text-neutral-500 mt-2">Tanggal Order: <?php echo e($order->created_at); ?></p>
+                                        </div>
+                                        <!--[if BLOCK]><![endif]--><?php if($order->status === 'ditolak'): ?>
+                                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-red-100 text-red-700">
+                                                <?php echo e($statusLabels[$order->status] ?? 'Ditolak'); ?>
+
+                                            </span>
+                                        <?php elseif($order->status === 'selesai'): ?>
+                                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-green-100 text-green-700">
+                                                <?php echo e($statusLabels[$order->status] ?? 'Selesai'); ?>
+
+                                            </span>
+                                        <?php elseif(isset($statusColor[$order->status])): ?>
+                                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap <?php echo e($statusColor[$order->status]); ?>">
+                                                <?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?>
+
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-gray-100 text-gray-800">
+                                                <?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?>
+
+                                            </span>
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+
+                                    <div class="space-y-1 mb-3">
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            <span class="text-sm text-neutral-600">Jenis Pelayanan: <?php echo e($order->layananBengkel->nama_layanan); ?></span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            <span class="text-sm text-neutral-600">Jenis Kendaraaan: <?php echo e($order->layananBengkel->kategori); ?></span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            <span class="text-sm text-neutral-600 truncate"><?php echo e($order->bengkel->alamat_lengkap); ?></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
+                                        <span class="font-bold text-xl text-primary-700">
+                                            Rp <?php echo e(number_format($order->total_bayar, 0, ',', '.')); ?>
+
+                                        </span>
+                                        <div class="flex gap-2">
+                                            <a href="<?php echo e(route('bengkel.report.order', $order->id_order)); ?>" class="btn btn-sm btn-outline btn-error">
+                                                Lapor
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                        </div>
                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
-
             </div>
 
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->

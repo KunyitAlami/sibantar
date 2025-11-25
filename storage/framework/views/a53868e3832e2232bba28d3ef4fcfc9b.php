@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?php echo e($title ?? 'SIBANTAR - Dashboard Bengkel'); ?></title>
+    <title><?php echo e($title ?? 'SIBANTAR - Dashboard Admin'); ?></title>
     
     <!-- Vite Assets -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     
-    <!-- Notyf CSS (toast notifications) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
@@ -20,16 +17,14 @@
 
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
 
-    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-
 </head>
 <body class="bg-neutral-50">
     
-    <!-- Navbar Bengkel -->
-    <?php if (isset($component)) { $__componentOriginalf9516f3d9d396f5e52c22286badacc84 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalf9516f3d9d396f5e52c22286badacc84 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.navbar-bengkel','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('navbar-bengkel'); ?>
+    <!-- Navbar Admin -->
+    <?php if (isset($component)) { $__componentOriginalf2d127ec02acb2fe16e0bd0cf86744e3 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf2d127ec02acb2fe16e0bd0cf86744e3 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.navbar-admin','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('navbar-admin'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
@@ -38,13 +33,13 @@
 <?php $component->withAttributes([]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginalf9516f3d9d396f5e52c22286badacc84)): ?>
-<?php $attributes = $__attributesOriginalf9516f3d9d396f5e52c22286badacc84; ?>
-<?php unset($__attributesOriginalf9516f3d9d396f5e52c22286badacc84); ?>
+<?php if (isset($__attributesOriginalf2d127ec02acb2fe16e0bd0cf86744e3)): ?>
+<?php $attributes = $__attributesOriginalf2d127ec02acb2fe16e0bd0cf86744e3; ?>
+<?php unset($__attributesOriginalf2d127ec02acb2fe16e0bd0cf86744e3); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalf9516f3d9d396f5e52c22286badacc84)): ?>
-<?php $component = $__componentOriginalf9516f3d9d396f5e52c22286badacc84; ?>
-<?php unset($__componentOriginalf9516f3d9d396f5e52c22286badacc84); ?>
+<?php if (isset($__componentOriginalf2d127ec02acb2fe16e0bd0cf86744e3)): ?>
+<?php $component = $__componentOriginalf2d127ec02acb2fe16e0bd0cf86744e3; ?>
+<?php unset($__componentOriginalf2d127ec02acb2fe16e0bd0cf86744e3); ?>
 <?php endif; ?>
     
     <!-- Main Content -->
@@ -77,28 +72,8 @@
     
     <!-- Scripts -->
     <?php echo $__env->yieldPushContent('scripts'); ?>
-    <!-- Notyf JS -->
-    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-
-    <script>
-        // initialize Notyf
-        const notyf = new Notyf({
-            duration: 4000,
-            position: { x: 'right', y: 'top' }
-        });
-
-        // Show Laravel session flash messages via Notyf
-        <?php if(session('success')): ?>
-            notyf.success(<?php echo json_encode(session('success'), 15, 512) ?>);
-        <?php endif; ?>
-
-        <?php if(session('error')): ?>
-            notyf.error(<?php echo json_encode(session('error'), 15, 512) ?>);
-        <?php endif; ?>
-    </script>
-
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
 
 </body>
 </html>
-<?php /**PATH C:\laragon\www\sibantar\resources\views/components/layout-bengkel.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/components/layout-admin.blade.php ENDPATH**/ ?>
