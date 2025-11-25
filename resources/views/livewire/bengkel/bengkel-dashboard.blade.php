@@ -1,16 +1,22 @@
 <div class="space-y-6">
     {{-- BUTTON PANEL --}}
-    <div class="flex gap-3">
+
+    {{-- Mobile: use a compact dropdown instead of horizontal buttons --}}
+    <div class="sm:hidden">
+        <select wire:change="setPanel($event.target.value)" aria-label="Pilih panel" class="block w-full bg-white border border-neutral-200 rounded-full px-4 py-2 text-sm font-semibold" style="height: 55px;">
+            <option value="order" @selected($activePanel === 'order')>Pesanan</option>
+            <option value="layanan" @selected($activePanel === 'layanan')>Layanan</option>
+            <option value="report" @selected($activePanel === 'report')>Lapor</option>
+            <option value="about" @selected($activePanel === 'about')>Tentang</option>
+        </select>
+    </div>
+
+    {{-- Desktop / tablet: horizontal buttons --}}
+    <div class="hidden sm:flex gap-3">
         <button wire:click="setPanel('order')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 {{ $activePanel === 'order' ? 'bg-blue-700 text-white' : 'bg-neutral-200' }}">
             Pesanan
-        </button>
-
-        <button wire:click="setPanel('about')" 
-            class="px-4 py-2 rounded-lg font-semibold 
-                {{ $activePanel === 'about' ? 'bg-blue-700 text-white' : 'bg-neutral-200' }}">
-            About
         </button>
 
         <button wire:click="setPanel('layanan')" 
@@ -24,6 +30,12 @@
                 {{ $activePanel === 'report' ? 'bg-blue-700 text-white' : 'bg-neutral-200' }}">
             Lapor
         </button>
+
+        <button wire:click="setPanel('about')" 
+            class="px-4 py-2 rounded-lg font-semibold 
+                {{ $activePanel === 'about' ? 'bg-blue-700 text-white' : 'bg-neutral-200' }}">
+            Tentang
+        </button>
     </div>
 
 
@@ -32,16 +44,6 @@
 
         {{-- ABOUT --}}
         @if($activePanel === 'about')
-            {{-- <div class="flex flex-col gap-2 mb-4">
-                <button wire:click="setPanel('order')" 
-                    class="px-3 py-2 sm:px-4 sm:py-2 rounded-md font-semibold border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white transition-all">
-                    Tambah Cabang Baru
-                </button>
-                <button wire:click="setPanel('order')" 
-                    class="px-3 py-2 sm:px-4 sm:py-2 rounded-md font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all">
-                    Edit Profil Cabang
-                </button>
-            </div> --}}
             <div class="card p-5 shadow-md mt-6">
                 <h2 class="text-xl font-bold mb-3">Profil Bengkel</h2>
                 <p class="text-neutral-700">Nama: <strong>{{ $bengkel->nama_bengkel }}</strong></p>
@@ -50,7 +52,6 @@
                 <p class="text-neutral-700">Jam: {{ $bengkel->jam_operasional }}</p>
             </div>
         @endif
-
 
         {{-- PESANAN --}}
         @if ($activePanel === 'order')
@@ -291,7 +292,7 @@
                 <div class="flex flex-col gap-2 mb-4">
 
                     <a href="{{ route('bengkel.tambahLayanan', ['id_bengkel' => $bengkel->id_bengkel]) }}" 
-                    class="px-3 py-2 sm:px-4 sm:py-2 rounded-md font-semibold border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white transition-all text-center">
+                    class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white transition-all text-center">
                         Tambah Layanan Baru
                     </a>
 
@@ -334,22 +335,22 @@
                                         Rp {{ number_format($l->harga_akhir, 0, ',', '.') }}
                                     </td>
                                     <td class="px-3 py-2 sm:px-4 sm:py-3">
-                                        <button wire:click="hapusLayanan({{ $l->id_layanan_bengkel }})"
+                                        <button onclick="confirmDelete(event, {{ $l->id_layanan_bengkel }}, '{{ $_instance->getId() }}')"
                                             wire:loading.attr="disabled"
                                             wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})"
-                                            class="px-3 py-1 sm:px-4 sm:py-2 rounded-md font-semibold border border-red-600 text-red-600 
+                                            class="px-3 py-1 sm:px-4 sm:py-2 rounded-full font-semibold border border-red-600 text-red-600 
                                                 hover:bg-red-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                             <span wire:loading.remove wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
-                                            <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Menghapus...</span>
+                                            <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
                                         </button>
                                     </td>
                                     <td class="p-2">
                                         <button wire:click="editLayanan({{ $l->id_layanan_bengkel }})"
                                             wire:loading.attr="disabled"
                                             wire:target="editLayanan({{ $l->id_layanan_bengkel }})"
-                                            class="px-3 py-2 sm:px-4 sm:py-2 rounded-md font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all text-center">
+                                            class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all text-center">
                                             <span wire:loading.remove wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
-                                            <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Mengedit...</span>
+                                            <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -397,9 +398,23 @@
                                     <h3 class="font-bold text-neutral-900">{{ $order->user->username }}</h3>
                                     <p class="text-xs text-neutral-500 mt-2">Tanggal Order: {{ $order->created_at }}</p>
                                 </div>
-                                <span class="px-2.5 py-1 bg-info-100 text-info-700 text-xs font-semibold rounded-full whitespace-nowrap">
-                                    {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
-                                </span>
+                                @if($order->status === 'ditolak')
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-red-100 text-red-700">
+                                        {{ $statusLabels[$order->status] ?? 'Ditolak' }}
+                                    </span>
+                                @elseif($order->status === 'selesai')
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-green-100 text-green-700">
+                                        {{ $statusLabels[$order->status] ?? 'Selesai' }}
+                                    </span>
+                                @elseif(isset($statusColor[$order->status]))
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap {{ $statusColor[$order->status] }}">
+                                        {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
+                                    </span>
+                                @else
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-gray-100 text-gray-800">
+                                        {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="space-y-1 mb-3">
@@ -445,3 +460,43 @@
 
     </div>
 </div>
+
+<script>
+    function _showDeleteSwal(id, instanceId) {
+        Swal.fire({
+            title: 'Hapus layanan?',
+            text: 'Layanan akan dihapus permanen. Lanjutkan?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            customClass: {
+                actions: 'swal2-actions gap-3',
+                confirmButton: 'rounded-full px-6 py-2 bg-red-600 text-white font-semibold hover:bg-red-700',
+                cancelButton: 'rounded-full px-6 py-2 bg-gray-500 text-white font-semibold hover:bg-gray-600'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                try {
+                    Livewire.find(instanceId).call('hapusLayanan', id);
+                } catch (e) {
+                    console.error('Livewire call failed', e);
+                }
+            }
+        });
+    }
+
+    function confirmDelete(event, id, instanceId) {
+        event.preventDefault();
+        // load SweetAlert2 if not present
+        if (typeof Swal === 'undefined') {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            s.onload = function() { _showDeleteSwal(id, instanceId); };
+            document.head.appendChild(s);
+        } else {
+            _showDeleteSwal(id, instanceId);
+        }
+    }
+</script>

@@ -52,7 +52,7 @@
                             <label class="label justify-start">
                                 <span class="label-text text-white font-medium text-base">Jenis Kendaraan</span>
                             </label>
-                            <select name="vehicle_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
+                            <select id="vehicle_type" name="vehicle_type" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
                                 <option disabled selected value="">Pilih jenis kendaraan</option>
                                 <option value="Motor">Motor</option>
                                 <option value="Mobil">Mobil</option>
@@ -65,7 +65,7 @@
                             <label class="label justify-start">
                                 <span class="label-text text-white font-medium text-base">Jenis Kerusakan</span>
                             </label>
-                            <select name="nama_layanan" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
+                            <select id="nama_layanan" name="nama_layanan" class="select select-bordered w-full bg-white text-neutral-700 text-base !h-14 !min-h-0 !leading-normal" required>
                                 <option disabled selected value="">Pilih jenis kerusakan</option>
                                 <option value="Ban Bocor">Ban Bocor</option>
                                 <option value="Aki Tekor">Aki Soak</option>
@@ -229,6 +229,58 @@
             initMap(-3.3186, 114.5942);
             alert('Browser Anda tidak mendukung geolocation. Menggunakan lokasi default Banjarmasin.');
         }
+    </script>
+    <script>
+        // Persist select inputs so user doesn't need to re-enter when navigating
+        (function() {
+            const vehicleKey = 'sibantar.vehicle_type';
+            const layananKey = 'sibantar.nama_layanan';
+
+            const vehicleSelect = document.getElementById('vehicle_type');
+            const layananSelect = document.getElementById('nama_layanan');
+
+            // Restore saved values if present
+            try {
+                const savedVehicle = localStorage.getItem(vehicleKey);
+                const savedLayanan = localStorage.getItem(layananKey);
+                if (vehicleSelect && savedVehicle) {
+                    // only set if option exists
+                    const opt = Array.from(vehicleSelect.options).find(o => o.value === savedVehicle);
+                    if (opt) vehicleSelect.value = savedVehicle;
+                }
+                if (layananSelect && savedLayanan) {
+                    const opt2 = Array.from(layananSelect.options).find(o => o.value === savedLayanan);
+                    if (opt2) layananSelect.value = savedLayanan;
+                }
+            } catch (e) {
+                console.warn('Error restoring saved selects', e);
+            }
+
+            // Save on change
+            if (vehicleSelect) {
+                vehicleSelect.addEventListener('change', () => {
+                    try { localStorage.setItem(vehicleKey, vehicleSelect.value); } catch(e){}
+                });
+            }
+
+            if (layananSelect) {
+                layananSelect.addEventListener('change', () => {
+                    try { localStorage.setItem(layananKey, layananSelect.value); } catch(e){}
+                });
+            }
+
+            // Optional: clear saved values when form is successfully submitted (so it won't persist forever)
+            const searchForm = document.querySelector('form[action="{{ route('user.search') }}"]');
+            if (searchForm) {
+                searchForm.addEventListener('submit', () => {
+                    try {
+                        // keep stored values so user returning still sees them; comment out if you prefer clearing
+                        // localStorage.removeItem(vehicleKey);
+                        // localStorage.removeItem(layananKey);
+                    } catch (e) {}
+                });
+            }
+        })();
     </script>
     @endpush
 </x-layout>

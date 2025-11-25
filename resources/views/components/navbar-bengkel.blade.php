@@ -14,15 +14,25 @@
         <!-- Navbar Center - Desktop Menu -->
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-                <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium {{ request()->routeIs('bengkel.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-                <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium {{ request()->routeIs('bengkel.dashboard') ? 'active' : '' }}">Profile Bengkel</a></li>
+                <li>
+                    <a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" 
+                       class="font-medium {{ request()->routeIs('bengkel.dashboard') ? 'active' : '' }}">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}?panel=about" 
+                       class="font-medium {{ request()->routeIs('bengkel.dashboard') ? 'active' : '' }}">
+                        Profile Bengkel
+                    </a>
+                </li>
                 <li>
                     <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-nav').submit();" 
-                    class="font-medium text-error">
-                        Log out
+                       class="font-medium text-error">
+                        Sign out
                     </a>
                 </li>
             </ul>
@@ -38,20 +48,15 @@
                     </svg>
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium">Dashboard</a></li>
-                </ul>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}" class="font-medium">Profile Bengkel</a></li>
-                </ul>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}">Dashboard</a></li>
+                    <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}?panel=about">Profile Bengkel</a></li>
                     <li>
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Logout</a>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Sign out</a>
                     </li>
                 </ul>
-
             </div>
             
             <!-- Bengkel Profile Dropdown -->

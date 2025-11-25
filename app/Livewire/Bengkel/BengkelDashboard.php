@@ -315,9 +315,12 @@ class BengkelDashboard extends Component
     
     public function hapusLayanan($id_layanan_bengkel)
     {
+        Log::info("hapusLayanan called with id_layanan_bengkel={$id_layanan_bengkel}, component id_bengkel={$this->id_bengkel}");
+
         $layanan = LayananBengkelModel::find($id_layanan_bengkel);
-        
+
         if (!$layanan || $layanan->id_bengkel != $this->id_bengkel) {
+            Log::warning("hapusLayanan: layanan not found or ownership mismatch. found_layanan_id=" . ($layanan?->id_layanan_bengkel ?? 'null') . ", layanan_id_bengkel=" . ($layanan?->id_bengkel ?? 'null') );
             session()->flash('error', 'Layanan tidak ditemukan.');
             return;
         }
@@ -325,8 +328,9 @@ class BengkelDashboard extends Component
         try {
             $layanan->delete();
             $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
-            
+
             session()->flash('success', 'Layanan berhasil dihapus.');
+            Log::info("hapusLayanan: sukses menghapus layanan id={$id_layanan_bengkel} untuk bengkel={$this->id_bengkel}");
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan saat menghapus layanan.');
             Log::error('Hapus layanan error: '.$e->getMessage());

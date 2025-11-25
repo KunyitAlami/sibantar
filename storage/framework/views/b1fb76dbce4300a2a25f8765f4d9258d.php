@@ -29,7 +29,7 @@
     <section class="px-4">
         <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
             
-            <form action="<?php echo e(route('bengkel.layanan.update', $id_layanan_bengkel)); ?>" method="POST" class="mt-10 mb-10 gap-5">
+            <form action="<?php echo e(route('bengkel.layanan.update', $id_layanan_bengkel)); ?>" method="POST" class="mt-4 mb-10">
                 <?php echo csrf_field(); ?>
                 <div class="space-y-5">
                     <div class="flex-1">
@@ -47,7 +47,7 @@
                     
                     <div class="flex flex-col md:flex-row gap-5">
                         <div class="flex-1">
-                            <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Terendah</label>
+                            <label class="block font-medium text-neutral-800 mb-1">Harga Terendah</label>
                             <input type="number" name="harga_awal" required value="<?php echo e($layanan_bengkel->harga_awal); ?>"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
                         </div>
@@ -55,7 +55,7 @@
 
 
                         <div class="flex-1">
-                            <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Tertinggi</label>
+                            <label class="block font-medium text-neutral-800 mb-1">Harga Tertinggi</label>
                             <input type="number" name="harga_akhir" required value="<?php echo e($layanan_bengkel->harga_akhir); ?>"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
                         </div>
@@ -88,8 +88,8 @@
 
                 
                 <button type="submit"
-                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg text-center mt-4">
-                    Update Layanan
+                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-full text-center mt-4">
+                    Perbarui Layanan
                 </button>
 
                 
