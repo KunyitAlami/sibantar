@@ -45,7 +45,7 @@
 
         
         <!--[if BLOCK]><![endif]--><?php if($activePanel === 'order'): ?>
-        <div wire:poll.1000ms="loadOrders">
+        <div wire:poll.keep-alive.1000ms="loadOrders">
             <div class="card p-5 shadow-md">
                 <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
                 <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
@@ -220,7 +220,7 @@
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                             
-                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'pending' && $order->countDown?->status === 'terkonfirmasi'): ?>
+                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'pending' && $order->countDown->status === 'terkonfirmasi'): ?>
                                 <div class="mt-4">
                                     <button 
                                         wire:click="gotoFinalPrice(<?php echo e($order->id_order); ?>)"
@@ -229,17 +229,29 @@
                                         Lihat Detail & Tentukan Harga Final
                                     </button>
                                 </div>
-                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
                             
-                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi'): ?>
-                                <div class="mt-4">
-                                    <button 
-                                        wire:click="gotoFinalPrice(<?php echo e($order->id_order); ?>)"
-                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-full hover:bg-blue-700 transition-all"
-                                    >
+                            <?php elseif($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi'): ?>
+                                <div class="space-y-2 mt-4 flex flex-col text-center">
+                                    
+                                    <a href="<?php echo e(route('bengkel.order-tracking', ['orderId' => $order->id_order])); ?>"
+                                    class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all">
                                         Cek Detail Pesanan
-                                    </button>
+                                    </a>
+
+                                    
+                                    <!--[if BLOCK]><![endif]--><?php if($order->has_review ?? false): ?>
+                                        <a href="<?php echo e(route('bengkel.cekReview.order', ['id_order' => $order->id_order])); ?>"
+                                        class="w-full py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50">
+                                            Lihat Review Pelanggan
+                                        </a>
+                                    <?php else: ?>
+                                        <button 
+                                            disabled
+                                            class="w-full py-2.5 text-sm font-semibold text-neutral-400 bg-neutral-200 border border-neutral-300 rounded-lg cursor-not-allowed"
+                                        >
+                                            Belum Ada Review dari Pelanggan
+                                        </button>
+                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                 </div>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
