@@ -7,7 +7,6 @@
             <a href="{{ route('admin.dashboard.index') }}" class="btn btn-ghost text-xl px-2 lg:px-4">
                 <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-8 h-8 lg:w-10 lg:h-10 object-contain">
                 <span class="font-bold text-primary">SIBANTAR</span>
-                <span class="text-sm text-error hidden sm:inline">Admin</span>
             </a>
         </div>
         
@@ -18,7 +17,6 @@
                 <li><a href="{{ route('admin.users.index') }}" class="font-medium {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Kelola User</a></li>
                 <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium {{ request()->routeIs('admin.bengkel.*') ? 'active' : '' }}">Kelola Bengkel</a></li>
                 <li><a href="{{ route('admin.laporan.index') }}" class="font-medium {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">Laporan</a></li>
-                <li><a href="{{ route('admin.statistik.index') }}" class="font-medium {{ request()->routeIs('admin.statistik.*') ? 'active' : '' }}">Statistik</a></li>
                 <li>
                     <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
@@ -45,34 +43,11 @@
                     <li><a href="{{ route('admin.users.index') }}" class="font-medium">Kelola User</a></li>
                     <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium">Kelola Bengkel</a></li>
                     <li><a href="{{ route('admin.laporan.index') }}" class="font-medium">Laporan</a></li>
-                    <li><a href="{{ route('admin.statistik.index') }}" class="font-medium">Statistik</a></li>
                     <li>
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="text-error font-medium">Logout</a>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Admin Profile Dropdown -->
-            <div class="dropdown dropdown-end hidden lg:block">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                    <div class="w-10 rounded-full bg-error text-white flex items-center justify-center">
-                        <span class="text-lg font-semibold">{{ substr(Auth::user()->name, 0, 1) }}</span>
-                    </div>
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li class="menu-title">
-                        <span>{{ Auth::user()->name }} (Admin)</span>
-                    </li>
-                    <li><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></li>
-                    <li><a href="{{ route('admin.bengkel.index') }}">Kelola Bengkel</a></li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="w-full text-left">Logout</button>
-                        </form>
                     </li>
                 </ul>
             </div>

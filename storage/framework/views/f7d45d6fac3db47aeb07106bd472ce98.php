@@ -59,7 +59,7 @@
                                 <label for="username" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Username
                                 </label>
-                                <input 
+                                <input  
                                     type="text" 
                                     id="username" 
                                     name="username" 

@@ -539,11 +539,23 @@
     </header>
 
     <!-- Map Section -->
-    <section class="bg-white">
-        <div class="relative">
-            <div id="map" class="h-48 sm:h-64 lg:h-80 bg-neutral-200 relative overflow-hidden z-10"></div>
-            
-            <div id="map-loading" class="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-20">
+    <section class="bg-neutral-50 py-6">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-xl shadow-sm p-4 relative">
+                    <div id="map" class="rounded-lg overflow-hidden h-48 sm:h-64 lg:h-80 bg-neutral-200 w-full"></div>
+                    
+                    <div class="mt-4 w-full max-w-sm">
+                        <label for="filterSelect" class="sr-only">Filter</label>
+                        <select id="filterSelect" class="w-full px-4 py-3 h-12 rounded-full border border-neutral-200 bg-white text-neutral-900 text-sm shadow-sm">
+                            <option value="terdekat">Terdekat</option>
+                            <option value="rating">Rating Tertinggi</option>
+                            <option value="harga">Harga</option>
+                            <option value="buka">Buka Sekarang</option>
+                        </select>
+                    </div>
+
+                    <div id="map-loading" class="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-20">
                 <div class="text-center">
                     <svg class="animate-spin h-10 w-10 text-primary-700 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -553,31 +565,20 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Filter & Sort Section -->
-    <section class="bg-white border-b border-neutral-200 sticky top-[57px] z-40 shadow-sm">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex items-center gap-2">
-                <div class="w-full max-w-sm">
-                    <label for="filterSelect" class="sr-only">Filter</label>
-                    <select id="filterSelect" class="w-full px-4 py-3 h-12 rounded-full border border-neutral-200 bg-white text-neutral-900 text-sm shadow-sm">
-                        <option value="terdekat">Terdekat</option>
-                        <option value="rating">Rating Tertinggi</option>
-                        <option value="harga">Harga</option>
-                        <option value="buka">Buka Sekarang</option>
-                    </select>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Filter was moved into the map wrapper so they share one background -->
     
     <!-- Bengkel List -->
-    <section class="bg-neutral-50 pb-6 mt-6">
+    <section class="bg-neutral-50 pb-2 mt-2">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto space-y-4" id="bengkel-list">
-            
-            @forelse($bengkelList as $bengkel)
+            <div class="max-w-4xl mx-auto" id="bengkel-list">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                @forelse($bengkelList as $bengkel)
                 @php
                     $rating = $bengkel->average_rating;
                     $fullStars = floor($rating);
@@ -673,16 +674,19 @@
                     </div>
                 </div>
             @empty
-                <div class="card p-8 text-center">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="card p-8 text-center">
                     <svg class="w-16 h-16 text-neutral-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <h3 class="text-lg font-semibold text-neutral-900 mb-2">Tidak Ada Bengkel Tersedia</h3>
                     <p class="text-sm text-neutral-600 mb-4">Maaf, tidak ada bengkel yang tersedia di sekitar lokasi Anda saat ini.</p>
                     <a href="/" class="btn btn-primary">Kembali ke Beranda</a>
+                    </div>
                 </div>
             @endforelse
 
+            </div>
             </div>
         </div>
     </section>
