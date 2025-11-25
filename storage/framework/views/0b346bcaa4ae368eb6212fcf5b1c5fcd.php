@@ -1,5 +1,14 @@
-<x-layout-admin>
-    <x-slot:title>Kelola User - Admin SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal2e6fb18f75884c4fed4e10444e669251 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2e6fb18f75884c4fed4e10444e669251 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-admin','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-admin'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Kelola User - Admin SIBANTAR <?php $__env->endSlot(); ?>
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-4 md:py-4">
@@ -63,20 +72,21 @@
                                 </tr>
                             </thead>
                             <tbody id="userTableBody" class="divide-y divide-neutral-200">
-                                @foreach($users as $user)
-                                    <tr class="user-row hover:bg-neutral-50 transition-colors" data-role="{{ $user->role }}" data-username="{{ $user->username }}" data-email="{{ $user->email }}">
-                                        <td class="px-6 py-4 text-sm font-medium text-neutral-900">{{ $user->id_user }}</td>
+                                <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr class="user-row hover:bg-neutral-50 transition-colors" data-role="<?php echo e($user->role); ?>" data-username="<?php echo e($user->username); ?>" data-email="<?php echo e($user->email); ?>">
+                                        <td class="px-6 py-4 text-sm font-medium text-neutral-900"><?php echo e($user->id_user); ?></td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                                                    {{ strtoupper(substr($user->username ?? '', 0, 1)) }}
+                                                    <?php echo e(strtoupper(substr($user->username ?? '', 0, 1))); ?>
+
                                                 </div>
-                                                <span class="text-sm font-semibold text-neutral-900">{{ $user->username }}</span>
+                                                <span class="text-sm font-semibold text-neutral-900"><?php echo e($user->username); ?></span>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-neutral-600">{{ $user->email }}</td>
+                                        <td class="px-6 py-4 text-sm text-neutral-600"><?php echo e($user->email); ?></td>
                                         <td class="px-6 py-4">
-                                            @php
+                                            <?php
                                                 $r = strtolower($user->role ?? '');
                                                 $badge = '';
                                                 if ($r === 'admin') {
@@ -88,18 +98,18 @@
                                                 } else {
                                                     $badge = 'text-neutral-700 bg-neutral-100 border-neutral-200';
                                                 }
-                                            @endphp
-                                            <span class="px-3 py-1.5 text-xs font-bold rounded-full border {{ $badge }}">{{ strtoupper($user->role) }}</span>
+                                            ?>
+                                            <span class="px-3 py-1.5 text-xs font-bold rounded-full border <?php echo e($badge); ?>"><?php echo e(strtoupper($user->role)); ?></span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-neutral-600">{{ $user->wa_number }}</td>
+                                        <td class="px-6 py-4 text-sm text-neutral-600"><?php echo e($user->wa_number); ?></td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center gap-2">
-                                                    <a href="{{ route('admin.edit-user', $user->id_user) }}" class="px-3 py-1.5 text-sm font-medium rounded-full border border-yellow-300 text-yellow-700 bg-yellow-50 hover:bg-yellow-100 transition-colors" title="Edit">
+                                                    <a href="<?php echo e(route('admin.edit-user', $user->id_user)); ?>" class="px-3 py-1.5 text-sm font-medium rounded-full border border-yellow-300 text-yellow-700 bg-yellow-50 hover:bg-yellow-100 transition-colors" title="Edit">
                                                         Edit
                                                     </a>
 
-                                                    <form method="POST" action="{{ route('admin.users.delete', $user->id_user) }}" class="swal-delete-form" data-username="{{ $user->username }}">
-                                                        @csrf
+                                                    <form method="POST" action="<?php echo e(route('admin.users.delete', $user->id_user)); ?>" class="swal-delete-form" data-username="<?php echo e($user->username); ?>">
+                                                        <?php echo csrf_field(); ?>
                                                         <button type="submit" class="ml-2 px-3 py-1.5 text-sm font-medium rounded-full border border-red-300 text-red-700 bg-red-50 hover:bg-red-100 transition-colors" title="Hapus">
                                                             Hapus
                                                         </button>
@@ -107,7 +117,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -242,4 +252,14 @@
         })();
     </script>
 
-</x-layout-admin>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $attributes = $__attributesOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $component = $__componentOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__componentOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/admin/users/index.blade.php ENDPATH**/ ?>

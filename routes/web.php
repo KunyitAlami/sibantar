@@ -67,8 +67,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/calon-bengkel/{id}/approve', [AdminController::class, 'approveCalonBengkel'])
                 ->name('calonBengkel.approve');
 
-            Route::get('/users', fn() => view('admin.users.index'))
+            Route::get('/users', [AdminController::class, 'users'])
                 ->name('users.index');
+            Route::post('/users/{id_user}/delete', [AdminController::class, 'deleteUser'])
+                ->name('users.delete');
 
             // Kelola Bengkel, Laporan, Statistik (halaman admin baru)
             Route::get('/bengkel', [AdminController::class, 'manageBengkel'])

@@ -1,21 +1,27 @@
 <x-layout-admin>
     <x-slot:title>Daftar - SIBANTAR</x-slot:title>
 
-    <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
-        <div class="w-full max-w-screen">
-            
-            <!-- Logo & Title -->
-            <div class="text-center mb-6 sm:mb-8">
-                <div class="flex justify-center mb-3 sm:mb-4">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="SIBANTAR Logo" class="w-16 h-16 sm:w-16 sm:h-16 object-contain">
+    <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-4 md:py-4">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center gap-3">
+                    <a href="/admin/dashboard" class="hover:bg-white/10 p-2 rounded-lg transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl sm:text-2xl md:text-2xl font-bold">Calon Bengkel</h1>
                     </div>
                 </div>
-                <!-- Judul dan ringkasan dihapus sesuai permintaan -->
             </div>
+        </div>
+    </section>
 
+    <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
+        <div class="w-full max-w-screen">
             <!-- Register Card -->
-            <div class="card p-6 sm:p-8 w-full max-w-4xl mx-auto">
+            <div class="card p-6 sm:p-8 w-full max-w-3xl mx-auto">
                     <form method="POST" action="{{ route('admin.calonBengkel.approve', $calonBengkel->id_calon_bengkel) }}" class="space-y-4 sm:space-y-5">
                     @csrf
 
@@ -37,9 +43,8 @@
                         {{-- baris pertama (tiga pertanyaan) --}}
                         <div class="flex flex-col mb-8"> 
                             <h1 class="text-2xl font-bold text-black mb-4">Profile Pemilik Bengkel</h1>
-                            <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.12312312312321312321</p>
                         </div>
-                        <div class="flex gap-10 ">
+                        <div class="flex flex-col gap-4">
                             <!-- Username -->
                             <div>
                                 <label for="username" class="block text-sm font-medium text-neutral-700 mb-2">
@@ -107,10 +112,9 @@
                     <div class="mt-12">
                         <div class="flex flex-col mb-8"> 
                             <h1 class="text-2xl font-bold text-black mb-4 mt-10">Profile Bengkel</h1>
-                            <p class="text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore temporibus pariatur.</p>
                         </div>
                         {{-- baris pertama (tiga pertanyaan) --}}
-                        <div class="flex gap-10">
+                        <div class="flex flex-col gap-4">
                             <div class="flex-1">
                                 <!-- Nama Bengkel -->
                                 <div>
@@ -180,8 +184,8 @@
                         </div>
 
                         {{-- baris kedua (dua pertanyaan) --}}
-                        <div class="flex gap-10 mt-7">
-                            <div class="flex-1"> 
+                        <div class="flex flex-col gap-4 mt-7">
+                            <div class="w-full"> 
                                 <div>
                                     <label for="jam_buka" class="block text-sm font-medium text-neutral-700 mb-2">
                                         Jam Buka Bengkel  (WITA)
@@ -203,16 +207,16 @@
                                 </div>
                             </div>
 
-                            <div class="flex-1"> 
+                            <div class="w-full"> 
                                 <div>
-                                    <label for="jam_tutup" class="block text-sm font-medium text-neutral-700 mb-2 ml-5">
+                                    <label for="jam_tutup" class="block text-sm font-medium text-neutral-700 mb-2">
                                         Jam Tutup Bengkel  (WITA)
                                     </label>
                                     <input 
                                         type="text" 
                                         id="jam_tutup" 
                                         name="jam_tutup" 
-                                        class=" ml-3 input @error('jam_tutup') border-danger-500 @enderror" 
+                                        class="input @error('jam_tutup') border-danger-500 @enderror" 
                                         placeholder="Contoh: 23.59 "
                                         value="{{ old('jam_tutup', $calonBengkel->jam_tutup) }}"
                                         readonly
@@ -226,8 +230,8 @@
                             </div>
                         </div>
                         {{-- baris ketiga (dua pertanyaan) --}}
-                        <div class="flex gap-10 mt-7 w-full">
-                            <div class="flex-1"> 
+                        <div class="flex flex-col gap-4 mt-7 w-full">
+                            <div class="w-full"> 
                                 <!-- alamat_lengkap -->
                                 <div>
                                     <label for="alamat_lengkap" class="block text-sm font-medium text-neutral-700 mb-2 ">
@@ -247,7 +251,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex-1"> 
+                            <div class="w-full"> 
                                 <!-- penjelasan_bengkel -->
                                 <div>
                                     <label for="penjelasan_bengkel" class="block text-sm font-medium text-neutral-700 mb-2 ">
@@ -270,14 +274,11 @@
                     </div>
                     <!-- Submit Button -->
                     <div class="pt-2">
-                        <button type="submit" class="btn btn-primary w-full btn-lg">
+                        <button type="submit" class="btn btn-primary w-full btn-lg rounded-full">
                             Terima Permintaan 
                         </button>
                     </div>
                 </form>
-                <a href="{{ route('admin.dashboard.index') }}" class="bg-gray-400 rounded-lg w-full btn-lg mt-6 hover:bg-gray-600 text-center block">
-                    <span class="text-white">Kembali</span>
-                </a>
             </div>
         </div>
     </section>

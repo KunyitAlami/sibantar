@@ -1,5 +1,14 @@
-<x-layout-admin>
-    <x-slot:title>Kelola Bengkel - Admin</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal2e6fb18f75884c4fed4e10444e669251 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2e6fb18f75884c4fed4e10444e669251 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout-admin','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout-admin'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Kelola Bengkel - Admin <?php $__env->endSlot(); ?>
 
     <section class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white py-4 md:py-4">
         <div class="container mx-auto px-4">
@@ -95,16 +104,16 @@
                                 </tr>
                             </thead>
                             <tbody id="bengkelTableBody" class="divide-y divide-neutral-200">
-                                @if(isset($calonBengkels) && $calonBengkels->count())
-                                    @foreach($calonBengkels as $calon)
+                                <?php if(isset($calonBengkels) && $calonBengkels->count()): ?>
+                                    <?php $__currentLoopData = $calonBengkels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr data-status="calon">
-                                            <td class="px-6 py-6 text-sm">{{ $calon->id_calon_bengkel }}</td>
-                                            <td class="px-6 py-6 text-sm text-neutral-500 italic">@if($calon->id_user){{ $calon->id_user }}@else - @endif</td>
-                                            <td class="px-6 py-6 font-semibold">{{ $calon->nama_bengkel }}</td>
-                                            <td class="px-6 py-6">{{ $calon->kecamatan ?? '-' }}</td>
-                                            <td class="px-6 py-6">{{ $calon->alamat_lengkap ?? '-' }}</td>
-                                            <td class="px-6 py-6">{{ $calon->jam_operasional ?? ($calon->jam_buka . ' - ' . $calon->jam_tutup) }} WITA</td>
-                                            @php
+                                            <td class="px-6 py-6 text-sm"><?php echo e($calon->id_calon_bengkel); ?></td>
+                                            <td class="px-6 py-6 text-sm text-neutral-500 italic"><?php if($calon->id_user): ?><?php echo e($calon->id_user); ?><?php else: ?> - <?php endif; ?></td>
+                                            <td class="px-6 py-6 font-semibold"><?php echo e($calon->nama_bengkel); ?></td>
+                                            <td class="px-6 py-6"><?php echo e($calon->kecamatan ?? '-'); ?></td>
+                                            <td class="px-6 py-6"><?php echo e($calon->alamat_lengkap ?? '-'); ?></td>
+                                            <td class="px-6 py-6"><?php echo e($calon->jam_operasional ?? ($calon->jam_buka . ' - ' . $calon->jam_tutup)); ?> WITA</td>
+                                            <?php
                                                 $s = strtolower($calon->status ?? 'belum diterima');
                                                 if (str_contains($s, 'belum') || str_contains($s, 'diterima') && $s !== 'diterima') {
                                                     $statusLabel = 'Belum Diterima';
@@ -116,27 +125,27 @@
                                                     $statusLabel = ucfirst($s);
                                                     $statusClasses = 'text-neutral-700 bg-neutral-100 border-neutral-200';
                                                 }
-                                            @endphp
+                                            ?>
                                             <td class="px-6 py-6">
-                                                <span class="inline-flex items-center gap-1 whitespace-nowrap px-3 py-1 text-xs font-bold rounded-full border {{ $statusClasses }}">{{ $statusLabel }}</span>
+                                                <span class="inline-flex items-center gap-1 whitespace-nowrap px-3 py-1 text-xs font-bold rounded-full border <?php echo e($statusClasses); ?>"><?php echo e($statusLabel); ?></span>
                                             </td>
                                             <td class="px-6 py-6 text-right">
-                                                <a href="{{ route('admin.calonBengkel.show', $calon->id_calon_bengkel) }}" class="px-3 py-1.5 text-sm font-medium rounded-full border border-primary-200 text-primary-600 bg-primary-50 hover:bg-primary-100">Detail</a>
+                                                <a href="<?php echo e(route('admin.calonBengkel.show', $calon->id_calon_bengkel)); ?>" class="px-3 py-1.5 text-sm font-medium rounded-full border border-primary-200 text-primary-600 bg-primary-50 hover:bg-primary-100">Detail</a>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
 
-                                @if(isset($bengkels) && $bengkels->count())
-                                    @foreach($bengkels as $b)
+                                <?php if(isset($bengkels) && $bengkels->count()): ?>
+                                    <?php $__currentLoopData = $bengkels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr data-status="terdaftar">
-                                            <td class="px-6 py-6 text-sm">{{ $b->id_bengkel }}</td>
-                                            <td class="px-6 py-6 text-sm">{{ $b->id_user ?? optional($b->user)->id_user ?? '-' }}</td>
-                                            <td class="px-6 py-6 font-semibold">{{ $b->nama_bengkel }}</td>
-                                            <td class="px-6 py-6">{{ $b->kecamatan ?? '-' }}</td>
-                                            <td class="px-6 py-6">{{ $b->alamat_lengkap ?? '-' }}</td>
-                                            <td class="px-6 py-6">{{ $b->jam_operasional ?? ($b->jam_buka . ' - ' . $b->jam_tutup) }} WITA</td>
-                                            @php
+                                            <td class="px-6 py-6 text-sm"><?php echo e($b->id_bengkel); ?></td>
+                                            <td class="px-6 py-6 text-sm"><?php echo e($b->id_user ?? optional($b->user)->id_user ?? '-'); ?></td>
+                                            <td class="px-6 py-6 font-semibold"><?php echo e($b->nama_bengkel); ?></td>
+                                            <td class="px-6 py-6"><?php echo e($b->kecamatan ?? '-'); ?></td>
+                                            <td class="px-6 py-6"><?php echo e($b->alamat_lengkap ?? '-'); ?></td>
+                                            <td class="px-6 py-6"><?php echo e($b->jam_operasional ?? ($b->jam_buka . ' - ' . $b->jam_tutup)); ?> WITA</td>
+                                            <?php
                                                 $s2 = strtolower($b->status ?? 'terdaftar');
                                                 if (str_contains($s2, 'aktif') || str_contains($s2, 'terdaftar')) {
                                                     $statusLabel2 = ucfirst($s2);
@@ -145,20 +154,20 @@
                                                     $statusLabel2 = ucfirst($s2);
                                                     $statusClasses2 = 'text-neutral-700 bg-neutral-100 border-neutral-200';
                                                 }
-                                            @endphp
+                                            ?>
                                             <td class="px-6 py-6">
-                                                <span class="inline-flex items-center gap-1 whitespace-nowrap px-3 py-1 text-xs font-bold rounded-full border {{ $statusClasses2 }}">{{ $statusLabel2 }}</span>
+                                                <span class="inline-flex items-center gap-1 whitespace-nowrap px-3 py-1 text-xs font-bold rounded-full border <?php echo e($statusClasses2); ?>"><?php echo e($statusLabel2); ?></span>
                                             </td>
                                             <td class="px-6 py-6 text-right">
                                                 <a href="#" class="px-3 py-1.5 text-sm font-medium rounded-full border border-primary-200 text-primary-600 bg-primary-50 hover:bg-primary-100">Detail</a>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
 
-                                @if((!isset($calonBengkels) || !$calonBengkels->count()) && (!isset($bengkels) || !$bengkels->count()))
+                                <?php if((!isset($calonBengkels) || !$calonBengkels->count()) && (!isset($bengkels) || !$bengkels->count())): ?>
                                     <tr><td class="px-6 py-6 text-neutral-500" colspan="8">Belum ada data bengkel.</td></tr>
-                                @endif
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -166,4 +175,14 @@
             </div>
         </div>
     </section>
-</x-layout-admin>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $attributes = $__attributesOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__attributesOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2e6fb18f75884c4fed4e10444e669251)): ?>
+<?php $component = $__componentOriginal2e6fb18f75884c4fed4e10444e669251; ?>
+<?php unset($__componentOriginal2e6fb18f75884c4fed4e10444e669251); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\sibantar\resources\views/admin/bengkel/index.blade.php ENDPATH**/ ?>

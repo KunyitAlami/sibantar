@@ -39,6 +39,13 @@ class AdminController extends RoutingController
         return view('admin.bengkel.index', compact('bengkels', 'calonBengkels'));
     }
 
+    // Users listing for admin
+    public function users()
+    {
+        $users = UserModel::all();
+        return view('admin.users.index', compact('users'));
+    }
+
 
     public function showCalonBengkel($id)
     {
@@ -144,6 +151,28 @@ class AdminController extends RoutingController
 
         return redirect()->route('admin.dashboard.index')
                         ->with('success', 'User berhasil diupdate!');
+    }
+
+    // Delete a user (admin)
+    public function deleteUser($id_user)
+    {
+        $user = UserModel::where('id_user', $id_user)->first();
+
+        if (!$user) {
+            return redirect()->route('admin.users.index')->with('error', 'User tidak ditemukan.');
+        }
+
+        // Prevent deleting currently authenticated admin
+        if (auth()->check() && auth()->user()->id_user == $user->id_user) {
+            return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun yang sedang aktif.');
+        }
+
+        try {
+            $user->delete();
+            return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')->with('error', 'Terjadi kesalahan saat menghapus user.');
+        }
     }
 
     public function showCalon($id_calon_bengkel){
