@@ -69,7 +69,7 @@
 
             <!--[if BLOCK]><![endif]--><?php if($isPaid): ?>
                 <div class="py-3 text-center text-sm font-semibold text-success-700 border border-success-200 rounded-xl bg-success-100">
-                    Pembayaran berhasil ✅
+                    Pembayaran berhasil
                 </div>
             <?php else: ?>
                 <button 
@@ -151,16 +151,38 @@
                 window.snap.pay(token, {
                     onSuccess: function(result) {
                         console.log('Payment success:', result);
-                        
-                        // Panggil Livewire method menggunakan window.Livewire.find('<?php echo e($_instance->getId()); ?>')
-                        if (typeof Livewire !== 'undefined') {
-                            Livewire.find('<?php echo e($_instance->getId()); ?>').call('handleTransactionConfirmed', transactionId, 'settlement', orderId);
+                            // Show immediate SweetAlert confirmation (client-side fallback)
+                        try {
+                            window.paymentAlertShown = true;
+                            Swal.fire({
+                                title: 'Pembayaran Berhasil',
+                                text: 'Pembayaran Anda telah diterima.',
+                                icon: 'success',
+                                confirmButtonText: 'Lihat Riwayat',
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#0051BA',
+                                background: '#ffffff',
+                                timer: 5000,
+                                timerProgressBar: true,
+                            }).then((res) => {
+                                // Redirect to history whether clicked or auto-closed
+                                window.location.href = '<?php echo e(route('user.history', ['id_user' => Auth::id()])); ?>';
+                            });
+                        } catch (e) {
+                            console.warn('SweetAlert not available yet:', e);
                         }
-                        
-                        // Fallback: reload halaman jika Livewire tidak tersedia
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1000);
+
+                            // Panggil Livewire method untuk konfirmasi server-side
+                            if (typeof Livewire !== 'undefined') {
+                                Livewire.find('<?php echo e($_instance->getId()); ?>').call('handleTransactionConfirmed', transactionId, 'settlement', orderId);
+                            }
+
+                            // Fallback: reload halaman jika Livewire tidak tersedia
+                            setTimeout(() => {
+                                if (!window.paymentAlertShown) {
+                                    window.location.reload();
+                                }
+                            }, 1500);
                     },
                     onPending: function(result) {
                         console.log('Payment pending:', result);
@@ -197,5 +219,34 @@
         // Log untuk debugging
         console.log('Payment script loaded');
         console.log('Midtrans Snap available:', typeof window.snap !== 'undefined');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Ensure flag exists to avoid duplicate alerts
+        window.paymentAlertShown = window.paymentAlertShown || false;
+
+        // Listen for Livewire browser event when payment is processed
+        window.addEventListener('payment-processed', function(e) {
+            console.log('payment-processed event:', e.detail);
+            if (window.paymentAlertShown) return; // already shown by client-side fallback
+
+            if (e.detail && (e.detail.status === 'settlement' || e.detail.status === 'capture')) {
+                window.paymentAlertShown = true;
+                Swal.fire({
+                    title: 'Pembayaran Berhasil',
+                    text: 'Pembayaran Anda telah diterima.',
+                    icon: 'success',
+                    confirmButtonText: 'Lihat Riwayat',
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#0051BA',
+                    background: '#ffffff',
+                    timer: 5000,
+                    timerProgressBar: true,
+                }).then((result) => {
+                    // Redirect to history whether clicked or auto-closed
+                    window.location.href = '<?php echo e(route('user.history', ['id_user' => Auth::id()])); ?>';
+                });
+            }
+        });
     </script>
 <?php $__env->stopPush(); ?><?php /**PATH D:\laragon\www\sibantar\resources\views/livewire/bengkel/order-progress.blade.php ENDPATH**/ ?>

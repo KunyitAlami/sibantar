@@ -27,18 +27,18 @@
     <!-- Main Content -->
     <section class="py-4 pb-24">
         <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center">
             <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php
                         // Dynamic status badge
                         $statusColor = match($order->status) {
-                            'pending' => 'bg-yellow-100 text-yellow-700',
-                            'dibayar' => 'bg-green-100 text-green-700',
-                            'diproses' => 'bg-blue-100 text-blue-700',
-                            'selesai'  => 'bg-green-100 text-green-700',
-                            'gagal'    => 'bg-red-100 text-red-700',
-                            'ditolak'  => 'bg-red-100 text-red-700',
-                            'dibatalkan' => 'bg-gray-100 text-gray-700',
-                            default    => 'bg-gray-100 text-gray-700',
+                            // Progress/waiting
+                            'pending', 'menunggu_konfirmasi', 'diproses' => 'bg-warning-100 text-warning-700',
+                            // Success
+                            'dibayar', 'selesai' => 'bg-success-100 text-success-700',
+                            // Cancel/fail
+                            'gagal', 'ditolak', 'dibatalkan' => 'bg-danger-100 text-danger-700',
+                            default => 'bg-neutral-100 text-neutral-700',
                         };
                         $statusLabels = [
                             'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
@@ -50,20 +50,20 @@
                             'dibatalkan' => 'Dibatalkan',
                         ];
                     ?>
-                <!-- Booking Card 1 - In Progress -->
-                <div class="booking-card card p-4 hover:shadow-lg transition-shadow mb-6" data-status="in-progress">
+                <!-- Booking Card -->
+                <div class="booking-card card p-6 hover:shadow-lg transition-shadow rounded-lg bg-white max-w-[560px] w-full" data-status="in-progress">
                     <div class="flex items-start justify-between mb-2">
                         <div>
-                            <h3 class="font-bold text-neutral-900"><?php echo e($order->bengkel->nama_bengkel); ?></h3>
-                            <p class="text-xs text-neutral-500 mt-2">Tanggal Order: <?php echo e($order->created_at); ?></p>
+                            <h3 class="font-bold text-base md:text-lg text-neutral-900"><?php echo e($order->bengkel->nama_bengkel); ?></h3>
+                            <p class="text-xs text-neutral-500 mt-1">Tanggal Order: <?php echo e($order->created_at); ?></p>
                         </div>
-                        <span class="px-2.5 py-1 bg-info-100 text-info-700 text-xs font-semibold rounded-full whitespace-nowrap">
+                        <span class="px-2.5 py-1 <?php echo e($statusColor); ?> text-xs font-semibold rounded-full whitespace-nowrap">
                             <?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?>
 
                         </span>
                     </div>
 
-                    <div class="space-y-1 mb-3">
+                        <div class="space-y-1 mb-1">
                         <div class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -85,60 +85,47 @@
                     </div>
 
                     <?php if($order->status === 'ditolak'): ?>
-                        <div class="py-3 text-center text-sm font-semibold text-error-600 border border-error-500 rounded-xl bg-error-50">
-                            Detail Order Tidak Tersedia Karena Order Ditolak
-                        </div>
+                        
                     <?php else: ?>
-                        <div class="flex items-center justify-between pt-3 border-t border-neutral-100">
-                            <span class="font-bold text-xl text-primary-700">
-                                        Rp <?php echo e(number_format($order->tracking->finalPrice, 0, ',', '.')); ?>
+                            <div class="pt-2 border-t border-neutral-100">
+                            <div class="flex items-center justify-between gap-4">
+                                <span class="font-bold text-lg md:text-xl text-primary-700">
+                                    Rp <?php echo e(number_format(optional($order->tracking)->finalPrice ?? 0, 0, ',', '.')); ?>
 
-                            </span>
-                            <div class="flex gap-2">
-                                <a href="<?php echo e(route('user.report.order', ['id_order' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
+                                </span>
+                            </div>
+                            <div class="mt-1 flex gap-2">
+                                <a href="<?php echo e(route('user.report.order', ['id_order' => $order->id_order])); ?>" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
                                     Lapor
                                 </a>
-                                <a href="<?php echo e(route('user.invoice', $order->id_order)); ?>" 
-                                class="btn btn-sm btn-outline btn-error">
-                                Invoice
+                                <a href="<?php echo e(route('user.invoice', $order->id_order)); ?>" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
+                                    Invoice
                                 </a>
-                                <a href="<?php echo e(route('user.order-tracking', ['id' => $order->id_order])); ?>" class="btn btn-sm btn-outline btn-error">
-                                    Detail Order
+                                <a href="<?php echo e(route('user.order-tracking', ['id' => $order->id_order])); ?>" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
+                                    Detail
                                 </a>
                             </div>
                         </div>
                         
-                        <div class="mt-10 mb-5">
+                        <div class="mt-1 mb-1">
                                 <?php if($order->review): ?>
-                                    <p>Rating Bengkel: 
-                                        <?php for($i = 1; $i <= 5; $i++): ?>
-                                            <?php if($i <= $order->review->ratingBengkel): ?>
-                                                ★
-                                            <?php else: ?>
-                                                ☆
-                                            <?php endif; ?>
-                                        <?php endfor; ?>
-                                    </p>
-                                    <p>Rating Layanan: 
-                                        <?php for($i = 1; $i <= 5; $i++): ?>
-                                            <?php if($i <= $order->review->ratingLayanan): ?>
-                                                ★
-                                            <?php else: ?>
-                                                ☆
-                                            <?php endif; ?>
-                                        <?php endfor; ?>
-                                    </p>
-                                <?php else: ?>
-                                    <p>
-                                        <a href="<?php echo e(route('user.review', ['id_order' => $order->id_order])); ?>" class="text-gray-600 italic underline">
-                                            Belum ada review
+                                    <div class="mt-1">
+                                        <a href="<?php echo e(route('user.review.show', ['id_order' => $order->id_order])); ?>" class="btn btn-sm md:btn-sm btn-outline w-full border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
+                                            Lihat Review
                                         </a>
-                                    </p>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="mt-1">
+                                        <a href="<?php echo e(route('user.review', ['id_order' => $order->id_order])); ?>" class="btn btn-sm md:btn-sm btn-outline w-full border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
+                                            Beri Review
+                                        </a>
+                                    </div>
                                 <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
 
             <!-- Empty State (Hidden by default) -->
             <div id="emptyState" class="hidden text-center py-16">

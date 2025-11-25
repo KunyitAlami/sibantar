@@ -57,7 +57,9 @@ unset($__errorArgs, $__bag); ?>"
                             value="<?php echo e(old('email')); ?>"
                             required 
                             autofocus
+                            pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
                         >
+                        <p id="emailError" class="mt-1 text-sm text-danger-600 hidden"></p>
                         <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -105,6 +107,7 @@ unset($__errorArgs, $__bag); ?>"
                                 </svg>
                             </button>
                         </div>
+                        <p id="passwordError" class="mt-1 text-sm text-danger-600 hidden"></p>
                         <?php $__errorArgs = ['password'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -126,11 +129,53 @@ unset($__errorArgs, $__bag); ?>
 
                     <!-- Submit Button -->
                     <div class="pt-2">
-                        <button type="submit" class="btn btn-primary w-full btn-lg">
+                        <button type="submit" class="btn btn-primary w-full btn-lg rounded-full">
                             Masuk
                         </button>
                     </div>
                 </form>
+                <script>
+                function validateLoginForm(e) {
+                    var email = document.getElementById('email').value.trim();
+                    var password = document.getElementById('password').value.trim();
+                    var emailError = document.getElementById('emailError');
+                    var passwordError = document.getElementById('passwordError');
+                    var valid = true;
+
+                    // Reset error
+                    emailError.textContent = '';
+                    emailError.classList.add('hidden');
+                    passwordError.textContent = '';
+                    passwordError.classList.add('hidden');
+
+                    // Email validation
+                    var gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                    var ulmPattern = /^[a-zA-Z0-9._%+-]+@mhs\.ulm\.ac\.id$/;
+                    var isDosenTester = email === 'dosentester';
+                    if (!email) {
+                        emailError.textContent = 'Email wajib diisi';
+                        emailError.classList.remove('hidden');
+                        valid = false;
+                    } else if (!(gmailPattern.test(email) || ulmPattern.test(email) || isDosenTester)) {
+                        emailError.textContent = 'Email harus menggunakan domain @gmail.com';
+                        emailError.classList.remove('hidden');
+                        valid = false;
+                    }
+
+                    // Password validation
+                    if (!password) {
+                        passwordError.textContent = 'Password wajib diisi.';
+                        passwordError.classList.remove('hidden');
+                        valid = false;
+                    }
+
+                    if (!valid) {
+                        e.preventDefault();
+                    }
+                    return valid;
+                }
+                document.querySelector('form[action="<?php echo e(route('login.post')); ?>"]')?.addEventListener('submit', validateLoginForm);
+                </script>
             </div>
 
             <!-- Register Link -->

@@ -24,73 +24,81 @@
 
     <!-- Form Review -->
     <section class="container mx-auto px-4 py-6">
-        <form action="<?php echo e(route('user.review.store', ['id_order' => $order->id_order])); ?>" method="POST">
-            <?php echo csrf_field(); ?>
+        <div class="max-w-xl mx-auto">
+            <form action="<?php echo e(route('user.review.store', ['id_order' => $order->id_order])); ?>" method="POST">
+                <?php echo csrf_field(); ?>
+                <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                    <!-- Heading -->
+                    <h2 class="text-lg font-bold text-neutral-900 mb-3">Beri Review</h2>
 
-            <!-- Rating Bengkel -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Rating Bengkel</label>
-                <div class="flex gap-1">
-                    <?php for($i = 1; $i <= 5; $i++): ?>
-                        <label>
-                            <input type="radio" name="ratingBengkel" value="<?php echo e($i); ?>" class="hidden" 
-                                <?php echo e(isset($review) && $review->ratingBengkel == $i ? 'checked' : ''); ?>>
-                            <span class="cursor-pointer text-2xl <?php echo e(isset($review) && $review->ratingBengkel >= $i ? 'text-yellow-400' : 'text-gray-300'); ?>">★</span>
-                        </label>
-                    <?php endfor; ?>
+                    <!-- Rating Bengkel -->
+                    <div class="mb-3">
+                        <label class="block text-neutral-900 font-medium mb-0">Rating Bengkel</label>
+                        <div class="flex items-center gap-2 text-2xl">
+                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="ratingBengkel" value="<?php echo e($i); ?>" class="hidden" 
+                                        <?php echo e(isset($review) && $review->ratingBengkel == $i ? 'checked' : ''); ?>>
+                                    <span class="inline-block px-1 py-0.5 rounded hover:text-yellow-500 <?php echo e(isset($review) && $review->ratingBengkel >= $i ? 'text-yellow-500' : 'text-gray-400'); ?>">★</span>
+                                </label>
+                            <?php endfor; ?>
+                        </div>
+                        <?php $__errorArgs = ['ratingBengkel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="text-red-500 text-sm mt-1"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+
+                    <!-- Rating Layanan -->
+                    <div class="mb-3">
+                        <label class="block text-neutral-900 font-medium mb-0">Rating Layanan</label>
+                        <div class="flex items-center gap-2 text-2xl">
+                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="ratingLayanan" value="<?php echo e($i); ?>" class="hidden" 
+                                        <?php echo e(isset($review) && $review->ratingLayanan == $i ? 'checked' : ''); ?>>
+                                    <span class="inline-block px-1 py-0.5 rounded hover:text-yellow-500 <?php echo e(isset($review) && $review->ratingLayanan >= $i ? 'text-yellow-500' : 'text-gray-400'); ?>">★</span>
+                                </label>
+                            <?php endfor; ?>
+                        </div>
+                        <?php $__errorArgs = ['ratingLayanan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="text-red-500 text-sm mt-1"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="mb-3">
+                        <label for="comment" class="block text-neutral-900 font-medium mb-2">Komentar (Opsional)</label>
+                        <textarea name="comment" id="comment" rows="4" 
+                            class="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            placeholder="Tulis komentar..."><?php echo e($review->comment ?? old('comment')); ?></textarea>
+                        <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="text-red-500 text-sm mt-1"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" class="w-full bg-primary-700 text-white px-4 py-3 rounded-lg hover:bg-primary-600 transition font-semibold">
+                            Kirim Review
+                        </button>
+                    </div>
                 </div>
-                <?php $__errorArgs = ['ratingBengkel'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <span class="text-red-500 text-sm"><?php echo e($message); ?></span> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-            </div>
-
-            <!-- Rating Layanan -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Rating Layanan</label>
-                <div class="flex gap-1">
-                    <?php for($i = 1; $i <= 5; $i++): ?>
-                        <label>
-                            <input type="radio" name="ratingLayanan" value="<?php echo e($i); ?>" class="hidden" 
-                                <?php echo e(isset($review) && $review->ratingLayanan == $i ? 'checked' : ''); ?>>
-                            <span class="cursor-pointer text-2xl <?php echo e(isset($review) && $review->ratingLayanan >= $i ? 'text-yellow-400' : 'text-gray-300'); ?>">★</span>
-                        </label>
-                    <?php endfor; ?>
-                </div>
-                <?php $__errorArgs = ['ratingLayanan'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <span class="text-red-500 text-sm"><?php echo e($message); ?></span> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-            </div>
-
-            <!-- Comment -->
-            <div class="mb-4">
-                <label for="comment" class="block text-gray-700 font-semibold mb-2">Komentar (Opsional)</label>
-                <textarea name="comment" id="comment" rows="4" 
-                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="Tulis komentar..."><?php echo e($review->comment ?? old('comment')); ?></textarea>
-                <?php $__errorArgs = ['comment'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <span class="text-red-500 text-sm"><?php echo e($message); ?></span> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-            </div>
-
-            <button type="submit" class="bg-primary-700 text-white px-4 py-2 rounded hover:bg-primary-600 transition">
-                Kirim Review
-            </button>
-        </form>
+            </form>
+        </div>
     </section>
 
     <script>
@@ -100,13 +108,13 @@ unset($__errorArgs, $__bag); ?>
             stars.forEach((s, i) => {
                 if(inputs[i].checked) {
                     for(let j = 0; j <= i; j++) {
-                        stars[j].classList.add('text-yellow-400');
+                        stars[j].classList.add('text-yellow-500');
                     }
                     for(let j = i+1; j < stars.length; j++) {
-                        stars[j].classList.remove('text-yellow-400');
+                        stars[j].classList.remove('text-yellow-500');
                     }
                 } else if(!Array.from(inputs).some(inp => inp.checked)) {
-                    s.classList.remove('text-yellow-400');
+                    s.classList.remove('text-yellow-500');
                 }
             });
         };
@@ -116,8 +124,8 @@ unset($__errorArgs, $__bag); ?>
                 const parent = this.parentNode.parentNode;
                 const stars = parent.querySelectorAll('span');
                 stars.forEach((s, i) => {
-                    if(i <= Array.from(stars).indexOf(this)) s.classList.add('text-yellow-400');
-                    else s.classList.remove('text-yellow-400');
+                    if(i <= Array.from(stars).indexOf(this)) s.classList.add('text-yellow-500');
+                    else s.classList.remove('text-yellow-500');
                 });
             });
 
@@ -134,7 +142,7 @@ unset($__errorArgs, $__bag); ?>
             });
         });
 
-        document.querySelectorAll('.mb-4').forEach(container => updateStars(container));
+        document.querySelectorAll('.mb-3').forEach(container => updateStars(container));
     </script>
 
  <?php echo $__env->renderComponent(); ?>

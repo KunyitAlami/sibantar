@@ -1,5 +1,14 @@
-<x-layout>
-    <x-slot:title>Daftar - SIBANTAR</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Daftar - SIBANTAR <?php $__env->endSlot(); ?>
 
     <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
         <div class="w-full max-w-5xl mx-auto">
@@ -12,25 +21,25 @@
 
             <!-- Register Card -->
             <div class="card p-6 sm:p-8 w-full max-w-4xl mx-auto">
-                <form method="POST" action="{{ route('registerBengkel.post') }}" class="space-y-8">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('registerBengkel.post')); ?>" class="space-y-8">
+                    <?php echo csrf_field(); ?>
 
-                    @if ($errors->any())
+                    <?php if($errors->any()): ?>
                         <div class="mb-4 text-danger-600">
                             <ul class="list-disc pl-5">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
 
-                    {{-- bagian pertama itu buat table user --}}
-                    {{-- bagian kedua itu buat table calon_bengkel yang nanti kalo udah diacc bakal dikirim ke table bengkel --}}
-                    {{-- bagian pertama --}}
+                    
+                    
+                    
                     <div>
-                        {{-- baris pertama (tiga pertanyaan) --}}
+                        
                         <div class="mb-8">
                             <h1 class="text-xl sm:text-2xl font-bold text-black mb-2">Profile Pemilik Bengkel</h1>
                             <p class="text-gray-500 text-sm">Lengkapi data pemilik bengkel di bawah ini.</p>
@@ -39,15 +48,43 @@
                             <!-- Username -->
                             <div>
                                 <label for="username" class="block text-sm font-medium text-neutral-700 mb-2">Username</label>
-                                <input type="text" id="username" name="username" class="input @error('username') border-danger-500 @enderror" placeholder="Masukkan username" value="{{ old('username') }}" required autofocus>
-                                @error('username')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                <input type="text" id="username" name="username" class="input <?php $__errorArgs = ['username'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" placeholder="Masukkan username" value="<?php echo e(old('username')); ?>" required autofocus>
+                                <?php $__errorArgs = ['username'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                             <!-- Email -->
                             <div>
                                 <label for="email" class="block text-sm font-medium text-neutral-700 mb-2">Email</label>
-                                <input type="text" id="email" name="email" class="input @error('email') border-danger-500 @enderror" placeholder="email@gmail.com" value="{{ old('email') }}" required>
+                                <input type="text" id="email" name="email" class="input <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" placeholder="email@gmail.com" value="<?php echo e(old('email')); ?>" required>
                                 <p id="emailError" class="mt-1 text-sm text-danger-600 hidden"></p>
-                                @error('email')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                             <!-- Nomor Telepon -->
                             <div>
@@ -56,19 +93,40 @@
                                     type="text"
                                     id="wa_number"
                                     name="wa_number"
-                                    class="input @error('wa_number') border-danger-500 @enderror"
+                                    class="input <?php $__errorArgs = ['wa_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                     placeholder="08123456789"
                                     inputmode="numeric"
                                     required
                                 >
                                 <p id="waError" class="mt-1 text-sm text-danger-600 hidden"></p>
-                                @error('wa_number')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                <?php $__errorArgs = ['wa_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                             <!-- Password -->
                             <div>
                                 <label for="password" class="block text-sm font-medium text-neutral-700 mb-2">Password</label>
                                 <div class="relative">
-                                    <input type="password" id="password" name="password" class="input @error('password') border-danger-500 @enderror" placeholder="Masukkan password" required>
+                                    <input type="password" id="password" name="password" class="input <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" placeholder="Masukkan password" required>
                                     <button type="button" onclick="togglePassword('password', 'eye-password-open', 'eye-password-closed')" class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600">
                                         <svg id="eye-password-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -79,7 +137,14 @@
                                         </svg>
                                     </button>
                                 </div>
-                                @error('password')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                             <!-- Konfirmasi Password -->
                             <div>
@@ -101,7 +166,7 @@
                         </div>
                     </div>
 
-                    {{-- bagian kedua --}}
+                    
                     <div class="mt-12">
                         <div class="mb-8">
                             <h1 class="text-xl sm:text-2xl font-bold text-black mb-2 mt-8">Profile Bengkel</h1>
@@ -117,15 +182,29 @@
                                     type="text" 
                                     id="nama_bengkel" 
                                     name="nama_bengkel" 
-                                    class="input @error('nama_bengkel') border-danger-500 @enderror" 
+                                    class="input <?php $__errorArgs = ['nama_bengkel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                     placeholder="Masukkan Nama Bengkel"
-                                    value="{{ old('nama_bengkel') }}"
+                                    value="<?php echo e(old('nama_bengkel')); ?>"
                                     required 
                                     autofocus
                                 >
-                                @error('nama_bengkel')
-                                    <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                                @enderror
+                                <?php $__errorArgs = ['nama_bengkel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                             <!-- Link Gmaps -->
                             <div>
@@ -136,15 +215,29 @@
                                     type="text" 
                                     id="link_gmaps" 
                                     name="link_gmaps" 
-                                    class="input @error('link_gmaps') border-danger-500 @enderror" 
+                                    class="input <?php $__errorArgs = ['link_gmaps'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                     placeholder="Link Google Maps"
-                                    value="{{ old('link_gmaps') }}"
+                                    value="<?php echo e(old('link_gmaps')); ?>"
                                     required 
                                     autofocus
                                 >
-                                @error('link_gmaps')
-                                    <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                                @enderror
+                                <?php $__errorArgs = ['link_gmaps'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
 
                             <div class="flex-1">
@@ -156,43 +249,85 @@
                                     <select 
                                         id="kecamatan" 
                                         name="kecamatan" 
-                                        class="input @error('kecamatan') border-danger-500 @enderror"
+                                        class="input <?php $__errorArgs = ['kecamatan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                         style="height: 50px;"
                                         required
                                     >
                                         <option value="">Pilih Kecamatan</option>
-                                        <option value="Banjarmasin Selatan" {{ old('kecamatan') == 'Banjarmasin Selatan' ? 'selected' : '' }}>Banjarmasin Selatan</option>
-                                        <option value="Banjarmasin Timur"    {{ old('kecamatan') == 'Banjarmasin Timur' ? 'selected' : '' }}>Banjarmasin Timur</option>
-                                        <option value="Banjarmasin Barat"    {{ old('kecamatan') == 'Banjarmasin Barat' ? 'selected' : '' }}>Banjarmasin Barat</option>
-                                        <option value="Banjarmasin Tengah"   {{ old('kecamatan') == 'Banjarmasin Tengah' ? 'selected' : '' }}>Banjarmasin Tengah</option>
-                                        <option value="Banjarmasin Utara"    {{ old('kecamatan') == 'Banjarmasin Utara' ? 'selected' : '' }}>Banjarmasin Utara</option>
+                                        <option value="Banjarmasin Selatan" <?php echo e(old('kecamatan') == 'Banjarmasin Selatan' ? 'selected' : ''); ?>>Banjarmasin Selatan</option>
+                                        <option value="Banjarmasin Timur"    <?php echo e(old('kecamatan') == 'Banjarmasin Timur' ? 'selected' : ''); ?>>Banjarmasin Timur</option>
+                                        <option value="Banjarmasin Barat"    <?php echo e(old('kecamatan') == 'Banjarmasin Barat' ? 'selected' : ''); ?>>Banjarmasin Barat</option>
+                                        <option value="Banjarmasin Tengah"   <?php echo e(old('kecamatan') == 'Banjarmasin Tengah' ? 'selected' : ''); ?>>Banjarmasin Tengah</option>
+                                        <option value="Banjarmasin Utara"    <?php echo e(old('kecamatan') == 'Banjarmasin Utara' ? 'selected' : ''); ?>>Banjarmasin Utara</option>
                                     </select>
-                                    @error('kecamatan')
-                                        <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                                    @enderror
+                                    <?php $__errorArgs = ['kecamatan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- baris kedua (dua pertanyaan) --}}
+                        
                         <div class="flex gap-10 mt-7">
                             <div class="flex-1"> 
                                 <div>
                                     <label for="jam_buka" class="block text-sm font-medium text-neutral-700 mb-2">Jam Buka Bengkel (WITA)</label>
-                                    <input type="number" id="jam_buka" name="jam_buka" class="input @error('jam_buka') border-danger-500 @enderror" placeholder="08.00" value="{{ old('jam_buka') }}" required autofocus min="0" max="23.99" step="0.01">
-                                    @error('jam_buka')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                    <input type="number" id="jam_buka" name="jam_buka" class="input <?php $__errorArgs = ['jam_buka'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" placeholder="08.00" value="<?php echo e(old('jam_buka')); ?>" required autofocus min="0" max="23.99" step="0.01">
+                                    <?php $__errorArgs = ['jam_buka'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
 
                             <div class="flex-1"> 
                                 <div>
                                     <label for="jam_tutup" class="block text-sm font-medium text-neutral-700 mb-2">Jam Tutup Bengkel (WITA)</label>
-                                    <input type="number" id="jam_tutup" name="jam_tutup" class="input @error('jam_tutup') border-danger-500 @enderror" placeholder="23.59" value="{{ old('jam_tutup') }}" required autofocus min="0" max="23.99" step="0.01">
-                                    @error('jam_tutup')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                    <input type="number" id="jam_tutup" name="jam_tutup" class="input <?php $__errorArgs = ['jam_tutup'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" placeholder="23.59" value="<?php echo e(old('jam_tutup')); ?>" required autofocus min="0" max="23.99" step="0.01">
+                                    <?php $__errorArgs = ['jam_tutup'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
-                        {{-- baris ketiga (dua pertanyaan) --}}
+                        
                         <div class="flex flex-col gap-4 mt-4">
                             <!-- alamat_lengkap -->
                             <div>
@@ -202,13 +337,27 @@
                                 <textarea
                                     id="alamat_lengkap"
                                     name="alamat_lengkap"
-                                    class="input @error('alamat_lengkap') border-danger-500 @enderror h-[8rem]"
+                                    class="input <?php $__errorArgs = ['alamat_lengkap'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?> h-[8rem]"
                                     placeholder="Masukkan Alamat Lengkap Bengkel"
                                     required
-                                >{{ old('alamat_lengkap') }}</textarea>
-                                @error('alamat_lengkap')
-                                    <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                                @enderror
+                                ><?php echo e(old('alamat_lengkap')); ?></textarea>
+                                <?php $__errorArgs = ['alamat_lengkap'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                             <div>
                                 <label for="penjelasan_bengkel" class="block text-sm font-medium text-neutral-700 mb-2 ">
@@ -217,13 +366,27 @@
                                 <textarea
                                     id="penjelasan_bengkel"
                                     name="penjelasan_bengkel"
-                                    class="input @error('penjelasan_bengkel') border-danger-500 @enderror h-[8rem]"
+                                    class="input <?php $__errorArgs = ['penjelasan_bengkel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-danger-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?> h-[8rem]"
                                     placeholder="Masukkan Penjelasan Bengkel Anda "
                                     required
-                                >{{ old('penjelasan_bengkel') }}</textarea>
-                                @error('penjelasan_bengkel')
-                                    <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
-                                @enderror
+                                ><?php echo e(old('penjelasan_bengkel')); ?></textarea>
+                                <?php $__errorArgs = ['penjelasan_bengkel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="mt-1 text-sm text-danger-600"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                     </div>
@@ -239,7 +402,7 @@
             <!-- Login Link -->
             <p class="text-center mt-5 sm:mt-6 text-sm text-neutral-600">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-primary-700 hover:text-primary-800 font-semibold">
+                <a href="<?php echo e(route('login')); ?>" class="text-primary-700 hover:text-primary-800 font-semibold">
                     Masuk sekarang
                 </a>
             </p>
@@ -247,7 +410,7 @@
         </div>
     </section>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         document.getElementById('wa_number').addEventListener('beforeinput', function(e) {
             if (e.data && !/^[0-9]+$/.test(e.data)) {
@@ -324,8 +487,18 @@
             }
             return valid;
         }
-        document.querySelector('form[action="{{ route('registerBengkel.post') }}"]')?.addEventListener('submit', validateRegisterBengkelForm);
+        document.querySelector('form[action="<?php echo e(route('registerBengkel.post')); ?>"]')?.addEventListener('submit', validateRegisterBengkelForm);
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $attributes = $__attributesOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__attributesOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php /**PATH D:\laragon\www\sibantar\resources\views/Auth/register_bengkel.blade.php ENDPATH**/ ?>

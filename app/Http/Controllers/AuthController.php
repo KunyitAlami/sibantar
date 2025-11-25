@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class AuthController extends Controller
 {
@@ -34,51 +37,6 @@ class AuthController extends Controller
         };
 
     }
-
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email' => 'required',
-    //         'password' => 'required',
-    //     ]);
-
-    //     if ($credentials['email'] === 'dosentester') {
-    //         $user = UserModel::where('email', 'dosentester')->first();
-
-    //         if ($user && Hash::check($credentials['password'], $user->password)) {
-    //             Auth::login($user);
-    //             $request->session()->regenerate();
-
-    //             return redirect()->route('admin.dashboard.index');
-    //         }
-
-    //         return back()->withErrors([
-    //             'email' => 'Password salah untuk akun admin khusus!',
-    //         ]);
-    //     }
-
-    //     $loginField = filter_var($credentials['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-    //     $user = UserModel::where($loginField, $credentials['email'])->first();
-
-    //     if ($user && Hash::check($credentials['password'], $user->password)) {
-    //         Auth::login($user);
-    //         $request->session()->regenerate();
-
-    //         return match ($user->role) {
-    //             'admin' => redirect()->route('admin.dashboard.index'),
-    //             'bengkel' => redirect()->route('bengkel.dashboard', [
-    //                 'id_bengkel' => $user->bengkel->first()->id_bengkel
-    //             ]),
-    //             'user' => redirect()->route('user.dashboard'),
-    //             default => redirect()->route('landing_page'),
-    //         };
-    //     }
-
-    //     return back()->withErrors([
-    //         'email' => 'Akun tidak ditemukan! Pastikan email atau username benar.',
-    //     ]);
-    // }
-
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -188,18 +146,19 @@ class AuthController extends Controller
 
     public function registerBengkel(Request $request)
     {
+        $daftarKecamatan = ['Banjarmasin Utara', 'Banjarmasin Tengah', 'Banjarmasi Timur', 'Banjarmasin Barat', 'Banjarmasin Selatan'];
         $request->validate([
-            'username'              => 'required|string|max:255|unique:calon_bengkel,username', // Tambah unique
-            'email'                 => 'required|email|max:255|unique:calon_bengkel,email', // Tambah unique
-            'password'              => 'required|string|min:8|confirmed',
-            'wa_number'             => 'required|string|max:20',
-            'nama_bengkel'          => 'required|string|max:255',
-            'link_gmaps'            => 'required|string|max:255',
-            'kecamatan'             => 'required|string|max:255',
+            'username'              => 'required|string|max:255|unique:calon_bengkel',
+            'email'                 => 'required|email:rfc,dns|max:255|unique:calon_bengkel,email',
+            'password'              => 'required|string|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'wa_number'             => 'required|string|regex:/^[0-9]{10,15}$/|starts_with:08,628', 
+            'nama_bengkel'          => 'required|string|max:255|min:3',
+            'link_gmaps'            => 'required|url|max:500',
+            'kecamatan'             => 'required|string|max:255|in:' . implode(',', $daftarKecamatan),
             'jam_buka'              => 'required|string|max:10', 
             'jam_tutup'             => 'required|string|max:10',
-            'alamat_lengkap'        => 'required|string',
-            'penjelasan_bengkel'    => 'required|string',
+            'alamat_lengkap'        => 'required|string|min:10|max:500',
+            'penjelasan_bengkel'    => 'required|string|max:10000',
         ], [
             'username.required'           => 'Username wajib diisi.',
             'email.required'              => 'Email wajib diisi.',
@@ -215,22 +174,46 @@ class AuthController extends Controller
             'jam_tutup.required'          => 'Jam tutup wajib diisi.',
             'alamat_lengkap.required'     => 'Alamat lengkap wajib diisi.',
             'penjelasan_bengkel.required' => 'Penjelasan bengkel wajib diisi.',
+            'password.regex'    => 'Password harus mengandung huruf besar, kecil, dan angka.',
+            'wa_number.regex'   => 'Nomor WhatsApp tidak valid.',
+            'wa_number.starts_with' => 'Nomor WhatsApp harus dimulai dengan 08 atau 628.',
+            'link_gmaps.url'    => 'Link Google Maps tidak valid.',
         ]);
 
         $data = $request->all();
+        $data['nama_bengkel'] = strip_tags($data['nama_bengkel']);
+        $data['alamat_lengkap'] = strip_tags($data['alamat_lengkap']);
+        $data['penjelasan_bengkel'] = strip_tags($data['penjelasan_bengkel']);
 
         $data['password'] = Hash::make($data['password']);
         $data['jam_operasional'] = $data['jam_buka'] . ' - ' . $data['jam_tutup'];
         $data['role'] = 'bengkel';
         $data['status'] = 'belum_diterima';
+        $data['username'] = trim($data['username']);
+        $data['email'] = strtolower(trim($data['email']));
+        $data['wa_number'] = preg_replace('/\s+/', '', $data['wa_number']);
+        $data['link_gmaps'] = rtrim($data['link_gmaps'], '/');
 
         try {
-            $calonBengkel = CalonBengkelModel::create($data);
+            DB::beginTransaction();
             
-            return redirect()->route('login')->with('success', 'Data calon bengkel berhasil dikirim. Tunggu persetujuan admin.');
+            $calonBengkel = CalonBengkelModel::create($data);
+            DB::commit();
+            
+            return redirect()->route('login')
+                ->with('success', 'Data calon bengkel berhasil dikirim. Tunggu persetujuan admin.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        } catch (\Exception $e) {    
-            return back()->withInput()->withErrors(['gagal' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.']);
+            Log::error('Register Bengkel Error: ' . $e->getMessage(), [
+                'email' => $request->email,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()
+                ->withInput($request->except('password', 'password_confirmation'))
+                ->withErrors(['gagal' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.']);
         }
     }
 }

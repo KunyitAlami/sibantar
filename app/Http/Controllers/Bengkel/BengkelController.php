@@ -145,8 +145,18 @@ class BengkelController extends Controller
 
     public function orderTracking($orderId)
     {
-        $order = OrderModel::findOrFail($orderId);
+        $order = OrderModel::with(['user', 'layananBengkel', 'bengkel', 'countDown'])
+            ->findOrFail($orderId);
+
         return view('bengkel.dashboard.final-price', compact('order', 'orderId'));
+    }
+
+    public function cekReview($id_order)
+    {
+        $order = OrderModel::with(['user', 'layananBengkel', 'bengkel', 'countDown', 'review'])
+            ->findOrFail($id_order);
+
+        return view('bengkel.dashboard.cek-review', compact('order', 'id_order'));
     }
 
     public function formTambahLayanan($id_bengkel){

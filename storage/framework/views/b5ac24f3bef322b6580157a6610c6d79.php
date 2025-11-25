@@ -49,7 +49,7 @@
                                 <option value="Aki Tekor">Aki Tekor</option>
                                 <option value="Mesin Mati">Mesin Mati</option>
                                 <option value="Kecelakaan">Kecelakaan</option>
-                                <option value="Lainnya">Lainnya</option>
+                                <!-- <option value="Lainnya">Lainnya</option> -->
                             </select>
                         </div>
 

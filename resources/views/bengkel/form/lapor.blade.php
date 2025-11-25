@@ -20,7 +20,6 @@
         <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
             <div class="flex flex-col gap-4 justify-center text-center">
                 <h1>Form Laporkan Pesanan</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam quasi voluptates.</p>
             </div>
             {{-- {{ route('bengkel.order.store', $order->id_order) }}--}}
             <form action="{{ route('bengkel.report.store', $order->id_order) }}"

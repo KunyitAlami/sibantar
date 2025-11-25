@@ -120,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/report/{id_order}', [BengkelController::class, 'reportOrder'])->name('report.order');
             Route::post('/report-store/{id_order}', [BengkelController::class, 'reportStore'])->name('report.store');
+            Route::get('/cek-review/{id_order}', [BengkelController::class, 'cekReview'])->name('cekReview.order');
         });
 
     // USER

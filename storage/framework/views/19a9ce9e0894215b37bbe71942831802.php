@@ -1,28 +1,28 @@
 <div class="space-y-6">
     
     <div class="flex gap-3">
-        <button wire:click="setPanel('about')" 
-            class="px-4 py-2 rounded-lg font-semibold 
-                <?php echo e($activePanel === 'about' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            About Bengkel
-        </button>
-
         <button wire:click="setPanel('order')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 <?php echo e($activePanel === 'order' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            Daftar Pesanan
+            Pesanan
+        </button>
+
+        <button wire:click="setPanel('about')" 
+            class="px-4 py-2 rounded-lg font-semibold 
+                <?php echo e($activePanel === 'about' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
+            About
         </button>
 
         <button wire:click="setPanel('layanan')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 <?php echo e($activePanel === 'layanan' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            Daftar Layanan
+            Layanan
         </button>
 
         <button wire:click="setPanel('report')" 
             class="px-4 py-2 rounded-lg font-semibold 
                 <?php echo e($activePanel === 'report' ? 'bg-blue-700 text-white' : 'bg-neutral-200'); ?>">
-            Report
+            Lapor
         </button>
     </div>
 
@@ -43,15 +43,14 @@
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
 
-      
-        <!--[if BLOCK]><![endif]--><?php if($activePanel === 'order'): ?>
         
-        <div wire:poll.5000ms="loadOrders">
+        <!--[if BLOCK]><![endif]--><?php if($activePanel === 'order'): ?>
+        <div wire:poll.keep-alive.1000ms="loadOrders">
             <div class="card p-5 shadow-md">
                 <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
                 <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <?php
-                        $statusColor = match($order->status) {
+                        $statusColor = [
                             'pending' => 'bg-yellow-100 text-yellow-700',
                             'dibayar' => 'bg-green-100 text-green-700',
                             'diproses' => 'bg-blue-100 text-blue-700',
@@ -59,8 +58,9 @@
                             'gagal'    => 'bg-red-100 text-red-700',
                             'ditolak'  => 'bg-red-100 text-red-700',
                             'dibatalkan' => 'bg-gray-100 text-gray-700',
-                            default    => 'bg-gray-100 text-gray-700',
-                        };
+                            'menunggu_konfirmasi' => 'bg-yellow-100 text-yellow-700',
+                            'berhasil' => 'bg-green-100 text-green-700',
+                        ];
                         $statusLabels = [
                             'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
                             'pending' => 'Pending',
@@ -69,11 +69,12 @@
                             'selesai' => 'Selesai',
                             'ditolak' => 'Ditolak',
                             'dibatalkan' => 'Dibatalkan',
+                            'gagal' => 'Gagal',
+                            'berhasil' => 'Berhasil',
                         ];
                     ?>
 
-                    <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-neutral-200 hover:shadow-md transition-all"
-                         wire:key="order-<?php echo e($order->id_order); ?>">
+                    <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-neutral-200 hover:shadow-md transition-all">
                         
                         <div class="flex items-start justify-between mb-3">
                             <div>
@@ -138,221 +139,80 @@
                             <p class="text-sm text-neutral-600 mt-1">
                                 Harga: <span class="font-medium">Rp <?php echo e(number_format($order->total_bayar ?? 0, 0, ',', '.')); ?></span>
                             </p>
-                            <p class="text-sm text-neutral-600">
-                                Status: <span class="font-medium"><?php echo e($statusLabels[$order->status] ?? ucfirst($order->status)); ?></span>
-                            </p>
                         </div>
 
                         
                         <div class="mt-3 text-sm text-neutral-600"
                             x-data="{
-                                orderId: <?php echo e($order->id_order); ?>,
                                 countdown_ms: <?php echo e($order->countdown_ms ?? 0); ?>,
+                                now: 0,
                                 diff: <?php echo e($order->countdown_ms ?? 0); ?>,
                                 isActive: <?php echo e($order->countdown_active ? 'true' : 'false'); ?>,
-                                isConfirmed: <?php echo e($order->countdown_confirmed ? 'true' : 'false'); ?>,
+                                isConfirmed: '<?php echo e($order->countDown?->status ?? ''); ?>' === 'terkonfirmasi',
                                 orderStatus: '<?php echo e($order->status); ?>',
-                                autoRejectTriggered: false,
-                                
-                                init() {
-                                    // Skip jika order sudah ditolak atau dikonfirmasi
-                                    if (this.orderStatus === 'ditolak' || this.isConfirmed) {
-                                        return;
-                                    }
-                                    
-                                    // CRITICAL: Gunakan global state yang persisten
-                                    if (!window.orderTimers) {
-                                        window.orderTimers = {};
-                                    }
-                                    
-                                    const globalState = window.orderTimers[this.orderId];
-                                    
-                                    // Jika sudah ada timer yang berjalan, ambil state-nya
-                                    if (globalState && globalState.interval) {
-                                        // Silent restore - no console log spam
-                                        this.diff = globalState.diff;
-                                        this.isActive = globalState.isActive;
-                                        this.isConfirmed = globalState.isConfirmed;
-                                        this.syncWithGlobal();
-                                        return;
-                                    }
-                                    
-                                    // Only log for NEW timers
-                                    console.log('🆕 Timer started: Order #' + this.orderId + ' (' + Math.floor(this.countdown_ms/1000) + 's)');
-                                    
-                                    if (this.isActive && !this.isConfirmed && this.countdown_ms > 0) {
-                                        this.startGlobalCountdown();
-                                    }
-                                },
-                                
-                                syncWithGlobal() {
-                                    const self = this;
-                                    const globalState = window.orderTimers[this.orderId];
-                                    
-                                    // Update UI setiap 100ms dari global state
-                                    const syncInterval = setInterval(() => {
-                                        if (globalState && globalState.isActive) {
-                                            self.diff = globalState.diff;
-                                            self.isActive = globalState.isActive;
-                                            self.isConfirmed = globalState.isConfirmed;
-                                        } else {
-                                            // Timer sudah selesai, stop sync
-                                            clearInterval(syncInterval);
-                                        }
-                                    }, 100);
-                                },
-                                
-                                startGlobalCountdown() {
-                                    const self = this;
-                                    const startTime = Date.now();
-                                    const initialCountdown = this.countdown_ms;
-                                    
-                                    // Create global state
-                                    const globalState = {
-                                        orderId: this.orderId,
-                                        startTime: startTime,
-                                        initialCountdown: initialCountdown,
-                                        diff: initialCountdown,
-                                        isActive: true,
-                                        isConfirmed: false,
-                                        autoRejectTriggered: false,
-                                        interval: null
-                                    };
-                                    
-                                    // Global interval yang tidak akan di-destroy oleh Livewire
-                                    globalState.interval = setInterval(() => {
-                                        const elapsed = Date.now() - startTime;
-                                        globalState.diff = Math.max(0, initialCountdown - elapsed);
-                                        
-                                        // Update local state
-                                        self.diff = globalState.diff;
-                                        
-                                        if (globalState.diff <= 0 && !globalState.autoRejectTriggered) {
-                                            globalState.autoRejectTriggered = true;
-                                            globalState.isActive = false;
-                                            self.isActive = false;
-                                            self.autoRejectTriggered = true;
-                                            
-                                            console.log('⏰ Timer expired: Order #' + self.orderId);
-                                            
-                                            // CRITICAL: Call Livewire method properly
-                                            try {
-                                                self.$wire.autoRejectOrder(self.orderId)
-                                                    .then(() => {
-                                                        console.log('✅ Auto-reject success: Order #' + self.orderId);
-                                                    })
-                                                    .catch(err => {
-                                                        console.error('❌ Auto-reject failed:', err);
-                                                    });
-                                            } catch (err) {
-                                                console.error('❌ Error calling autoRejectOrder:', err);
-                                            }
-                                            
-                                            // Cleanup
-                                            clearInterval(globalState.interval);
-                                            delete window.orderTimers[self.orderId];
-                                        }
-                                    }, 100);
-                                    
-                                    // Store globally
-                                    window.orderTimers[this.orderId] = globalState;
-                                }
+                                autoRejectTriggered: false
                             }" 
-                            @order-confirmed.window="
-                                if ($event.detail.orderId === orderId) { 
-                                    isConfirmed = true; 
-                                    isActive = false;
-                                    
-                                    // Update global state
-                                    if (window.orderTimers && window.orderTimers[orderId]) {
-                                        window.orderTimers[orderId].isConfirmed = true;
-                                        window.orderTimers[orderId].isActive = false;
-                                        clearInterval(window.orderTimers[orderId].interval);
-                                        delete window.orderTimers[orderId];
-                                    }
-                                }
-                            "
-                            @order-auto-rejected.window="
-                                if ($event.detail.orderId === orderId) {
-                                    console.log('🔔 Order #' + orderId + ' auto-rejected');
-                                    isConfirmed = true;
-                                    isActive = false;
-                                    orderStatus = 'ditolak';
-                                    
-                                    // Update global state
-                                    if (window.orderTimers && window.orderTimers[orderId]) {
-                                        clearInterval(window.orderTimers[orderId].interval);
-                                        delete window.orderTimers[orderId];
-                                    }
+                            x-init="
+                                console.log('Order #<?php echo e($order->id_order); ?>', {
+                                    countdown_ms: countdown_ms,
+                                    isActive: isActive,
+                                    isConfirmed: isConfirmed,
+                                    countDownStatus: '<?php echo e($order->countDown?->status ?? 'NULL'); ?>',
+                                    orderStatus: orderStatus
+                                });
+                                
+                                if(isActive && !isConfirmed && countdown_ms > 0){
+                                    let interval = setInterval(() => {
+                                        now += 1000;
+                                        diff = countdown_ms - now;
+                                        
+                                        // AUTO REJECT ketika timer habis
+                                        if(diff <= 0 && !autoRejectTriggered){
+                                            diff = 0;
+                                            isActive = false;
+                                            autoRejectTriggered = true;
+                                            
+                                            console.log('⏰ Timer habis! Auto-rejecting order #<?php echo e($order->id_order); ?>');
+                                            
+                                            // Panggil method auto reject dari Livewire
+                                            $wire.autoRejectOrder(<?php echo e($order->id_order); ?>);
+                                            
+                                            clearInterval(interval);
+                                        }
+                                    }, 1000);
                                 }
                             "
                         >
                             
                             <!--[if BLOCK]><![endif]--><?php if($order->countdown_ms !== null && $order->countdown_ms > 0 && $order->status !== 'ditolak'): ?>
-                                <div class="mb-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                                    <template x-if="!isConfirmed && isActive && diff > 0">
-                                        <div class="flex items-center gap-2">
-                                            <svg class="w-5 h-5 text-yellow-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <span class="font-semibold text-yellow-700">
-                                                Sisa waktu: <span x-text="Math.floor(diff/60000).toString().padStart(2,'0') + ':' + Math.floor((diff%60000)/1000).toString().padStart(2,'0')"></span>
-                                            </span>
-                                        </div>
-                                    </template>
+                                <div class="mb-3">
+                                    <span x-show="!isConfirmed && diff > 0"
+                                        x-text="'Sisa waktu: ' + Math.floor(diff/60000).toString().padStart(2,'0') + ':' + Math.floor((diff%60000)/1000).toString().padStart(2,'0')"
+                                        class="font-semibold text-red-600">
+                                    </span>
 
-                                    <template x-if="isConfirmed">
-                                        <div class="flex items-center gap-2">
-                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span class="font-semibold text-green-600">
-                                                ✓ Pesanan sudah dikonfirmasi
-                                            </span>
-                                        </div>
-                                    </template>
+                                    <span x-show="isConfirmed" class="font-semibold text-green-600">
+                                        ✓ Pesanan sudah dikonfirmasi
+                                    </span>
 
-                                    <template x-if="!isConfirmed && (!isActive || diff <= 0)">
-                                        <div class="flex items-center gap-2">
-                                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <span class="font-semibold text-red-600">
-                                                ⏰ Waktu habis - Pesanan ditolak otomatis
-                                            </span>
-                                        </div>
-                                    </template>
+                                    
+                                    <span x-show="!isConfirmed && diff <= 0"
+                                        class="font-semibold text-red-600">
+                                        ⏰ Waktu habis - Menolak pesanan otomatis...
+                                    </span>
                                 </div>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                             
                             <!--[if BLOCK]><![endif]--><?php if($order->countDown?->status === 'tidak_dikonfirmasi' && !$order->countdown_confirmed && $order->status !== 'ditolak'): ?>
-                                <div x-show="!isConfirmed && diff > 0" class="grid grid-cols-2 gap-2 mt-4">
+                                <div class="grid grid-cols-2 gap-2 mt-4" x-show="!isConfirmed && diff > 0">
                                     <button wire:click="rejectOrder(<?php echo e($order->id_order); ?>)" 
-                                            @click="
-                                                isConfirmed = true; 
-                                                orderStatus = 'ditolak';
-                                                // Cleanup global timer
-                                                if (window.orderTimers && window.orderTimers[orderId]) {
-                                                    clearInterval(window.orderTimers[orderId].interval);
-                                                    delete window.orderTimers[orderId];
-                                                }
-                                            "
-                                            :disabled="!isActive || diff <= 0"
+                                            @click="isConfirmed = true; orderStatus = 'ditolak'; $el.disabled = true"
                                             class="py-2.5 text-sm font-semibold text-white bg-red-600 border border-red-700 rounded-lg hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                         Tolak Pesanan
                                     </button>
                                     <button wire:click="acceptOrder(<?php echo e($order->id_order); ?>)" 
-                                            @click="
-                                                isConfirmed = true; 
-                                                orderStatus = 'pending';
-                                                // Cleanup global timer
-                                                if (window.orderTimers && window.orderTimers[orderId]) {
-                                                    clearInterval(window.orderTimers[orderId].interval);
-                                                    delete window.orderTimers[orderId];
-                                                }
-                                            "
-                                            :disabled="!isActive || diff <= 0"
+                                            @click="isConfirmed = true; orderStatus = 'pending'; $el.disabled = true"
                                             class="py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                         Terima Pesanan
                                     </button>
@@ -360,7 +220,7 @@
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                             
-                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'pending' && $order->countDown?->status === 'terkonfirmasi'): ?>
+                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'pending' && $order->countDown->status === 'terkonfirmasi'): ?>
                                 <div class="mt-4">
                                     <button 
                                         wire:click="gotoFinalPrice(<?php echo e($order->id_order); ?>)"
@@ -369,17 +229,29 @@
                                         Lihat Detail & Tentukan Harga Final
                                     </button>
                                 </div>
-                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
                             
-                            <!--[if BLOCK]><![endif]--><?php if($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi'): ?>
-                                <div class="mt-4">
-                                    <button 
-                                        wire:click="gotoFinalPrice(<?php echo e($order->id_order); ?>)"
-                                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
-                                    >
+                            <?php elseif($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi'): ?>
+                                <div class="space-y-2 mt-4 flex flex-col text-center">
+                                    
+                                    <a href="<?php echo e(route('bengkel.order-tracking', ['orderId' => $order->id_order])); ?>"
+                                    class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all">
                                         Cek Detail Pesanan
-                                    </button>
+                                    </a>
+
+                                    
+                                    <!--[if BLOCK]><![endif]--><?php if($order->has_review ?? false): ?>
+                                        <a href="<?php echo e(route('bengkel.cekReview.order', ['id_order' => $order->id_order])); ?>"
+                                        class="w-full py-2.5 text-sm font-semibold text-white bg-green-600 border border-green-700 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50">
+                                            Lihat Review Pelanggan
+                                        </a>
+                                    <?php else: ?>
+                                        <button 
+                                            disabled
+                                            class="w-full py-2.5 text-sm font-semibold text-neutral-400 bg-neutral-200 border border-neutral-300 rounded-lg cursor-not-allowed"
+                                        >
+                                            Belum Ada Review dari Pelanggan
+                                        </button>
+                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                 </div>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
@@ -387,9 +259,9 @@
                             <!--[if BLOCK]><![endif]--><?php if($order->status === 'ditolak'): ?>
                                 <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                                     <p class="text-sm text-red-700">
-                                        ❌ Pesanan ini telah ditolak
+                                        Pesanan ini telah ditolak
                                         <!--[if BLOCK]><![endif]--><?php if($order->countDown?->status === 'tidak_dikonfirmasi'): ?>
-                                            <span class="block mt-1">(Waktu konfirmasi habis - ditolak otomatis)</span>
+                                            <span class="block mt-1">Waktu konfirmasi habis - ditolak otomatis</span>
                                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                     </p>
                                 </div>

@@ -18,6 +18,9 @@ return new class extends Migration
             $table->enum('status', ['pending', 'terkonfirmasi', 'tidak_dikonfirmasi'])->default('pending');
             $table->timestamps();
             $table->timestamp('batas_konfirmasi')->nullable();
+            $table->timestamp('waktu_konfirmasi')->nullable();
+            
+            
             $table->foreign('id_order')->references('id_order')->on('order')->cascade();
         });
 
