@@ -17,6 +17,8 @@
 
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
 
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
 </head>
 <body class="bg-neutral-50">
     

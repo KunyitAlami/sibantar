@@ -38,6 +38,13 @@ Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('
 // Route Home - Redirect berdasarkan role setelah login
 Route::get('/home', [AuthController::class, 'redirectToDashboard'])->name('home')->middleware('auth');
 
+// Route::post('/bengkel/status/{id}', [BengkelController::class, 'updateStatus'])
+//     ->middleware(['auth', 'role:bengkel']);
+
+Route::post('/bengkel/status/{id}', [BengkelController::class, 'updateStatus']);
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard per Role
@@ -107,20 +114,24 @@ Route::middleware(['auth'])->group(function () {
 
 
             Route::get('/dashboard/bengkel/{id_bengkel}', [BengkelController::class, 'index'])->name('dashboard');
-            Route::get('/bengkel/order-tracking/{orderId}', [BengkelController::class, 'orderTracking'])->name('order-tracking');
+            Route::get('/order-tracking/{orderId}', [BengkelController::class, 'orderTracking'])->name('order-tracking');
 
             Route::delete('/bengkel/layanan/{id}', [BengkelController::class, 'hapusLayanan'])->name('hapusLayanan');
             Route::get('/form/bengkel/{id_bengkel}', [BengkelController::class, 'formTambahLayanan'])->name('tambahLayanan');
             Route::post('/bengkel/layanan/{id_bengkel}/store', [BengkelController::class, 'storeLayananBengkel'])->name('layanan.store');
 
             Route::get('/form/bengkel/{id_bengkel}', [BengkelController::class, 'formTambahLayanan'])->name('tambahLayanan');
-            Route::get('/bengkel/layanan/{id}/edit', [BengkelController::class, 'editLayanan'])->name('edit.layanan');
+            Route::get('/layanan/{id}/edit', [BengkelController::class, 'editLayanan'])->name('edit.layanan');
 
-            Route::post('/bengkel/layanan/{id_layanan_bengkel}/update',[BengkelController::class, 'updateLayananBengkel'])->name('layanan.update');
+            Route::post('/layanan/{id_layanan_bengkel}/update',[BengkelController::class, 'updateLayananBengkel'])->name('layanan.update');
 
             Route::get('/report/{id_order}', [BengkelController::class, 'reportOrder'])->name('report.order');
             Route::post('/report-store/{id_order}', [BengkelController::class, 'reportStore'])->name('report.store');
             Route::get('/cek-review/{id_order}', [BengkelController::class, 'cekReview'])->name('cekReview.order');
+
+            Route::post('/dashboard/status/{id}', [BengkelController::class, 'updateStatus'])->name('updateStatus');
+
+
         });
 
     // USER
@@ -167,36 +178,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/review-store/{id_order}', [UserController::class, 'saveReview'])
                 ->name('review.store');
-
-
-            
-            // Order Tracking berdasarkan status
-            // Route::get('/order-tracking/on-the-way/{id}', function ($id) {
-            //     return view('user.order-tracking', ['orderId' => $id, 'status' => 'on-the-way']);
-            // })->name('order-tracking.on-the-way');
-            
-            // Route::get('/order-tracking/in-progress/{id}', function ($id) {
-            //     return view('user.order-tracking', ['orderId' => $id, 'status' => 'in-progress']);
-            // })->name('order-tracking.in-progress');
-            
-            // Route::get('/order-tracking/completed/{id}', function ($id) {
-            //     return view('user.order-tracking', ['orderId' => $id, 'status' => 'completed']);
-            // })->name('order-tracking.completed');
-            
-            // Order Tracking dengan status dinamis (fallback)
-            // Route::get('/order-tracking/{orderId}', function ($orderId) {
-            //     $status = request()->get('status', 'waiting');
-            //     return view('user.order-tracking', compact('orderId', 'status'));
-            // })->name('order-tracking');
-            
-            // Halaman waiting confirmation dengan timer 2 menit
-            // Route::get('/waiting-confirmation', function () {
-            //     return view('user.waiting-confirmation');
-            // })->name('waiting-confirmation');
-            
-            // Route::get('/mechanic-on-the-way', function () {
-            //     return redirect()->route('user.order-tracking', ['orderId' => 1, 'status' => 'on-the-way']);
-            // })->name('mechanic-on-the-way');
             
             // Payment routes
             Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('create-transaction');
@@ -204,70 +185,3 @@ Route::middleware(['auth'])->group(function () {
         });
 });
 
-
-
-/*
-|--------------------------------------------------------------------------
-| Bengkel Routes (Bengkel Dashboard)
-|--------------------------------------------------------------------------
-*/
-
-// Moved to top with specific routes to avoid conflict with /bengkel/{id}
-
-/*
-|--------------------------------------------------------------------------
-| Admin Routes (Admin Dashboard)
-|--------------------------------------------------------------------------
-*/
-
-// Route::prefix('admin')->name('admin.')->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('admin.dashboard.index');
-//     })->name('dashboard');
-// });
-
-// Example page (untuk referensi)
-// Route::get('/example', function () {
-//     return view('example');
-// })->name('example');
-
-// Route::get('/bengkel/search', fn() => view('user.search'))->name('bengkel.search');
-// Route::get('/bengkel/{id}', fn($id) => view('user.detail'))->name('bengkel.detail');
-
-// Homepage
-// Route::get('/', function () {
-//     return view('user.home');
-// })->name('home');
-
-// Bengkel Search & Detail
-// Route::get('/bengkel/search', function () {
-//     return view('user.search');
-// })->name('bengkel.search');
-
-// Route::get('/bengkel/waiting-confirmation', function () {
-//     return view('user.waiting-confirmation');
-// })->name('bengkel.waiting-confirmation');
-
-// Route::get('/bengkel/dashboard', function () {
-//     return view('bengkel.dashboard.index');
-// })->name('bengkel.dashboard');
-
-// Route::get('/bengkel/final-price/{id}', function ($id) {
-//     return view('bengkel.dashboard.final-price');
-// })->name('bengkel.final-price');
-
-// Route::get('/bengkel/{id}', function ($id) {
-//     return view('user.detail');
-// })->name('bengkel.detail');
-
-
-// Authentication Routes
-// Route::get('/login', function () {
-//     return view('user.auth.login');
-// })->name('login');
-
-// Route::get('/register', function () {
-//     return view('user.auth.register');
-// })->name('register');
-
-// Route::get('/about_us', fn() => view('about_us'))->name('about_us');

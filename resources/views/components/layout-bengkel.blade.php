@@ -16,6 +16,8 @@
     @stack('styles')
 
     @livewireStyles
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 <body class="bg-neutral-50">
     

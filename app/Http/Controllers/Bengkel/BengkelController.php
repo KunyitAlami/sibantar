@@ -10,6 +10,8 @@ use Illuminate\Routing\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\StatusRealTimeBengkelModel;
+
 
 class BengkelController extends Controller
 {
@@ -140,6 +142,31 @@ class BengkelController extends Controller
             'totalIncomeToday',
             'LayananTotal'
         ));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'status' => 'required|in:buka,tutup',
+            ]);
+
+            // Pastikan model dan kolom sesuai
+            $status = StatusRealTimeBengkelModel::where('id_bengkel', $id)->firstOrFail();
+            $status->status = $request->status;
+            $status->save();
+
+            return response()->json([
+                'success' => true, 
+                'status' => $status->status,
+                'message' => 'Status berhasil diupdate'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
 

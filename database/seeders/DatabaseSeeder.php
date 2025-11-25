@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class, // Aktifkan kembali
+            UserSeeder::class,
             BengkelSeeder::class,
             ServiceSeeder::class,
             BookingSeeder::class,
@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
 
             CalonBengkelSeeder::class,
             LayananBengkelSeeder::class,
-            BengkelStatusSeeder::class
+            BengkelStatusSeeder::class,
+            StatusRealTimeBengkelSeeder::class
         ]);
     }
 }
