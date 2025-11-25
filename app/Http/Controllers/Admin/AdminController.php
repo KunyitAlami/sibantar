@@ -6,11 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\CalonBengkelModel;
 use App\Models\UserModel;
 use App\Models\BengkelModel;
+use App\Models\LayananBengkelModel;
 use App\Models\OrderModel;
+use App\Models\OrderTrackingModel;
 use App\Models\ReportFromBengkelModel;
 use App\Models\ReportFromUserModel;
+use App\Models\ReviewsModel;
+use Database\Seeders\ReviewSeeder;
 use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class AdminController extends RoutingController
 {
@@ -163,7 +169,7 @@ class AdminController extends RoutingController
         }
 
         // Prevent deleting currently authenticated admin
-        if (auth()->check() && auth()->user()->id_user == $user->id_user) {
+        if (Auth::check() && Auth::user()->id_user == $user->id_user)  {
             return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun yang sedang aktif.');
         }
 
@@ -173,6 +179,24 @@ class AdminController extends RoutingController
         } catch (\Exception $e) {
             return redirect()->route('admin.users.index')->with('error', 'Terjadi kesalahan saat menghapus user.');
         }
+    }
+
+    public function cekAktivitas($id_bengkel){
+        $bengkel = BengkelModel::findOrFail($id_bengkel);
+        $orders = OrderModel::where('id_bengkel', $id_bengkel)->get();
+        $layanan_bengkel = LayananBengkelModel::where('id_bengkel', $id_bengkel)->get();
+        $reviews = ReviewsModel::where('id_bengkel', $id_bengkel)->get();
+        $orderIds = $orders->pluck('id_order');
+
+        $order_tracking = OrderTrackingModel::whereIn('id_order', $orderIds)->get();
+
+        return view('admin.bengkel.aktivitas', compact(
+            'bengkel',
+            'orders',
+            'layanan_bengkel',
+            'reviews',
+            'order_tracking'
+        ));
     }
 
     public function showCalon($id_calon_bengkel){

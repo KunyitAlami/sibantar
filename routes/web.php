@@ -100,6 +100,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/approve-calon-bengkel/{id}', [AdminController::class, 'approveCalonBengkel'])
                 ->name('calonBengkel.approve');
 
+            Route::get('/cek-aktivitas/bengkel/{id_bengkel}', [AdminController::class, 'cekAktivitas'])
+                ->name('cekAktivitas');
+
 
         });
 
