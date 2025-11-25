@@ -318,13 +318,14 @@
                                     <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Kategori</th>
                                     <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Harga Terendah</th>
                                     <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Harga Tertinggi</th>
-                                    <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider" colspan="2">Aksi</th>
+                                    <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Hapus</th>
+                                    <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Edit</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach($layanan as $l)
-                                <tr class="hover:bg-neutral-50 border-b text-center" wire:key="layanan-{{ $l->id_layanan_bengkel }}">
+                                @foreach($layanan as $index => $l)
+                                <tr class="hover:bg-neutral-50 border-b text-center" wire:key="layanan-{{ $l->id_layanan_bengkel }}-{{ $index }}">
                                     <td class="px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base font-medium text-neutral-900">
                                         {{ $l->nama_layanan }}
                                     </td>
@@ -338,22 +339,24 @@
                                         Rp {{ number_format($l->harga_akhir, 0, ',', '.') }}
                                     </td>
                                     <td class="px-3 py-2 sm:px-4 sm:py-3">
-                                        <button onclick="confirmDelete(event, {{ $l->id_layanan_bengkel }}, '{{ $_instance->getId() }}')"
+                                        <button type="button" 
+                                            onclick="confirmDelete(event, {{ $l->id_layanan_bengkel }}, '{{ $_instance->getId() }}')"
                                             wire:loading.attr="disabled"
                                             wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})"
                                             class="px-3 py-1 sm:px-4 sm:py-2 rounded-full font-semibold border border-red-600 text-red-600 
                                                 hover:bg-red-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                             <span wire:loading.remove wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
-                                            <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
+                                            <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Menghapus...</span>
                                         </button>
                                     </td>
-                                    <td class="p-2">
-                                        <button wire:click="editLayanan({{ $l->id_layanan_bengkel }})"
+                                    <td class="px-3 py-2 sm:px-4 sm:py-3">
+                                        <button type="button"
+                                            wire:click="editLayanan({{ $l->id_layanan_bengkel }})"
                                             wire:loading.attr="disabled"
                                             wire:target="editLayanan({{ $l->id_layanan_bengkel }})"
                                             class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all text-center">
                                             <span wire:loading.remove wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
-                                            <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
+                                            <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Loading...</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -486,8 +489,14 @@
             buttonsStyling: false
         }).then((result) => {
             if (result.isConfirmed) {
+                console.log('Deleting layanan id:', id, 'via component:', instanceId);
                 try {
-                    Livewire.find(instanceId).call('hapusLayanan', id);
+                    const component = Livewire.find(instanceId);
+                    if (component) {
+                        component.call('hapusLayanan', id);
+                    } else {
+                        console.error('Component not found:', instanceId);
+                    }
                 } catch (e) {
                     console.error('Livewire call failed', e);
                 }
@@ -497,7 +506,10 @@
 
     function confirmDelete(event, id, instanceId) {
         event.preventDefault();
-        // load SweetAlert2 if not present
+        event.stopPropagation(); 
+        
+        console.log('confirmDelete called - id:', id, 'instanceId:', instanceId);
+        
         if (typeof Swal === 'undefined') {
             const s = document.createElement('script');
             s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';

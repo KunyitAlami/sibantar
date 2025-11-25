@@ -342,61 +342,6 @@ class BengkelDashboard extends Component
         return redirect()->route('bengkel.edit.layanan', $id_layanan_bengkel);
     }
 
-    // public function render()
-    // {
-    //     $bengkel = BengkelModel::find($this->id_bengkel);
-        
-    //     if ($this->ordersCache === null || 
-    //         ($this->lastLoadTime && now()->diffInSeconds($this->lastLoadTime) > 5)) {
-            
-    //         $orders = OrderModel::where('id_bengkel', $this->id_bengkel)
-    //             ->with(['user', 'layananBengkel', 'countDown', 'bengkel'])
-    //             ->orderBy('created_at', 'desc')
-    //             ->get();
-
-    //         foreach ($orders as $order) {
-    //             $order->countdown_ms = null;
-    //             $order->countdown_active = false;
-    //             $order->countdown_confirmed = false;
-                
-    //             if ($order->countDown?->batas_konfirmasi) {
-    //                 $clientZone = $order->client_timezone ?? 'Asia/Makassar';
-                    
-    //                 try {
-    //                     $batas = Carbon::parse($order->countDown->batas_konfirmasi, $clientZone);
-    //                     $now = Carbon::now($clientZone);
-    //                     $diffMs = ($batas->timestamp * 1000) - ($now->timestamp * 1000);
-                        
-    //                     $order->countdown_ms = max($diffMs, 0);
-                        
-    //                     $order->countdown_active = 
-    //                         $order->countDown->status === 'tidak_dikonfirmasi' 
-    //                         && $order->status !== 'ditolak'
-    //                         && $order->countdown_ms > 0;
-                        
-    //                     $order->countdown_confirmed = 
-    //                         $order->countDown->status === 'terkonfirmasi';
-                        
-    //                 } catch (\Exception $e) {
-    //                     Log::error("Error calculating countdown for order #{$order->id_order}: " . $e->getMessage());
-    //                 }
-    //             }
-                
-    //             $order->distance_km = $this->calculateDistance($order);
-    //         }
-            
-    //         $this->ordersCache = $orders;
-    //     } else {
-    //         $orders = $this->ordersCache;
-    //     }
-
-    //     return view('livewire.bengkel.bengkel-dashboard', [
-    //         'bengkel' => $bengkel,
-    //         'orders' => $orders,
-    //         'layanan' => $this->layanan,
-    //     ]);
-    // }
-
     public function render()
     {
         $bengkel = BengkelModel::find($this->id_bengkel);
