@@ -10,8 +10,8 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('title', null, []); ?> Masuk - SIBANTAR <?php $__env->endSlot(); ?>
 
-    <section class="min-h-screen flex items-center justify-center py-8 sm:py-12 px-4 bg-neutral-50">
-        <div class="w-full max-w-md">
+    <section class="pt-6 pb-6 px-4 bg-neutral-50 mt-4">
+        <div class="w-full max-w-md mx-auto">
             
             <!-- Logo & Title -->
             <div class="text-center mb-6 sm:mb-8">
@@ -180,7 +180,7 @@ unset($__errorArgs, $__bag); ?>
                     Daftar sekarang
                 </a>
             </p>
-            <p class="text-center mt-5 sm:mt-6 text-sm text-neutral-600 ">
+            <p class="text-center mt-2 sm:mt-2 text-sm text-neutral-600 ">
                 Ingin Menjadi Mitra?
                 <a href="<?php echo e(route('registerBengkel')); ?>" class="text-primary-700 hover:text-primary-800 font-semibold hover:underline">
                     Daftar menjadi Mitra SIBANTAR

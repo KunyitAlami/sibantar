@@ -9,8 +9,7 @@
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Notyf CSS (toast notifications) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <!-- Notyf removed: toasts disabled per request -->
 
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -37,25 +36,7 @@
     
     <!-- Scripts -->
     @stack('scripts')
-    <!-- Notyf JS -->
-    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-
-    <script>
-        // initialize Notyf
-        const notyf = new Notyf({
-            duration: 4000,
-            position: { x: 'right', y: 'top' }
-        });
-
-        // Show Laravel session flash messages via Notyf
-        @if(session('success'))
-            notyf.success(@json(session('success')));
-        @endif
-
-        @if(session('error'))
-            notyf.error(@json(session('error')));
-        @endif
-    </script>
+    <!-- Notyf removed: toasts disabled per request -->
 
     @livewireScripts
 </body>

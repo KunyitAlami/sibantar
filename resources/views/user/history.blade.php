@@ -40,6 +40,9 @@
                             'ditolak' => 'Ditolak',
                             'dibatalkan' => 'Dibatalkan',
                         ];
+                        // consider order finished when payment or completed
+                        $finishedStatuses = ['dibayar', 'selesai'];
+                        $isFinished = in_array($order->status, $finishedStatuses);
                     @endphp
                 <!-- Booking Card -->
                 <div class="booking-card card p-6 hover:shadow-lg transition-shadow rounded-lg bg-white max-w-[560px] w-full" data-status="in-progress">
@@ -80,16 +83,26 @@
                             <div class="pt-2 border-t border-neutral-100">
                             <div class="flex items-center justify-between gap-4">
                                 <span class="font-bold text-lg md:text-xl text-primary-700">
-                                    Rp {{ number_format(optional($order->tracking)->finalPrice ?? 0, 0, ',', '.') }}
-                                </span>
+                                        @if($isFinished)
+                                            Rp {{ number_format(optional($order->tracking)->finalPrice ?? 0, 0, ',', '.') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
                             </div>
                             <div class="mt-1 flex gap-2">
                                 <a href="{{ route('user.report.order', ['id_order' => $order->id_order]) }}" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
                                     Lapor
                                 </a>
-                                <a href="{{ route('user.invoice', $order->id_order) }}" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
-                                    Invoice
-                                </a>
+                                @if($isFinished)
+                                    <a href="{{ route('user.invoice', $order->id_order) }}" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
+                                        Invoice
+                                    </a>
+                                @else
+                                    <span class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 rounded-full px-4 py-2 border-[1.5px] opacity-50 pointer-events-none cursor-not-allowed" aria-disabled="true">
+                                        Invoice
+                                    </span>
+                                @endif
                                 <a href="{{ route('user.order-tracking', ['id' => $order->id_order]) }}" class="btn btn-sm md:btn-sm btn-outline flex-1 border-primary-700 text-primary-700 hover:border-primary-700 hover:text-primary-700 rounded-full px-4 py-2 border-[1.5px]">
                                     Detail
                                 </a>
