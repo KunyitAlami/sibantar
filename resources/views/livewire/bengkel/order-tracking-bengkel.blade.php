@@ -34,7 +34,7 @@
                 <p class="text-neutral-900 font-semibold">{{ $tracking->order->layananBengkel->kategori ?? '-' }}</p>
                 <p class="text-sm text-neutral-600 mb-1 mt-2">Catatan Dari Pelanggan:</p>
                 <p class="text-neutral-900 font-semibold">{{ $tracking->order->notes ?? '-' }}</p>
-                <p class="text-sm text-neutral-600 mb-1 mt-2">Link Lokasi (Temukan Lokasi):</p>
+                <p class="text-sm text-neutral-600 mb-1 mt-2">Link Lokasi:</p>
                 {{-- <p class="text-neutral-900 font-semibold"></p> --}}
                 @php
                     $lat = $tracking->order->user_latitude ?? null;
