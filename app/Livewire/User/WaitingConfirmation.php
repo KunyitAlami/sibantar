@@ -58,10 +58,21 @@ class WaitingConfirmation extends Component
     // Method baru: dipanggil dari frontend saat countdown habis
     public function handleCountdownExpired()
     {
+        // Pastikan kita bekerja dengan state terbaru
         $this->loadOrder();
-        
-        // Refresh halaman atau redirect ke dashboard setelah beberapa saat
-        $this->dispatch('countdown-expired');
+
+        // Jika order masih pending, set status jadi 'ditolak' dan simpan
+        if ($this->order && $this->order->status === 'pending') {
+            $this->order->status = 'ditolak';
+            $this->order->save();
+        }
+
+        // Reload properti setelah perubahan
+        $this->loadOrder();
+
+        // Redirect user ke halaman order tracking sehingga akan langsung
+        // menampilkan halaman "Pesanan Ditolak" seperti desain.
+        return $this->redirectRoute('user.order-tracking', ['id' => $this->orderId]);
     }
 
     protected function calculateCountdown()
