@@ -15,6 +15,7 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="{{ route('admin.dashboard.index') }}" class="font-medium {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}">Dashboard</a></li>
                 <li><a href="{{ route('admin.users.index') }}" class="font-medium {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Kelola User</a></li>
+                <li><a href="{{ route('admin.users.manage') }}" class="font-medium {{ request()->routeIs('admin.users.manage') ? 'active' : '' }}">Blokir Pengguna</a></li>
                 <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium {{ request()->routeIs('admin.bengkel.*') ? 'active' : '' }}">Kelola Bengkel</a></li>
                 <li><a href="{{ route('admin.laporan.index') }}" class="font-medium {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">Laporan</a></li>
                 <li>
@@ -41,6 +42,7 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li><a href="{{ route('admin.dashboard.index') }}" class="font-medium">Dashboard</a></li>
                     <li><a href="{{ route('admin.users.index') }}" class="font-medium">Kelola User</a></li>
+                    <li><a href="{{ route('admin.users.manage') }}" class="font-medium">Blokir Pengguna</a></li>
                     <li><a href="{{ route('admin.bengkel.index') }}" class="font-medium">Kelola Bengkel</a></li>
                     <li><a href="{{ route('admin.laporan.index') }}" class="font-medium">Laporan</a></li>
                     <li>

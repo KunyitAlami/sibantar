@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Livewire\Admin\UserManagement;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Bengkel\BengkelController;
 use App\Http\Controllers\Controller;
@@ -69,6 +70,11 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/users', [AdminController::class, 'users'])
                 ->name('users.index');
+
+            // Livewire-based user management (score/block)
+            // Use a blade view that mounts the Livewire component to avoid component alias resolution issues
+            Route::get('/users/manage', fn() => view('admin.users.manage'))
+                ->name('users.manage');
             Route::post('/users/{id_user}/delete', [AdminController::class, 'deleteUser'])
                 ->name('users.delete');
 
