@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\StatusRealTimeBengkelModel;
+use Illuminate\Validation\Rule;
+
 
 
 class BengkelController extends Controller
@@ -208,11 +210,21 @@ class BengkelController extends Controller
     public function storeLayananBengkel(Request $request, $id_bengkel)
     {
         $validated = $request->validate([
-            'nama_layanan' => 'required|string|max:255',
+            'nama_layanan' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('layanan_bengkel', 'nama_layanan')
+                    ->where('id_bengkel', $id_bengkel)
+                    ->where('kategori', $request->kategori)
+            ],
             'harga_awal'   => 'required|numeric|min:0',
-            'harga_akhir'  => 'required|numeric|min:0',
+            'harga_akhir'  => 'required|numeric|min:0|gte:harga_awal',
             'deskripsi'    => 'required|string',
             'kategori'     => 'required|string',
+        ], [
+            'harga_akhir.gte' => 'Harga tertinggi tidak boleh lebih rendah daripada harga terendah.',
+            'nama_layanan.unique' => 'Layanan dengan nama dan kategori yang sama sudah terdaftar.'
         ]);
 
         LayananBengkelModel::create([
@@ -231,16 +243,21 @@ class BengkelController extends Controller
 
     public function updateLayananBengkel(Request $request, $id_layanan_bengkel)
     {
+        $layanan = LayananBengkelModel::findOrFail($id_layanan_bengkel);
+
         $validated = $request->validate([
-            'nama_layanan' => 'required|string|max:255',
+            'nama_layanan' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[A-Za-z\s\(\)\-]+$/'
+            ],
             'harga_awal' => 'required|numeric',
-            'harga_akhir' => 'required|numeric',
+            'harga_akhir' => 'required|numeric|min:0|gte:harga_awal',
             'deskripsi' => 'required|string',
             'kategori' => 'required|string',
             'id_bengkel' => 'required|numeric'
         ]);
-
-        $layanan = LayananBengkelModel::findOrFail($id_layanan_bengkel);
 
         $layanan->update([
             'nama_layanan' => $validated['nama_layanan'],
@@ -250,17 +267,23 @@ class BengkelController extends Controller
             'kategori'     => $validated['kategori'],
         ]);
 
-        // Redirect
-        return redirect()->route('bengkel.dashboard', $validated['id_bengkel'])->with('success', 'Layanan berhasil diperbarui!');
+        return redirect()
+            ->route('bengkel.dashboard', $validated['id_bengkel'])
+            ->with('success', 'Layanan berhasil diperbarui!');
     }
+
 
     public function editLayanan($id_layanan_bengkel)
     {
         $layanan = LayananBengkelModel::findOrFail($id_layanan_bengkel);
+        $allNames = LayananBengkelModel::where('id_bengkel', $layanan->id_bengkel)
+            ->pluck('nama_layanan')
+            ->toArray();
 
         return view('bengkel.form.editLayanan', [
             'layanan_bengkel' => $layanan,
-            'id_layanan_bengkel' => $id_layanan_bengkel
+            'id_layanan_bengkel' => $id_layanan_bengkel,
+            'existingNames' => $allNames
         ]);
     }
 

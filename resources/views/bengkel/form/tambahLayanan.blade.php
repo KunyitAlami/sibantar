@@ -23,6 +23,15 @@
             <form id="tambahLayananForm" action="{{ route('bengkel.layanan.store', $id_bengkel) }}" method="POST" class="mt-10 mb-10 gap-5 p-6">
                 @csrf
                 <div class="space-y-5">
+                    @if ($errors->any())
+                        <div class="mb-4 text-danger-600">
+                            <ul class="list-disc pl-5">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     {{-- NAMA LAYANAN --}}
                     <div>

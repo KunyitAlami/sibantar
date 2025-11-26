@@ -25,13 +25,16 @@
                 <div class="space-y-5">
                     <div class="flex-1">
                         <label class="block font-medium text-neutral-800 mb-1">ID Layanan Bengkel</label>
-                        <input type="number" name="harga_awal" required value="{{ $layanan_bengkel->id_layanan_bengkel }}" disabled
-                            class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
+                        <input type="number" value="{{ $layanan_bengkel->id_layanan_bengkel }}" disabled
+                                class="w-full border border-neutral-300 rounded-lg px-3 py-2">
+
+
                     </div>
                     {{-- NAMA LAYANAN --}}
                     <div>
                         <label class="block font-medium text-neutral-800 mb-1">Nama Layanan</label>
                         <input 
+                            value="{{ old('nama_layanan', $layanan_bengkel->nama_layanan) }}"
                             type="text" 
                             name="nama_layanan"
                             id="nama_layanan"
@@ -144,7 +147,60 @@
                             }
                         });
                     })();
+
+                    (function(){
+                        const form = document.getElementById('editLayananForm');
+                        if(!form) return;
+
+                        const existingNames = @json($existingNames);
+                        const oldName = "{{ $layanan_bengkel->nama_layanan }}";
+
+                        form.addEventListener('submit', function(e){
+                            const nameInput = document.getElementById('nama_layanan');
+                            const newName = nameInput.value.trim();
+
+                            // Cek nama layanan duplikat
+                            if(newName !== oldName && existingNames.includes(newName)){
+                                e.preventDefault();
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Nama Layanan Duplikat',
+                                    text: 'Nama layanan ini sudah ada di bengkel Anda. Gunakan nama lain.',
+                                    confirmButtonColor: '#0051BA'
+                                }).then(() => nameInput.focus());
+                                return false;
+                            }
+                        });
+                    })();
                 </script>
+
+                <script>
+                (function(){
+                    const form = document.getElementById('editLayananForm');
+                    if(!form) return;
+
+                    const existingNames = @json($existingNames);
+                    const oldName = "{{ $layanan_bengkel->nama_layanan }}";
+
+                    form.addEventListener('submit', function(e){
+                        const nameInput = document.getElementById('nama_layanan');
+                        const newName = nameInput.value.trim();
+
+                        // Cek nama layanan duplikat
+                        if(newName !== oldName && existingNames.includes(newName)){
+                            e.preventDefault();
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Nama Layanan Duplikat',
+                                text: 'Nama layanan ini sudah ada di bengkel Anda. Gunakan nama lain.',
+                                confirmButtonColor: '#0051BA'
+                            }).then(() => nameInput.focus());
+                            return false;
+                        }
+                    });
+                })();
+                </script>
+
 
                 {{-- HIDDEN INPUT --}}
                 <input type="hidden" name="id_bengkel" value="{{ $layanan_bengkel->id_bengkel }}">

@@ -25,6 +25,9 @@
                         </div>
                     @endif
 
+                    {{-- <input type="text" name="faketext" style="display:none" value=" " tabindex="-1">
+                        <input type="password" name="fakepassword" style="display:none" value=" " tabindex="-1"> --}}
+
 
                     {{-- bagian pertama itu buat table user --}}
                     {{-- bagian kedua itu buat table calon_bengkel yang nanti kalo udah diacc bakal dikirim ke table bengkel --}}
@@ -40,7 +43,7 @@
                             <div>
                                 <label for="username" class="block text-sm font-medium text-neutral-700 mb-2">Username</label>
                                 <input type="text" id="username" name="username" class="input @error('username') border-danger-500 @enderror" placeholder="Masukkan username" value="{{ old('username') }}" required autofocus>
-                                @error('username')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                                @error('username')<p class="mt-1 text-sm text-danger-600" autocomplete="off">{{ $message }}</p>@enderror
                             </div>
                             <!-- Email -->
                             <div>
@@ -68,7 +71,7 @@
                             <div>
                                 <label for="password" class="block text-sm font-medium text-neutral-700 mb-2">Password</label>
                                 <div class="relative">
-                                    <input type="password" id="password" name="password" class="input @error('password') border-danger-500 @enderror" placeholder="Masukkan password" required>
+                                    <input autocomplete="off" type="password" id="password" name="password" class="input @error('password') border-danger-500 @enderror" placeholder="Masukkan password" required>
                                     <button type="button" onclick="togglePassword('password', 'eye-password-open', 'eye-password-closed')" class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600">
                                         <svg id="eye-password-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -179,7 +182,7 @@
                             <div class="flex-1"> 
                                 <div>
                                     <label for="jam_buka" class="block text-sm font-medium text-neutral-700 mb-2">Jam Buka Bengkel (WITA)</label>
-                                    <input type="number" id="jam_buka" name="jam_buka" class="input @error('jam_buka') border-danger-500 @enderror" placeholder="08.00" value="{{ old('jam_buka') }}" required autofocus min="0" max="23.99" step="0.01">
+                                    <input type="time" step="60" id="jam_buka" name="jam_buka" class="input @error('jam_buka') border-danger-500 @enderror" placeholder="08.00" value="{{ old('jam_buka') }}" required autofocus min="0" max="23.99" step="0.01">
                                     @error('jam_buka')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                                 </div>
                             </div>
@@ -187,7 +190,7 @@
                             <div class="flex-1"> 
                                 <div>
                                     <label for="jam_tutup" class="block text-sm font-medium text-neutral-700 mb-2">Jam Tutup Bengkel (WITA)</label>
-                                    <input type="number" id="jam_tutup" name="jam_tutup" class="input @error('jam_tutup') border-danger-500 @enderror" placeholder="23.59" value="{{ old('jam_tutup') }}" required autofocus min="0" max="23.99" step="0.01">
+                                    <input type="time" step="60" id="jam_tutup" name="jam_tutup" class="input @error('jam_tutup') border-danger-500 @enderror" placeholder="23.59" value="{{ old('jam_tutup') }}" required autofocus min="0" max="23.99" step="0.01">
                                     @error('jam_tutup')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                                 </div>
                             </div>

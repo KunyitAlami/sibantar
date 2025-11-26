@@ -204,4 +204,3 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/confirm-transaction', [PaymentController::class, 'confirmTransaction'])->name('confirm-transaction');
         });
 });
-
