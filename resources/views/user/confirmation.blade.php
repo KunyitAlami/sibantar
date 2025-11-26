@@ -7,7 +7,6 @@
                     <!-- Page Title -->
                     <div class="mb-6 text-center">
                         <h1 class="text-2xl font-bold text-neutral-900">Konfirmasi Pesanan</h1>
-                        <p class="text-sm text-neutral-600 mt-1">Lengkapi data pemesanan Anda</p>
                     </div>
 
                     <!-- Bengkel Info -->
@@ -51,7 +50,7 @@
                                 <!-- Address Display -->
                                 <div class="mt-2 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
                                     <p class="text-xs font-medium text-neutral-700">Alamat</p>
-                                    <p class="text-xs text-neutral-600" id="userAddress">Mendeteksi lokasi Anda...</p>
+                                    <p class="text-xs text-neutral-600" id="userAddress">Mendeteksi lokasi...</p>
                                 </div>
                                 <input type="hidden" id="userLatitude" name="user_latitude">
                                 <input type="hidden" id="userLongitude" name="user_longitude">
@@ -65,7 +64,7 @@
                                 id="orderNotes" 
                                 name="notes"
                                 placeholder="Tambahkan catatan untuk bengkel..." 
-                                class="textarea textarea-bordered w-full text-sm p-2" 
+                                class="textarea textarea-bordered w-full text-sm p-2" maxlength="500"
                                 rows="3"></textarea>
                         </div>
 
@@ -91,10 +90,10 @@
                                 </div>
                             </div>
                             <div class="flex gap-3 mt-6">
-                                <a href="{{ url()->previous() }}" class="flex-1 btn btn-outline text-center">
+                                <a href="{{ url()->previous() }}" class="flex-1 btn btn-outline text-center rounded-full">
                                     Batal
                                 </a>
-                                <button type="button" onclick="confirmOrder()" class="flex-1 btn btn-primary">
+                                <button type="button" onclick="confirmOrder()" class="flex-1 btn btn-primary rounded-full">
                                     Konfirmasi
                                 </button>
                             </div>
@@ -130,6 +129,11 @@
         let userMarker = null;
         let bengkelMarker = null;
         let routeLine = null;
+        // References for temporary layers/animations so we can remove them
+        let animatedLine = null;
+        let animatedInterval = null;
+        let startMarker = null;
+        let endMarker = null;
 
         window.addEventListener('DOMContentLoaded', function() {
             initMap();
@@ -339,9 +343,26 @@
 
         function drawRouteLine(userLat, userLon) {
             if (!bengkelLat || !bengkelLng) return;
-            
+            // Remove previous route and temporary layers/animations to avoid leaving traces
             if (routeLine) {
                 map.removeLayer(routeLine);
+                routeLine = null;
+            }
+            if (animatedLine) {
+                map.removeLayer(animatedLine);
+                animatedLine = null;
+            }
+            if (animatedInterval) {
+                clearInterval(animatedInterval);
+                animatedInterval = null;
+            }
+            if (startMarker) {
+                map.removeLayer(startMarker);
+                startMarker = null;
+            }
+            if (endMarker) {
+                map.removeLayer(endMarker);
+                endMarker = null;
             }
             
             const url = `https://router.project-osrm.org/route/v1/driving/${userLon},${userLat};${bengkelLng},${bengkelLat}?overview=full&geometries=geojson`;
@@ -363,7 +384,7 @@
                         }).addTo(map);
                         
                         // Add animated overlay
-                        const animatedLine = L.polyline(leafletCoordinates, {
+                        animatedLine = L.polyline(leafletCoordinates, {
                             color: '#FFFFFF',
                             weight: 3,
                             opacity: 0.6,
@@ -372,17 +393,17 @@
                             lineJoin: 'round',
                             lineCap: 'round'
                         }).addTo(map);
-                        
-                        // Animate the dashed line
+
+                        // Animate the dashed line (store interval reference so we can clear it)
                         let offset = 0;
-                        setInterval(() => {
+                        animatedInterval = setInterval(() => {
                             offset += 1;
                             if (offset > 30) offset = 0;
-                            animatedLine.setStyle({ dashOffset: -offset });
+                            if (animatedLine) animatedLine.setStyle({ dashOffset: -offset });
                         }, 50);
-                        
-                        // Add start and end markers
-                        L.circleMarker([userLat, userLon], {
+
+                        // Add start and end markers (keep references so we can remove them later)
+                        startMarker = L.circleMarker([userLat, userLon], {
                             radius: 6,
                             color: '#FFFFFF',
                             fillColor: '#0051BA',
@@ -391,7 +412,7 @@
                         }).addTo(map).bindTooltip('Start', { permanent: false });
                         
                         const endPoint = leafletCoordinates[leafletCoordinates.length - 1];
-                        L.circleMarker(endPoint, {
+                        endMarker = L.circleMarker(endPoint, {
                             radius: 6,
                             color: '#FFFFFF',
                             fillColor: '#FF9800',
@@ -410,6 +431,28 @@
         }
 
         function drawStraightLine(userLat, userLon) {
+            // Remove previous route and temporary layers/animations
+            if (routeLine) {
+                map.removeLayer(routeLine);
+                routeLine = null;
+            }
+            if (animatedLine) {
+                map.removeLayer(animatedLine);
+                animatedLine = null;
+            }
+            if (animatedInterval) {
+                clearInterval(animatedInterval);
+                animatedInterval = null;
+            }
+            if (startMarker) {
+                map.removeLayer(startMarker);
+                startMarker = null;
+            }
+            if (endMarker) {
+                map.removeLayer(endMarker);
+                endMarker = null;
+            }
+
             routeLine = L.polyline([
                 [userLat, userLon],
                 [bengkelLat, bengkelLng]
@@ -419,6 +462,23 @@
                 opacity: 0.6,
                 dashArray: '10, 10'
             }).addTo(map);
+
+            // add start/end markers for straight line and keep references
+            startMarker = L.circleMarker([userLat, userLon], {
+                radius: 6,
+                color: '#FFFFFF',
+                fillColor: '#0051BA',
+                fillOpacity: 1,
+                weight: 2
+            }).addTo(map).bindTooltip('Start', { permanent: false });
+
+            endMarker = L.circleMarker([bengkelLat, bengkelLng], {
+                radius: 6,
+                color: '#FFFFFF',
+                fillColor: '#FF9800',
+                fillOpacity: 1,
+                weight: 2
+            }).addTo(map).bindTooltip('Bengkel', { permanent: false });
         }
 
         function deg2rad(deg) {
@@ -468,15 +528,26 @@
             // Format total untuk ditampilkan
             const totalText = formatRupiah(parseInt(totalBayar));
 
+            // read vehicle type (from initial input) to show in confirmation
+            let vehicleTypeDisplay = '';
+            try {
+                vehicleTypeDisplay = localStorage.getItem('sibantar.vehicle_type') || '';
+            } catch (e) {
+                vehicleTypeDisplay = '';
+            }
+
             Swal.fire({
                 title: 'Konfirmasi Pesanan',
                 html: `
                     <div class="text-left">
-                        <p class="text-sm text-gray-600 mb-3">Pastikan data pesanan Anda sudah benar:</p>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Nama Bengkel:</span>
                                 <span class="font-medium">{{ $bengkel->nama_bengkel }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Jenis Kendaraan:</span>
+                                <span class="font-medium">${vehicleTypeDisplay || '-'} </span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Layanan:</span>
@@ -491,7 +562,7 @@
                 `,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Pesan Sekarang',
+                confirmButtonText: 'Pesan Sekarang',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#0051BA',
                 cancelButtonColor: '#737373',
@@ -511,7 +582,15 @@
                         didOpen: () => Swal.showLoading()
                     });
 
-                    axios.post("{{ route('user.order_store') }}", {
+                        // include vehicle type from localStorage if available
+                        let vehicleType = '';
+                        try {
+                            vehicleType = localStorage.getItem('sibantar.vehicle_type') || '';
+                        } catch (e) {
+                            vehicleType = '';
+                        }
+
+                        axios.post("{{ route('user.order_store') }}", {
                         id_bengkel: idBengkel,
                         id_layanan_bengkel: idLayanan,
                         user_latitude: userLat,
@@ -519,7 +598,8 @@
                         bengkel_latitude: bengkelLat,
                         bengkel_longitude: bengkelLng,
                         estimasi_harga: estimasiHarga,
-                        total_bayar: totalBayar,
+                            total_bayar: totalBayar,
+                            vehicle_type: vehicleType,
                         notes: notes,
                         client_timezone :client_timezone
                     })
