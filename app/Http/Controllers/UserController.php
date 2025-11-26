@@ -6,6 +6,7 @@ use App\Models\BengkelModel;
 use App\Models\LayananBengkelModel;
 use App\Models\OrderModel;
 use App\Models\ReportFromUserModel;
+use App\Models\UserModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,7 @@ class UserController extends Controller
                 ->get();
 
         Log::info('Total bengkel yang buka: ' . $bengkel->count());
-        
+
         if ($bengkel->count() === 0) {
             $bengkel = BengkelModel::with('layananBengkel')
                 ->join('status_real_time_bengkel', 'bengkel.id_bengkel', '=', 'status_real_time_bengkel.id_bengkel')
@@ -56,6 +57,7 @@ class UserController extends Controller
             Log::info('Total bengkel yang buka (dengan semua layanan): ' . $bengkel->count());
         }
 
+        // Proses map untuk hitung jarak, layanan, dan review
         $bengkel = $bengkel->map(function($item) use ($userLat, $userLng, $vehicleType, $namaLayanan) {
             $coordinates = $this->parseGoogleMapsLink($item->link_gmaps);
             
@@ -74,10 +76,7 @@ class UserController extends Controller
                 $item->estimated_time = $timeMinutes < 60 
                     ? $timeMinutes . ' menit'
                     : floor($timeMinutes / 60) . ' jam ' . ($timeMinutes % 60) . ' menit';
-                
-                Log::info("Bengkel {$item->nama_bengkel}: lat={$bengkelLat}, lng={$bengkelLng}, distance={$distance}km");
             } else {
-                Log::warning("Cannot parse coordinates for bengkel: {$item->nama_bengkel}, link: {$item->link_gmaps}");
                 $item->latitude = null;
                 $item->longitude = null;
                 $item->distance_km = 999;
@@ -85,11 +84,10 @@ class UserController extends Controller
                 $item->estimated_time = 'N/A';
             }
 
+            // Layanan relevan
             $relevantLayanan = $item->layananBengkel
                 ->where('kategori', $vehicleType)
-                ->filter(function($layanan) use ($namaLayanan) {
-                    return stripos($layanan->nama_layanan, $namaLayanan) !== false;
-                })
+                ->filter(fn($layanan) => stripos($layanan->nama_layanan, $namaLayanan) !== false)
                 ->first();
 
             if (!$relevantLayanan) {
@@ -107,17 +105,29 @@ class UserController extends Controller
                 ? 'Rp ' . number_format($relevantLayanan->harga_awal, 0, ',', '.') . ' - Rp ' . number_format($relevantLayanan->harga_akhir, 0, ',', '.')
                 : 'Hubungi Bengkel';
 
-            $item->average_rating = 4.5 + (rand(0, 10) / 10);
-            $item->total_reviews = rand(50, 200);
+            // Ambil review untuk layanan & bengkel ini
+            if ($relevantLayanan) {
+                $orders = OrderModel::where('id_bengkel', $item->id_bengkel)
+                    ->where('id_layanan_bengkel', $relevantLayanan->id_layanan_bengkel)
+                    ->pluck('id_order');
+
+                $reviews = ReviewsModel::whereIn('id_order', $orders)->get();
+                $item->average_rating = $reviews->avg('ratingBengkel') ?: 0;
+                $item->total_reviews  = $reviews->count();
+                $item->reviews_list   = $reviews; // kirim ke view
+            } else {
+                $item->average_rating = 0;
+                $item->total_reviews  = 0;
+                $item->reviews_list   = collect();
+            }
 
             return $item;
         });
 
-        $bengkel = $bengkel->filter(function($item) {
-            return $item->latitude !== null && $item->longitude !== null;
-        });
-
-        $bengkel = $bengkel->sortBy('distance_km')->values();
+        // Filter hanya bengkel valid
+        $bengkel = $bengkel->filter(fn($item) => $item->latitude !== null && $item->longitude !== null)
+                        ->sortBy('distance_km')
+                        ->values();
 
         Log::info('Bengkel with valid coordinates: ' . $bengkel->count());
 
@@ -145,6 +155,7 @@ class UserController extends Controller
             'bengkelDataJs' => $bengkelDataForJs,
         ]);
     }
+
 
     private function parseGoogleMapsLink($url)
     {
@@ -190,15 +201,28 @@ class UserController extends Controller
     public function detail_bengkel($id_bengkel, $id_layanan, Request $request)
     {
         $bengkel = BengkelModel::with('layananBengkel')->findOrFail($id_bengkel);
-        $layanan_bengkel = LayananBengkelModel::where('id_layanan_bengkel', $id_layanan)->firstOrFail();
+        $layanan_bengkel = LayananBengkelModel::findOrFail($id_layanan);
         $backUrl = $request->get('back');
+
+        $orders = OrderModel::where('id_bengkel', $id_bengkel)
+                            ->where('id_layanan_bengkel', $id_layanan)
+                            ->pluck('id_order');
+
+        $reviews = ReviewsModel::whereIn('id_order', $orders)->get();
+
+        $average_rating = $reviews->avg('ratingBengkel') ?: 0;
+        $total_reviews  = $reviews->count();
 
         return view('user.detail', [
             'bengkel' => $bengkel,
             'layanan_bengkel' => $layanan_bengkel,
-            'backUrl' => $backUrl
+            'backUrl' => $backUrl,
+            'reviews' => $reviews,
+            'average_rating' => $average_rating,
+            'total_reviews' => $total_reviews,
         ]);
     }
+
 
    public function pesan(Request $request)
     {
@@ -448,4 +472,38 @@ class UserController extends Controller
 
         return $pdf->download('invoice-order-'.$order->id_order.'.pdf');
     }
+
+    public function personalisasi($id_user){
+        $user = UserModel::where('id_user', $id_user)->firstOrFail();
+
+        return view('user.personalisasi',[
+            'user'=>$user,
+            'id_user'=>$id_user,
+        ]);
+    }
+
+    public function personalisasiStore(Request $request)
+    {
+        $user = UserModel::findOrFail($request->id_user); 
+
+        $emailRule = 'required|email';
+        if ($user->username !== 'dosentester_user') {
+            $emailRule .= '|unique:user,email,'.$user->id_user.',id_user';
+        }
+
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'wa_number' => 'required|string|max:20',
+        ]);
+
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->wa_number = $request->wa_number;
+
+        $user->save();
+
+        return redirect()->route('user.edit-personalisasi', ['id_user' => $user->id_user])
+                        ->with('success', 'Berhasil mengupdate profil!');
+    }
+
 }

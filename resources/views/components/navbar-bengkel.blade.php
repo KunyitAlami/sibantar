@@ -26,6 +26,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('bengkel.personalisasi', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}">
+                        Edit Personalisasi
+                    </a>
+                </li>
+                <li>
                     <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -50,6 +55,11 @@
                     <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}">Dashboard</a></li>
                     <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}?panel=about">Profile Bengkel</a></li>
                     <li>
+                        <a href="{{ route('bengkel.personalisasi', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])}}">
+                            Edit Personalisasi
+                        </a>
+                    </li>
+                    <li>
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
@@ -70,6 +80,11 @@
                         <span>{{ Auth::user()->name }} (Bengkel)</span>
                     </li>
                     <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}">Dashboard</a></li>
+                    <li>
+                        <a href="{{ route('bengkel.personalisasi', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}">
+                            Edit Personalisasi
+                        </a>
+                    </li>
                     <li>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf

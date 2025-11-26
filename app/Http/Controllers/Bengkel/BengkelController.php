@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\BengkelModel;
 use App\Models\LayananBengkelModel;
 use App\Models\ReportFromBengkelModel;
+use App\Models\UserModel;
 use App\Models\OrderModel;
 use Illuminate\Routing\Controller;
 use Carbon\Carbon;
@@ -314,10 +315,88 @@ class BengkelController extends Controller
             ->with('success', 'Laporan berhasil dikirim!');
     }
 
+    public function personalisasi($id_bengkel)
+    {
+        $bengkel = BengkelModel::with('user')->findOrFail($id_bengkel);
 
+        return view('bengkel.form.personalisasi', [
+            'bengkel' => $bengkel
+        ]);
+    }
 
+    public function updatePersonalisasi(Request $request, $id_bengkel)
+    {
+        $bengkel = BengkelModel::with('user')->findOrFail($id_bengkel);
 
+        $daftarKecamatan = [
+            'Banjarmasin Utara', 'Banjarmasin Tengah',
+            'Banjarmasin Timur', 'Banjarmasin Barat',
+            'Banjarmasin Selatan'
+        ];
 
+        $request->validate([
+            'nama_bengkel' => 'required|string|min:3|max:255',
+            'kecamatan' => ['required', 'string', Rule::in($daftarKecamatan)],
+            'alamat_lengkap' => 'required|string|min:10|max:500',
+            'jam_buka' => 'required|date_format:H:i',
+            'jam_tutup' => [
+                'required',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) use ($request) {
+                    $jamBuka = Carbon::createFromFormat('H:i', $request->jam_buka);
+                    $jamTutup = Carbon::createFromFormat('H:i', $value);
+
+                    if ($jamTutup->lessThanOrEqualTo($jamBuka)) {
+                        $fail('Jam tutup harus lebih besar dari jam buka.');
+                    }
+                }
+            ],
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'wa_number' => [
+                'required',
+                'regex:/^(08\d{8,13}|628\d{7,12})$/',
+                function ($attribute, $value, $fail) use ($bengkel) {
+                    $exists = UserModel::where('wa_number', preg_replace('/\s+/', '', $value))
+                        ->where('id_user', '<>', $bengkel->id_user)
+                        ->exists();
+                    if ($exists) {
+                        $fail('Nomor WhatsApp sudah digunakan oleh user lain.');
+                    }
+                }
+            ],
+            'link_gmaps' => [
+                'required',
+                'url',
+                'max:500',
+                'regex:/^(https?:\/\/)?(www\.)?(google\.[a-z.]+\/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl)\/.+$/'
+            ]
+        ]);
+
+        // Update data bengkel
+        $bengkel->nama_bengkel = strip_tags($request->nama_bengkel);
+        $bengkel->kecamatan = $request->kecamatan;
+        $bengkel->alamat_lengkap = strip_tags($request->alamat_lengkap);
+        $bengkel->jam_buka = $request->jam_buka;
+        $bengkel->jam_tutup = $request->jam_tutup;
+        $bengkel->latitude = $request->latitude;
+        $bengkel->longitude = $request->longitude;
+        $bengkel->link_gmaps = rtrim($request->link_gmaps, '/');
+        $bengkel->jam_operasional = $request->jam_buka . ' - ' . $request->jam_tutup;
+        
+        $bengkel->save();
+
+        // Update wa_number di tabel users
+        $user = $bengkel->user;
+        
+        if ($user) {
+            $user->wa_number = preg_replace('/\s+/', '', $request->wa_number);
+            $user->save();
+        }
+
+        return redirect()->route('bengkel.personalisasi', ['id_bengkel' => $id_bengkel])
+            ->with('success', 'Data bengkel berhasil diupdate!');
+    }
 
 
 }

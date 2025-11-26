@@ -22,6 +22,12 @@
                 </li>
                 <li><a href="{{ route('about_us') }}" class="font-medium {{ request()->routeIs('about_us') ? 'active' : '' }}">Tentang Kami</a></li>
                 <li>
+                    <a href="{{ route('user.edit-personalisasi', ['id_user' => auth()->user()->id_user]) }}" 
+                    class="font-medium {{ request()->routeIs('user.edit-personalisasi') ? 'active' : '' }}">
+                        Edit Personalisasi
+                    </a>
+                </li>
+                <li>
                     <form id="logout-form-nav" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -52,6 +58,12 @@
                         </a>
                     </li>
                     <li><a href="{{ route('about_us') }}" class="font-medium">Tentang Kami</a></li>
+                    <li>
+                        <a href="{{ route('user.edit-personalisasi', ['id_user' => auth()->user()->id_user]) }}" 
+                        class="font-medium {{ request()->routeIs('user.edit-personalisasi') ? 'active' : '' }}">
+                            Edit Personalisasi
+                        </a>
+                    </li>
                     <div class="divider my-1"></div>
                     <li>
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -97,6 +109,12 @@
                         </svg>
                         Tentang Kami
                     </a></li>
+                    <li>
+                        <a href="{{ route('user.edit-personalisasi', ['id_user' => auth()->user()->id_user]) }}" 
+                        class="font-medium {{ request()->routeIs('user.edit-personalisasi') ? 'active' : '' }}">
+                            Edit Personalisasi
+                        </a>
+                    </li>
                     <div class="divider my-1"></div>
                     <li>
                         <form id="logout-form-desktop" action="{{ route('logout') }}" method="POST" style="display: none;">

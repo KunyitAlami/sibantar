@@ -151,6 +151,13 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/dashboard/status/{id}', [BengkelController::class, 'updateStatus'])->name('updateStatus');
 
+            Route::get('/personalisasi/{id_bengkel}', [BengkelController::class, 'personalisasi'])
+                ->name('personalisasi');
+
+            Route::post('/personalisasi/{id_bengkel}/update', [BengkelController::class, 'updatePersonalisasi'])
+                ->name('personalisasi.update');
+
+
 
         });
 
@@ -202,5 +209,11 @@ Route::middleware(['auth'])->group(function () {
             // Payment routes
             Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('create-transaction');
             Route::post('/confirm-transaction', [PaymentController::class, 'confirmTransaction'])->name('confirm-transaction');
+
+            Route::get('/personalisasi-user/edit/{id_user}', [UserController::class, 'personalisasi'])
+                ->name('edit-personalisasi');
+
+            Route::post('/personalisasi-user/store/{id_user}', [UserController::class, 'personalisasiStore'])
+                ->name('update-personalisasi');
         });
 });
