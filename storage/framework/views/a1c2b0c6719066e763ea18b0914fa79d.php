@@ -34,7 +34,7 @@
                 <p class="text-neutral-900 font-semibold"><?php echo e($tracking->order->layananBengkel->kategori ?? '-'); ?></p>
                 <p class="text-sm text-neutral-600 mb-1 mt-2">Catatan Dari Pelanggan:</p>
                 <p class="text-neutral-900 font-semibold"><?php echo e($tracking->order->notes ?? '-'); ?></p>
-                <p class="text-sm text-neutral-600 mb-1 mt-2">Link Lokasi (Temukan Lokasi):</p>
+                <p class="text-sm text-neutral-600 mb-1 mt-2">Link Lokasi:</p>
                 
                 <?php
                     $lat = $tracking->order->user_latitude ?? null;

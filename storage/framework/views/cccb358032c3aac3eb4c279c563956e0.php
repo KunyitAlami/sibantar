@@ -1,5 +1,5 @@
 <!-- Navbar untuk User - DaisyUI -->
-<div class="bg-base-100 shadow-md sticky top-0 z-[9999]">
+<div id="main-navbar-user" class="bg-base-100 shadow-md sticky top-0 z-[9999]">
     <div class="navbar container mx-auto">
         <!-- Navbar Start - Logo -->
         <div class="navbar-start">

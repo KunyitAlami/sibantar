@@ -51,6 +51,51 @@
                                  orderStatus: orderStatus
                              });
                              
+                             // Helper to toggle navbar disabled state and beforeunload
+                             const navbar = document.getElementById('main-navbar-user');
+                             const beforeUnloadHandler = (e) => {
+                                 e.preventDefault();
+                                 e.returnValue = 'Dilarang meninggalkan halaman sampai countdown berakhir';
+                             };
+
+                             function toggleNavbarAndWarn(){
+                                 if(navbar){
+                                     if(isActive){
+                                         navbar.classList.add('pointer-events-none','opacity-60','select-none');
+                                     } else {
+                                         navbar.classList.remove('pointer-events-none','opacity-60','select-none');
+                                     }
+                                 }
+                                 if(isActive){
+                                     window.addEventListener('beforeunload', beforeUnloadHandler);
+                                 } else {
+                                     window.removeEventListener('beforeunload', beforeUnloadHandler);
+                                 }
+                             }
+
+                             // Initial toggle based on current state
+                             toggleNavbarAndWarn();
+
+                             // Watch isActive to toggle nav & beforeunload
+                             $watch('isActive', (val) => {
+                                 isActive = val;
+                                 toggleNavbarAndWarn();
+                             });
+
+                             // Watch for confirmation/expiry to ensure nav is re-enabled
+                             $watch('isConfirmed', (val) => {
+                                 if(val){
+                                     isActive = false; countdownExpired = false;
+                                     toggleNavbarAndWarn();
+                                 }
+                             });
+                             $watch('countdownExpired', (val) => {
+                                 if(val){
+                                     isActive = false;
+                                     toggleNavbarAndWarn();
+                                 }
+                             });
+
                              if(isActive && !isConfirmed && countdown_ms > 0){
                                  let interval = setInterval(() => {
                                      now += 1000;
@@ -138,6 +183,13 @@
                         <p class="text-center text-xs text-neutral-500 mt-3" x-show="!countdownExpired">
                             Pesanan otomatis dibatalkan jika tidak ada konfirmasi
                         </p>
+
+                        <!-- Warning about leaving page while countdown active -->
+                        <div x-show="isActive && !isConfirmed" x-cloak class="mt-4">
+                            <div class="px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-center">
+                                <p class="text-sm font-semibold text-red-700">Dilarang meninggalkan halaman sampai countdown berakhir</p>
+                            </div>
+                        </div>
                     </div>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 

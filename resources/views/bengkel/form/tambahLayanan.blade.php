@@ -27,22 +27,45 @@
                     {{-- NAMA LAYANAN --}}
                     <div>
                         <label class="block font-medium text-neutral-800 mb-1">Nama Layanan</label>
-                        <input type="text" name="nama_layanan" required
-                            class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
+                        <input 
+                            type="text" 
+                            name="nama_layanan"
+                            id="nama_layanan"
+                            required
+                            maxlength="50"
+                            pattern="^[A-Za-z\s]{1,50}$"
+                            title="Hanya huruf dan spasi, maksimal 50 karakter"
+                            class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
+                            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                        >
                     </div>
 
                     {{-- HARGA --}}
                     <div class="flex flex-col md:flex-row gap-5">
                         <div class="flex-1">
                             <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Terendah</label>
-                            <input type="number" name="harga_awal" required
-                                class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
+                            <input 
+                                type="text" 
+                                name="harga_awal" 
+                                required
+                                inputmode="numeric"
+                                maxlength="15"
+                                class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            >
                         </div>
 
                         <div class="flex-1">
                             <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Tertinggi</label>
-                            <input type="number" name="harga_akhir" required
-                                class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500">
+                            <input 
+                                type="text" 
+                                name="harga_akhir" 
+                                required
+                                inputmode="numeric"
+                                maxlength="15"
+                                class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            >
                         </div>
                     </div>
 
@@ -50,7 +73,7 @@
                     <div class="flex flex-col md:flex-row gap-5">
                         <div class="flex-1">
                             <label class="block font-medium text-neutral-800 mb-1">Deskripsi</label>
-                            <textarea name="deskripsi" rows="4" required
+                            <textarea name="deskripsi" rows="4" required maxlength="500"
                                     class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"></textarea>
                         </div>
 

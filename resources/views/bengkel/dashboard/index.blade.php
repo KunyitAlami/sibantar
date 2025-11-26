@@ -60,12 +60,6 @@
                         <div class="absolute left-1 top-1 w-7 h-7 bg-white rounded-full shadow-lg transition-transform duration-300 peer-checked:translate-x-7"></div>
                     </label>
                 </div>
-                <div class="flex items-center gap-2 text-xs text-primary-100">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Jam Operasional: 08:00 - 20:00 WITA</span>
-                </div>
             </div>
         </div>
     </section>

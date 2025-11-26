@@ -56,7 +56,7 @@
                         <label class="font-semibold mb-3">Deskripsi Laporan</label>
                         <textarea name="deskripsi" rows="5"
                                 class="w-full border rounded-lg p-3 mt-3"
-                                placeholder="Tuliskan laporan lengkap mengenai kondisi pesanan..."></textarea>
+                                placeholder="Tuliskan laporan secara lengkap" required maxlength="500"></textarea>
                     </div>
 
                     <button type="submit"
