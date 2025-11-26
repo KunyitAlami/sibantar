@@ -192,6 +192,38 @@
                     });
 
             });
+                // Map Livewire events to window events so existing handlers can pick them up
+                if (typeof Livewire !== 'undefined') {
+                    const normalize = (payload) => (Array.isArray(payload) && payload.length) ? payload[0] : payload;
+                    Livewire.on('swal:alert', payload => window.dispatchEvent(new CustomEvent('swal:alert', { detail: normalize(payload) })));
+                    Livewire.on('notify', payload => window.dispatchEvent(new CustomEvent('notify', { detail: normalize(payload) })));
+                }
+
+                // Listen for swal:alert window event and show SweetAlert (or load it dynamically)
+                window.addEventListener('swal:alert', (e) => {
+                    const detail = e.detail || {};
+                    const show = () => {
+                        Swal.fire({ icon: detail.type || 'info', title: detail.title || '', text: detail.text || '', confirmButtonText: 'OK' });
+                    };
+                    if (typeof Swal === 'undefined') {
+                        const s = document.createElement('script');
+                        s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+                        s.onload = show; document.head.appendChild(s);
+                    } else show();
+                });
+
+                // Also support a generic `notify` event used elsewhere in the app
+                window.addEventListener('notify', (e) => {
+                    const detail = e.detail || {};
+                    const show = () => {
+                        Swal.fire({ icon: detail.type || 'info', title: detail.message || detail.title || '', timer: 2000, showConfirmButton: false });
+                    };
+                    if (typeof Swal === 'undefined') {
+                        const s = document.createElement('script');
+                        s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+                        s.onload = show; document.head.appendChild(s);
+                    } else show();
+                });
         </script>
     @endpush
 </div>
