@@ -28,7 +28,7 @@ return new class extends Migration
             CREATE TRIGGER set_batas_konfirmasi BEFORE INSERT ON count_down
             FOR EACH ROW
             BEGIN
-                SET NEW.batas_konfirmasi = DATE_ADD(NOW(), INTERVAL 1 MINUTE);
+                SET NEW.batas_konfirmasi = DATE_ADD(NOW(), INTERVAL 2 MINUTE);
             END
         ");
 

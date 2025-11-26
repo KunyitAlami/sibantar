@@ -28,7 +28,12 @@ class DatabaseSeeder extends Seeder
             CalonBengkelSeeder::class,
             LayananBengkelSeeder::class,
             BengkelStatusSeeder::class,
-            StatusRealTimeBengkelSeeder::class
+            StatusRealTimeBengkelSeeder::class,
+
+            OrderSeeder::class,
+            CountDownSeeder::class,
+            OrderTrackingSeeder::class,
+            ReviewsSeeder::class
         ]);
     }
 }

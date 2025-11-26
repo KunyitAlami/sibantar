@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\StatusRealTimeBengkelModel;
 use Illuminate\Validation\Rule;
 
-
-
 class BengkelController extends Controller
 {
     private function haversineDistance($lat1, $lng1, $lat2, $lng2)
