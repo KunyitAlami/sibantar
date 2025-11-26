@@ -30,12 +30,18 @@ class UserModel extends Authenticatable
         'password',
         'role',
         'wa_number',
-        'skor'
+        'skor',
+        'is_blocked'
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'is_blocked' => 'boolean',
+        'skor' => 'integer',
     ];
 
     public function bengkel()

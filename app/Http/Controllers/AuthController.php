@@ -56,9 +56,9 @@ class AuthController extends Controller
             $userRole = $specialAccounts[$credentials['email']];
 
             if ($user && Hash::check($credentials['password'], $user->password)) {
-                if ($user->skor > 3) {
+                if (!empty($user->is_blocked) || ($user->skor ?? 0) >= 3) {
                     return back()->withErrors([
-                        'email' => 'Akun ini diblokir karena skor terlalu tinggi!',
+                        'email' => 'Akun ini diblokir. Hubungi admin jika merasa ini kesalahan.',
                     ]);
                 }
 
@@ -83,9 +83,9 @@ class AuthController extends Controller
         $user = UserModel::where($loginField, $credentials['email'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
-            if ($user->skor > 3) {
+            if (!empty($user->is_blocked) || ($user->skor ?? 0) >= 3) {
                 return back()->withErrors([
-                    'email' => 'Akun diblokir karena skor melebihi batas (skor > 3).',
+                    'email' => 'Akun diblokir. Hubungi admin jika merasa ini kesalahan.',
                 ]);
             }
 
@@ -150,7 +150,19 @@ class AuthController extends Controller
 
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
-        $user = UserModel::create($data);
+                // Prevent registration if an existing account with same email/username/wa_number is blocked
+                $blocked = UserModel::where(function($q) use ($request){
+                        $q->where('email', $request->email)
+                            ->orWhere('username', $request->username)
+                            ->orWhere('wa_number', $request->wa_number);
+                })->where('is_blocked', true)->first();
+
+                if ($blocked) {
+                        return back()->withInput($request->except('password', 'password_confirmation'))
+                                                 ->withErrors(['email' => 'Akun dengan email/username/nomor telepon ini diblokir. Hubungi admin.']);
+                }
+
+                $user = UserModel::create($data);
         Auth::login($user);
 
         if ($user->role === 'admin') {
