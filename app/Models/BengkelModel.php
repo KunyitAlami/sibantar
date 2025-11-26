@@ -20,6 +20,8 @@ class BengkelModel extends Model
         'jam_operasional',
         'status',
         'id_user',
+        'latitude',
+        'longitude'
     ];
 
     public function user()

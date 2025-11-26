@@ -233,12 +233,16 @@
                                 {{-- Tombol Lihat Detail - pending --}}
                             @if($order->status === 'pending' && $order->countDown->status === 'terkonfirmasi')
                                 <div class="mt-4">
-                                    <button 
+                                    {{-- <button 
                                         wire:click="gotoFinalPrice({{ $order->id_order }})"
                                         class="w-full h-12 flex items-center justify-center text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all"
                                     >
                                         Lihat Detail & Tentukan Harga Final
-                                    </button>
+                                    </button> --}}
+                                                <a href="{{ route('bengkel.order-tracking', ['orderId' => $order->id_order]) }}"
+                                                    class="flex items-center justify-center text-center w-full py-2.5 text-sm font-semibold text-white bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-all">
+                                        Cek Detail Pesanan
+                                    </a>
                                 </div>
                             {{-- Tombol Lihat Detail - selesai --}}
                             @elseif($order->status === 'selesai' && $order->countDown?->status === 'terkonfirmasi')

@@ -1,4 +1,4 @@
-<div wire:init="loadOrder" wire:poll.5000ms="checkExpiredOrder">
+<div wire:init="loadOrder" wire:poll.2000ms="checkExpiredOrder">
     <!-- Header -->
     {{-- <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
         <div class="container mx-auto px-4">

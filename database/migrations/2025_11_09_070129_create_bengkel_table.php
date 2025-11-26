@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('id_bengkel');
             $table->unsignedBigInteger('id_user')->nullable();
             $table->string('link_gmaps');
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->string('nama_bengkel');
             $table->string('kecamatan');
             $table->text('alamat_lengkap')->nullable();
