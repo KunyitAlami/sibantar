@@ -19,6 +19,7 @@
             <div class="max-w-md mx-auto space-y-6">
 
                 <!-- Status Card -->
+                @if(!($order && $order->status === 'ditolak'))
                 <div class="text-center mb-8">
                     <div class="w-20 h-20 bg-warning-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-10 h-10 text-warning-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,6 +29,7 @@
                     <h2 class="text-2xl font-bold text-neutral-900 mb-2">Menunggu Konfirmasi</h2>
                     <p class="text-neutral-600 text-sm">Sedang menunggu konfirmasi<br>dari bengkel</p>
                 </div>
+                @endif
 
                 @if($order && $order->status !== 'ditolak')
                     <!-- Countdown Timer -->
@@ -53,7 +55,8 @@
                              
                              // Helper to toggle navbar disabled state and beforeunload
                              const navbar = document.getElementById('main-navbar-user');
-                             const beforeUnloadHandler = (e) => {
+                             // expose the handler on window so other UI (links/buttons) can remove it
+                             window.sibantarBeforeUnloadHandler = (e) => {
                                  e.preventDefault();
                                  e.returnValue = 'Dilarang meninggalkan halaman sampai countdown berakhir';
                              };
@@ -67,9 +70,9 @@
                                      }
                                  }
                                  if(isActive){
-                                     window.addEventListener('beforeunload', beforeUnloadHandler);
+                                     window.addEventListener('beforeunload', window.sibantarBeforeUnloadHandler);
                                  } else {
-                                     window.removeEventListener('beforeunload', beforeUnloadHandler);
+                                     window.removeEventListener('beforeunload', window.sibantarBeforeUnloadHandler);
                                  }
                              }
 
@@ -199,9 +202,10 @@
                                 </svg>
                             </div>
                             <div class="text-red-700 font-semibold">
-                                Pesanan ditolak oleh bengkel
+                                Pesanan ditolak
                             </div>
                             <a href="{{ route('user.dashboard') }}" 
+                               onclick="try{ window.removeEventListener('beforeunload', window.sibantarBeforeUnloadHandler); }catch(e){}"
                                class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition-all hover:scale-105">
                                 Cari bengkel lain
                             </a>

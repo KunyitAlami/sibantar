@@ -20,7 +20,7 @@
     <section class="px-6">
         <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm mb-20">
             {{-- action="{{ route('bengkel.layanan.store') }}" --}}
-            <form action="{{ route('bengkel.layanan.store', $id_bengkel) }}" method="POST" class="mt-10 mb-10 gap-5 p-6">
+            <form id="tambahLayananForm" action="{{ route('bengkel.layanan.store', $id_bengkel) }}" method="POST" class="mt-10 mb-10 gap-5 p-6">
                 @csrf
                 <div class="space-y-5">
 
@@ -46,6 +46,7 @@
                             <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Terendah</label>
                             <input 
                                 type="text" 
+                                id="harga_awal"
                                 name="harga_awal" 
                                 required
                                 inputmode="numeric"
@@ -59,6 +60,7 @@
                             <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Tertinggi</label>
                             <input 
                                 type="text" 
+                                id="harga_akhir"
                                 name="harga_akhir" 
                                 required
                                 inputmode="numeric"
@@ -96,6 +98,44 @@
                     class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-full text-center mt-4">
                     Tambah Layanan
                 </button>
+
+                <script>
+                    (function(){
+                        const form = document.getElementById('tambahLayananForm');
+                        if(!form) return;
+
+                        form.addEventListener('submit', function(e){
+                            const a = document.getElementById('harga_awal');
+                            const b = document.getElementById('harga_akhir');
+                            if(!a || !b) return;
+                            const va = parseInt(a.value.replace(/\D/g,'')) || 0;
+                            const vb = parseInt(b.value.replace(/\D/g,'')) || 0;
+                            if(va > vb){
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const showSwal = () => {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Periksa Harga',
+                                        text: 'Harga terendah tidak boleh melebihi harga tertinggi. Mohon periksa kembali.',
+                                        confirmButtonColor: '#0051BA'
+                                    }).then(() => { a.focus(); });
+                                };
+
+                                if (typeof Swal !== 'undefined') {
+                                    showSwal();
+                                } else {
+                                    const s = document.createElement('script');
+                                    s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+                                    s.onload = showSwal;
+                                    document.head.appendChild(s);
+                                }
+
+                                return false;
+                            }
+                        });
+                    })();
+                </script>
 
                 {{-- HIDDEN INPUT --}}
                 <input type="hidden" name="id_bengkel" value="{{ $id_bengkel }}">

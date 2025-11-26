@@ -281,7 +281,7 @@
         @if($activePanel === 'layanan')
             <div class="card p-4 sm:p-5 shadow-md">
                 <div class="flex flex-col sm:flex-row items-center justify-between mb-3 gap-3">
-                    <h2 class="text-lg sm:text-xl font-bold">Daftar Layanan</h2>
+                    <h2 class="text-lg sm:text-xl font-bold self-start text-left">Daftar Layanan</h2>
 
                     <a href="{{ route('bengkel.tambahLayanan', ['id_bengkel' => $bengkel->id_bengkel]) }}"
                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-semibold border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white transition-all">
@@ -304,8 +304,7 @@
                                     <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Kategori</th>
                                     <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Harga Terendah</th>
                                     <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Harga Tertinggi</th>
-                                    <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Hapus</th>
-                                    <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Edit</th>
+                                    <th class="px-3 py-2 sm:px-4 sm:py-3 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
 
@@ -325,25 +324,26 @@
                                         Rp {{ number_format($l->harga_akhir, 0, ',', '.') }}
                                     </td>
                                     <td class="px-3 py-2 sm:px-4 sm:py-3">
-                                        <button type="button" 
-                                            onclick="confirmDelete(event, {{ $l->id_layanan_bengkel }}, '{{ $_instance->getId() }}')"
-                                            wire:loading.attr="disabled"
-                                            wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})"
-                                            class="px-3 py-1 sm:px-4 sm:py-2 rounded-full font-semibold border border-red-600 text-red-600 
-                                                hover:bg-red-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                                            <span wire:loading.remove wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
-                                            <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Menghapus...</span>
-                                        </button>
-                                    </td>
-                                    <td class="px-3 py-2 sm:px-4 sm:py-3">
-                                        <button type="button"
-                                            wire:click="editLayanan({{ $l->id_layanan_bengkel }})"
-                                            wire:loading.attr="disabled"
-                                            wire:target="editLayanan({{ $l->id_layanan_bengkel }})"
-                                            class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all text-center">
-                                            <span wire:loading.remove wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
-                                            <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Loading...</span>
-                                        </button>
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button type="button" 
+                                                onclick="confirmDelete(event, {{ $l->id_layanan_bengkel }}, '{{ $_instance->getId() }}')"
+                                                wire:loading.attr="disabled"
+                                                wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})"
+                                                class="px-3 py-1 sm:px-4 sm:py-2 rounded-full font-semibold border border-red-600 text-red-600 
+                                                    hover:bg-red-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                                <span wire:loading.remove wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
+                                                <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
+                                            </button>
+
+                                            <button type="button"
+                                                wire:click="editLayanan({{ $l->id_layanan_bengkel }})"
+                                                wire:loading.attr="disabled"
+                                                wire:target="editLayanan({{ $l->id_layanan_bengkel }})"
+                                                class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all text-center">
+                                                <span wire:loading.remove wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
+                                                <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -390,10 +390,10 @@
                                     ];
                                 @endphp
 
-                                <div class="booking-card card p-4 hover:shadow-lg transition-shadow" data-status="in-progress">
+                                <div class="booking-card card p-6 hover:shadow-lg transition-shadow" data-status="in-progress">
                                     <div class="flex items-start justify-between mb-2">
                                         <div>
-                                            <h3 class="font-bold text-neutral-900">{{ $order->user->username }}</h3>
+                                            <h3 class="font-bold text-md text-neutral-900">{{ $order->user->username }}</h3>
                                             <p class="text-xs text-neutral-500 mt-2">Tanggal Order: {{ $order->created_at }}</p>
                                         </div>
                                         @if($order->status === 'ditolak')
