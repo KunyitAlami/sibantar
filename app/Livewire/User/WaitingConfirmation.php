@@ -110,7 +110,16 @@ class WaitingConfirmation extends Component
     
     public function checkExpiredOrder()
     {
-        if (!$this->order || !$this->order->countDown) return;
+        // reload latest order state from DB to detect changes (e.g., bengkel accepted)
+        $fresh = OrderModel::with(['countDown'])->where('id_order', $this->orderId)->first();
+        if (!$fresh || !$fresh->countDown) return;
+
+        // If the bengkel already confirmed the order, redirect the user to order tracking
+        if (optional($fresh->countDown)->status === 'terkonfirmasi') {
+            // ensure local order reflects fresh state
+            $this->order = $fresh;
+            return $this->redirectRoute('user.order-tracking', ['id' => $this->orderId]);
+        }
 
         $clientZone = $this->order->client_timezone ?? 'Asia/Makassar';
         $batas = Carbon::parse($this->order->countDown->batas_konfirmasi, $clientZone);
@@ -126,7 +135,7 @@ class WaitingConfirmation extends Component
             ]);
             $this->dispatch('countdown-expired');
         }
-   
+
         $this->order->countdown_ms = $this->calculateCountdown();
     }
 
