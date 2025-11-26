@@ -34,12 +34,10 @@ class WaitingConfirmation extends Component
         $this->order->countdown_active = $this->isCountdownActive();
         $this->order->countdown_confirmed = optional($this->order->countDown)->status === 'terkonfirmasi';
         
-        // Auto redirect jika sudah dikonfirmasi
         if (optional($this->order->countDown)->status === 'terkonfirmasi') {
             return redirect()->route('user.order-tracking', ['id' => $this->orderId]);
         }
 
-        // Redirect jika countdown habis dan status masih pending
         if ($this->order->countdown_ms <= 0 && $this->order->status === 'pending') {
             // Berikan sedikit delay untuk UX yang lebih smooth
             session()->flash('countdown_expired', true);
@@ -55,24 +53,81 @@ class WaitingConfirmation extends Component
         }
     }
 
-    // Method baru: dipanggil dari frontend saat countdown habis
+    // public function handleCountdownExpired()
+    // {
+    //     $this->loadOrder();
+
+    //     if ($this->order && $this->order->status === 'pending') {
+    //         $this->order->status = 'ditolak';
+    //         $this->order->save();
+    //     }
+    //     $this->loadOrder();
+
+    //     return $this->redirectRoute('user.order-tracking', ['id' => $this->orderId]);
+    // }
+
     public function handleCountdownExpired()
     {
-        // Pastikan kita bekerja dengan state terbaru
         $this->loadOrder();
 
-        // Jika order masih pending, set status jadi 'ditolak' dan simpan
-        if ($this->order && $this->order->status === 'pending') {
+        if ($this->order && $this->order->status !== 'ditolak') {
             $this->order->status = 'ditolak';
             $this->order->save();
+
+            if ($this->order->countDown && $this->order->countDown->status === 'tidak_dikonfirmasi') {
+                $this->order->countDown->status = 'terkonfirmasi';
+                $this->order->countDown->waktu_konfirmasi = now();
+                $this->order->countDown->save();
+            }
         }
 
-        // Reload properti setelah perubahan
         $this->loadOrder();
 
-        // Redirect user ke halaman order tracking sehingga akan langsung
-        // menampilkan halaman "Pesanan Ditolak" seperti desain.
         return $this->redirectRoute('user.order-tracking', ['id' => $this->orderId]);
+    }
+
+    // public function checkExpiredOrder()
+    // {
+    //     if (!$this->order || !$this->order->countDown) return;
+
+    //     $clientZone = $this->order->client_timezone ?? 'Asia/Makassar';
+    //     $batas = Carbon::parse($this->order->countDown->batas_konfirmasi, $clientZone);
+    //     $now = Carbon::now($clientZone);
+
+    //     if ($now->greaterThan($batas) && $this->order->status !== 'ditolak') {
+    //         $this->order->status = 'ditolak';
+    //         $this->order->save();
+
+    //         $this->order->countDown->update([
+    //             'status' => 'terkonfirmasi',
+    //             'waktu_konfirmasi' => now()
+    //         ]);
+
+    //         $this->loadOrder();
+    //         return $this->redirectRoute('user.order-tracking', ['id' => $this->orderId]);
+    //     }
+    // }
+    
+    public function checkExpiredOrder()
+    {
+        if (!$this->order || !$this->order->countDown) return;
+
+        $clientZone = $this->order->client_timezone ?? 'Asia/Makassar';
+        $batas = Carbon::parse($this->order->countDown->batas_konfirmasi, $clientZone);
+        $now = Carbon::now($clientZone);
+
+        if ($now->greaterThan($batas) && $this->order->status !== 'ditolak') {
+            $this->order->status = 'ditolak';
+            $this->order->save();
+
+            $this->order->countDown->update([
+                'status' => 'terkonfirmasi',
+                'waktu_konfirmasi' => now()
+            ]);
+            $this->dispatch('countdown-expired');
+        }
+   
+        $this->order->countdown_ms = $this->calculateCountdown();
     }
 
     protected function calculateCountdown()

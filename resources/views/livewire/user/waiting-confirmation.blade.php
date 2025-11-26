@@ -1,6 +1,6 @@
-<div wire:init="loadOrder" wire:poll.3000ms="loadOrder">
+<div wire:init="loadOrder" wire:poll.5000ms="checkExpiredOrder">
     <!-- Header -->
-    <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
+    {{-- <section class="bg-white border-b border-neutral-200 sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
                 <a href="{{ route('user.dashboard') }}" class="text-neutral-700 hover:text-primary-700">
@@ -11,7 +11,7 @@
                 <h1 class="font-bold text-lg text-neutral-900">Riwayat Pesanan</h1>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Main Content -->
     <section class="py-6">
