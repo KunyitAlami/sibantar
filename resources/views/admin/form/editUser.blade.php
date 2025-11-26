@@ -10,7 +10,7 @@
                               d="M15 19l-7-7 7-7"/>
                     </svg>
                 </a>
-                <h1 class="font-bold text-lg text-neutral-900">Kembali</h1>
+                <h1 class="font-bold text-lg text-neutral-900">Edit Detail User</h1>
             </div>
         </div>
     </section>
@@ -19,8 +19,6 @@
     <section class="px-4">
         <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
             <div class="flex flex-col gap-4 justify-center text-center">
-                <h1>Form Edit Detail User</h1>
-                <p>Kelola informasi pengguna melalui formulir berikut untuk memastikan data tetap akurat dan terbarui.</p>
             </div>
             {{-- action="{{ route('bengkel.layanan.store') }}" --}}
             <form action="{{ route('admin.update-user') }}" autocomplete="off" method="POST" class="mt-10 mb-10 gap-5">

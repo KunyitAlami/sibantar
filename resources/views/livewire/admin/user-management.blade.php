@@ -1,14 +1,14 @@
 <div class="p-4">
-    <div class="flex items-center gap-3 mb-4">
-        <input wire:model.debounce.300ms="search" type="text" placeholder="Cari username/email/wa..." class="input input-bordered w-full" />
+    <!-- <div class="flex items-center gap-3 mb-4">
+        <input wire:model.debounce.300ms="search" type="text" placeholder="Cari username" class="input input-bordered w-full" />
         <a href="{{ route('admin.users.index') }}" class="btn btn-sm">Kembali</a>
-    </div>
+    </div> -->
 
     <div class="overflow-x-auto bg-white rounded-lg border">
         <table class="w-full text-sm">
             <thead class="bg-neutral-50 text-left">
                 <tr>
-                    <th class="px-3 py-2">#</th>
+                    <!-- <th class="px-3 py-2">#</th> -->
                     <th class="px-3 py-2">Username</th>
                     <th class="px-3 py-2">Email</th>
                     <th class="px-3 py-2">WA</th>
@@ -21,7 +21,7 @@
             <tbody>
                 @foreach($users as $u)
                 <tr class="border-t">
-                    <td class="px-3 py-2">{{ $u->id_user }}</td>
+                    <!-- <td class="px-3 py-2">{{ $u->id_user }}</td> -->
                     <td class="px-3 py-2">{{ $u->username }}</td>
                     <td class="px-3 py-2">{{ $u->email }}</td>
                     <td class="px-3 py-2">{{ $u->wa_number }}</td>
