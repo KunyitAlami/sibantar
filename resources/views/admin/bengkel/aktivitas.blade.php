@@ -8,7 +8,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </a>
-                <h1 class="font-bold text-lg text-neutral-900">Kembali ke Dashboard</h1>
+                <h1 class="font-bold text-lg text-neutral-900">Detail Bengkel</h1>
             </div>
         </div>
     </section>
@@ -18,14 +18,9 @@
         <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6">
             <div class="flex items-start justify-between mb-4">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-neutral-900">{{ $bengkel->nama_bengkel }}</h2>
-                        <p class="text-neutral-600 mt-1">{{ $bengkel->kecamatan }}</p>
+                        <h2 class="text-xl md:text-2xl font-semibold text-neutral-900">{{ $bengkel->nama_bengkel }}</h2>
+                        <p class="text-sm md:text-base text-neutral-600 mt-1">{{ $bengkel->kecamatan }}</p>
                     </div>
                 </div>
                 <div class="gap-8"> 
@@ -139,10 +134,7 @@
         {{-- Detail tentang layanan ini bengkel dari tabel layanan_bengkel --}}
         <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6">
             <h3 class="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Layanan Tersedia ({{ $layanan_bengkel->count() }})
+                Layanan Tersedia
             </h3>
             
             @if($layanan_bengkel->count() > 0)
@@ -150,7 +142,7 @@
                 @foreach($layanan_bengkel as $layanan)
                 <div class="border border-neutral-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                     <div class="flex items-start justify-between mb-2">
-                        <h4 class="font-semibold text-neutral-900">{{ $layanan->nama_layanan }}</h4>
+                        <h4 class="text-lg md:text-xl font-semibold text-neutral-900">{{ $layanan->nama_layanan }}</h4>
                         <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">{{ $layanan->kategori }}</span>
                     </div>
                     <p class="text-sm text-neutral-600 mb-3">{{ $layanan->deskripsi }}</p>
