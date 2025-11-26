@@ -149,6 +149,13 @@
                                     <span class="text-lg font-semibold text-green-600">
                                         Pesanan sudah dikonfirmasi
                                     </span>
+                                    <div class="mt-3">
+                                        <a href="{{ route('user.order-tracking', $order->id_order) }}"
+                                           onclick="event.preventDefault(); try{ window.removeEventListener('beforeunload', window.sibantarBeforeUnloadHandler); }catch(e){}; window.location.href = this.href;"
+                                           class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition-all">
+                                            Lihat Progress Pesanan
+                                        </a>
+                                    </div>
                                 </div>
                             </template>
 
@@ -205,7 +212,7 @@
                                 Pesanan ditolak
                             </div>
                             <a href="{{ route('user.dashboard') }}" 
-                               onclick="try{ window.removeEventListener('beforeunload', window.sibantarBeforeUnloadHandler); }catch(e){}"
+                               onclick="event.preventDefault(); try{ window.removeEventListener('beforeunload', window.sibantarBeforeUnloadHandler); }catch(e){}; window.location.href = this.href;"
                                class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition-all hover:scale-105">
                                 Cari bengkel lain
                             </a>

@@ -83,7 +83,26 @@ class OrderTrackingBengkel extends Component
             return;
         }
 
-        $totalFinalPrice = $this->servicePrice + $this->deliveryFee;
+        // validate servicePrice against layanan price range if available
+        $layanan = $this->tracking->order->layananBengkel ?? null;
+        if ($layanan) {
+            $min = (int) ($layanan->harga_awal ?? 0);
+            $max = (int) ($layanan->harga_akhir ?? 0);
+            $service = (int) $this->servicePrice;
+            if ($service < $min || $service > $max) {
+                $payload = [
+                    'type' => 'error',
+                    'title' => 'Harga di luar jangkauan',
+                    'text' => "Harga layanan harus antara Rp " . number_format($min,0,',','.') . " dan Rp " . number_format($max,0,',','.') . ".",
+                ];
+
+                // Use Livewire server-side dispatch (vendor Livewire supports ->dispatch())
+                $this->dispatch('swal:alert', $payload)->self();
+                return;
+            }
+        }
+
+        $totalFinalPrice = (int) $this->servicePrice + (int) $this->deliveryFee;
 
         $this->tracking->update([
             'finalPrice' => $totalFinalPrice,
