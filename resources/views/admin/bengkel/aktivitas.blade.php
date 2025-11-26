@@ -28,10 +28,18 @@
                         <p class="text-neutral-600 mt-1">{{ $bengkel->kecamatan }}</p>
                     </div>
                 </div>
-                <span class="px-4 py-2 rounded-full text-sm font-semibold
-                    {{ $bengkel->status == 'aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                    {{ ucfirst($bengkel->status) }}
-                </span>
+                <div class="gap-8"> 
+                    <span class="mr-2 px-4 py-2 rounded-full text-sm font-semibold
+                        {{ $bengkel->status == 'aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                        {{ ucfirst($bengkel->status) }}
+                    </span>
+
+                    <span class="px-4 py-2 rounded-full text-sm font-semibold
+                        {{ $bengkel->statusRealTime && $bengkel->statusRealTime->status == 'buka' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                        {{ $bengkel->statusRealTime->status ?? 'tutup' }}
+                    </span>
+                </div>
+
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">

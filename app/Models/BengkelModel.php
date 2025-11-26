@@ -59,6 +59,11 @@ class BengkelModel extends Model
         return $this->hasMany(BengkelStatusModel::class, 'id_bengkel', 'id_bengkel');
     }
 
+    public function statusRealTime()
+    {
+        return $this->hasOne(StatusRealTimeBengkelModel::class, 'id_bengkel', 'id_bengkel')->latestOfMany('id_status_bengkel');
+    }
+
 
 
 }

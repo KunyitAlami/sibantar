@@ -82,7 +82,7 @@
                             <thead class="bg-gradient-to-r from-neutral-50 to-neutral-100">
                                 <tr>
                                     <th class="px-6 py-6 text-left text-sm font-bold text-neutral-700 uppercase tracking-wider">ID BENGKEL</th>
-                                    <th class="px-6 py-6 text-left text-sm font-bold text-neutral-700 uppercase tracking-wider">ID USER</th>
+                                    <th class="px-6 py-6 text-left text-sm font-bold text-neutral-700 uppercase tracking-wider">Username</th>
                                     <th class="px-6 py-6 text-left text-sm font-bold text-neutral-700 uppercase tracking-wider">NAMA BENGKEL</th>
                                     <th class="px-6 py-6 text-left text-sm font-bold text-neutral-700 uppercase tracking-wider">KECAMATAN</th>
                                     <th class="px-6 py-6 text-left text-sm font-bold text-neutral-700 uppercase tracking-wider">ALAMAT</th>
@@ -96,7 +96,7 @@
                                     @foreach($calonBengkels as $calon)
                                         <tr data-status="calon">
                                             <td class="px-6 py-6 text-sm">{{ $calon->id_calon_bengkel }}</td>
-                                            <td class="px-6 py-6 text-sm text-neutral-500 italic">@if($calon->id_user){{ $calon->id_user }}@else - @endif</td>
+                                            <td class="px-6 py-6 text-sm">{{ $calon->username }}</td>
                                             <td class="px-6 py-6 font-semibold">{{ $calon->nama_bengkel }}</td>
                                             <td class="px-6 py-6">{{ $calon->kecamatan ?? '-' }}</td>
                                             <td class="px-6 py-6">{{ $calon->alamat_lengkap ?? '-' }}</td>
@@ -128,7 +128,7 @@
                                     @foreach($bengkels as $b)
                                         <tr data-status="terdaftar">
                                             <td class="px-6 py-6 text-sm">{{ $b->id_bengkel }}</td>
-                                            <td class="px-6 py-6 text-sm">{{ $b->id_user ?? optional($b->user)->id_user ?? '-' }}</td>
+                                            <td class="px-6 py-6 text-sm">{{ $b->user->username }}</td>
                                             <td class="px-6 py-6 font-semibold">{{ $b->nama_bengkel }}</td>
                                             <td class="px-6 py-6">{{ $b->kecamatan ?? '-' }}</td>
                                             <td class="px-6 py-6">{{ $b->alamat_lengkap ?? '-' }}</td>

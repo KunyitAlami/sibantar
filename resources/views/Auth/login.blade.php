@@ -26,7 +26,7 @@
                         <label for="email" class="block text-sm font-medium text-neutral-700 mb-2">
                             Email
                         </label>
-                        <input 
+                        {{-- <input 
                             type="text" 
                             id="email" 
                             name="email" 
@@ -36,6 +36,17 @@
                             required 
                             autofocus
                             pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                        > --}}
+                        <input 
+                            type="text" 
+                            id="email" 
+                            name="email" 
+                            class="input bg-white @error('email') border-danger-500 @enderror" 
+                            placeholder="Masukan Email"
+                            value="{{ old('email') }}"
+                            required 
+                            autofocus
+                            pattern="^([a-zA-Z0-9._%+-]+@(gmail\.com|mhs\.ulm\.ac\.id)|dosentester_(admin|bengkel|user))$"
                         >
                         <p id="emailError" class="mt-1 text-sm text-danger-600 hidden"></p>
                         @error('email')
@@ -108,7 +119,16 @@
                     // Email validation
                     var gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
                     var ulmPattern = /^[a-zA-Z0-9._%+-]+@mhs\.ulm\.ac\.id$/;
-                    var isDosenTester = email === 'dosentester';
+                    var isDosenTesterAdmin = email === 'dosentester_admin';
+                    var isDosenTesterBengkel = email === 'dosentester_bengkel';
+                    var isDosenTesterUser = email === 'dosentester_user';
+
+                    var isDosenTester = (
+                        email === 'dosentester_admin' || 
+                        email === 'dosentester_bengkel' || 
+                        email === 'dosentester_user'
+                    );
+
                     if (!email) {
                         emailError.textContent = 'Email wajib diisi';
                         emailError.classList.remove('hidden');

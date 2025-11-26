@@ -54,6 +54,7 @@
                     <input autocomplete="new-password" type="password" name="password" class="input input-bordered w-full" placeholder="Masukkan password">
                 </div>
 
+
                 {{-- Role --}}
                 <div class="flex flex-col gap-2 mt-4">
                     <label class="font-semibold text-neutral-700">Role</label>

@@ -21,6 +21,19 @@ class BengkelSeeder extends Seeder
     {
         $bengkelData = [
             [
+                'link_gmaps' => 'https://maps.google.com/?q=-3.2966136,114.5870891',
+                'id_user'=>6,
+                'nama_bengkel' => 'Bengkel Erika Jaya',
+                'kecamatan' => 'Banjarmasin Utara',
+                'alamat_lengkap' => ' Jl. Brigjen H. Hasan Basri Jl. Kayu Tangi, Pangeran, Kec. Banjarmasin Utara, Kota Banjarmasin, Kalimantan Selatan 70123',
+                'jam_buka' => '00:00',
+                'jam_tutup' => '23:59',
+                'jam_operasional' => '00:00-23:59',
+                'status' => 'aktif',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'link_gmaps' => 'https://maps.google.com/?q=-3.278461,114.574509',
                 'id_user'=>7,
                 'nama_bengkel' => 'Bengkel Jaya Motor',

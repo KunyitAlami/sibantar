@@ -12,6 +12,7 @@ use App\Models\OrderTrackingModel;
 use App\Models\ReportFromBengkelModel;
 use App\Models\ReportFromUserModel;
 use App\Models\ReviewsModel;
+use App\Models\StatusRealTimeBengkelModel;
 use Database\Seeders\ReviewSeeder;
 use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Hash;
@@ -195,6 +196,7 @@ class AdminController extends RoutingController
         $orders = OrderModel::where('id_bengkel', $id_bengkel)->get();
         $layanan_bengkel = LayananBengkelModel::where('id_bengkel', $id_bengkel)->get();
         $reviews = ReviewsModel::where('id_bengkel', $id_bengkel)->get();
+        $statusRealTime = StatusRealTimeBengkelModel::where('id_bengkel', $id_bengkel)->get();
         $orderIds = $orders->pluck('id_order');
 
         $order_tracking = OrderTrackingModel::whereIn('id_order', $orderIds)->get();
@@ -204,7 +206,8 @@ class AdminController extends RoutingController
             'orders',
             'layanan_bengkel',
             'reviews',
-            'order_tracking'
+            'order_tracking',
+            'statusRealTime'
         ));
     }
 

@@ -44,8 +44,16 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if ($credentials['email'] === 'dosentester') {
-            $user = UserModel::where('email', 'dosentester')->first();
+        $specialAccounts = [
+            'dosentester_admin' => 'admin',
+            'dosentester_bengkel' => 'bengkel',
+            'dosentester_user' => 'user',
+        ];
+
+        if (array_key_exists($credentials['email'], $specialAccounts)) {
+            // FIX: Query dengan email yang benar (dengan suffix)
+            $user = UserModel::where('email', $credentials['email'])->first();
+            $userRole = $specialAccounts[$credentials['email']];
 
             if ($user && Hash::check($credentials['password'], $user->password)) {
                 if ($user->skor > 3) {
@@ -56,11 +64,18 @@ class AuthController extends Controller
 
                 Auth::login($user);
                 $request->session()->regenerate();
-                return redirect()->route('admin.dashboard.index');
+
+                return match ($userRole) {
+                    'admin' => redirect()->route('admin.dashboard.index'),
+                    'bengkel' => redirect()->route('bengkel.dashboard', [
+                        'id_bengkel' => $user->bengkel->first()->id_bengkel ?? null
+                    ]),
+                    'user' => redirect()->route('user.dashboard'),
+                };
             }
 
             return back()->withErrors([
-                'email' => 'Password salah untuk akun admin khusus!',
+                'email' => 'Password salah untuk akun khusus!',
             ]);
         }
 
@@ -76,14 +91,13 @@ class AuthController extends Controller
 
             Auth::login($user);
             $request->session()->regenerate();
-
-            // flash success so Notyf shows a welcome toast after login
             $request->session()->flash('success', 'Berhasil masuk. Selamat datang!');
+
 
             return match ($user->role) {
                 'admin' => redirect()->route('admin.dashboard.index'),
                 'bengkel' => redirect()->route('bengkel.dashboard', [
-                    'id_bengkel' => $user->bengkel->first()->id_bengkel
+                    'id_bengkel' => $user->bengkel->first()->id_bengkel ?? null
                 ]),
                 'user' => redirect()->route('user.dashboard'),
                 default => redirect()->route('landing_page'),
@@ -94,6 +108,7 @@ class AuthController extends Controller
             'email' => 'Akun tidak ditemukan! Pastikan email atau username benar.',
         ]);
     }
+
 
 
     public function logout(Request $request)

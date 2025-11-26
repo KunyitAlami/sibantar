@@ -10,4 +10,11 @@ class StatusRealTimeBengkelModel extends Model
     protected $primaryKey = 'id_status_bengkel';
 
     protected $fillable = ['id_bengkel', 'status'];
+
+
+    public function statusRealTime()
+    {
+        return $this->hasOne(StatusRealTimeBengkelModel::class, 'id_bengkel', 'id_bengkel')->latestOfMany('id_status_bengkel');
+    }
+
 }

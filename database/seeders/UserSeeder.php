@@ -20,15 +20,17 @@ class UserSeeder extends Seeder
     {
         DB::table('user')->insert([
             // ADMIN ACCOUNTS
-            ['username'=>'admin', 'skor'=>0,  'role'=>'admin' ,'email'=>'admin@sibantar.com', 'password' => Hash::make('admin123'), 'wa_number'=>'081234567890', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), ],
-            ['username'=>'randyfebrian', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817110013@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), ],
-            ['username'=>'muhammadrizky', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817310011@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
-            ['username'=>'zahranabila', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817110011@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
-            ['username'=>'ghanimudzakir', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817320007@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
-            ['username'=>'erikamaulidiya', 'skor'=>0,'role'=>'admin' ,'email'=>'dosentester', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            // ['username'=>'admin', 'skor'=>0,  'role'=>'admin' ,'email'=>'admin@sibantar.com', 'password' => Hash::make('admin123'), 'wa_number'=>'081234567890', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), ],
+            ['username'=>'Randy Febrian', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817110013@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), ],
+            ['username'=>'Muhammad Rizky', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817310011@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            
+            ['username'=>'Ghani Mudzakir', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817110011@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'Zahra Nabila', 'skor'=>0,'role'=>'admin' ,'email'=>'2310817320007@mhs.ulm.ac.id', 'password' => Hash::make('admin123'), 'wa_number'=>'0000', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'Erika Maulidiya (admin)', 'skor'=>0,'role'=>'admin' ,'email'=>'dosentester_admin', 'password' => Hash::make('erika123'), 'wa_number'=>'08123456789', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
 
             // BENGKEL ACCOUNT
-            // buat bengkel awalan
+            // buat bengkel awalan id_user 6
+            ['username'=>'Erika Maulidiya (bengkel)', 'skor'=>0,'role'=>'bengkel' ,'email'=>'dosentester_bengkel', 'password' => Hash::make('erika123'), 'wa_number'=>'08123456789', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
             ['username'=>'bengkel_jaya_motor', 'skor'=>1,   'role'=>'bengkel', 'email'=>'bengkeljaya@gmail.com',  'password'=>Hash::make('bengkel123'), 'wa_number'=>'081234567891', 'created_at'=>Carbon::now(), 'updated_at'=>Carbon::now()],
             ['username'=>'bengkel_motor_sejahtera','skor'=>1,    'role'=>'bengkel', 'email'=>'bengkelmotor@gmail.com',  'password'=>Hash::make('bengkel123'), 'wa_number'=>'081234567892', 'created_at'=>Carbon::now(), 'updated_at'=>Carbon::now()],
             ['username'=>'bengkel_mandiri', 'skor'=>1,  'role'=>'bengkel', 'email'=>'bengkelmandiri@gmail.com',  'password'=>Hash::make('bengkel123'), 'wa_number'=>'081234567893', 'created_at'=>Carbon::now(), 'updated_at'=>Carbon::now()],
@@ -79,6 +81,7 @@ class UserSeeder extends Seeder
             // USER ACCOUNT
             ['username'=>'user_resmi', 'role'=>'user', 'skor'=>0, 'email'=>'user@gmail.com', 'password' => Hash::make('user123'), 'wa_number'=>'089876543210', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
             ['username'=>'Zahra Nabila', 'role'=>'user', 'skor'=>0, 'email'=>'zahranabila@gmail.com', 'password' => Hash::make('user123'), 'wa_number'=>'089876543210', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['username'=>'Erika Maulidiya (user)', 'skor'=>0,'role'=>'user' ,'email'=>'dosentester_user', 'password' => Hash::make('erika123'), 'wa_number'=>'08123456789', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
 
         ]);
     }
