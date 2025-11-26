@@ -107,21 +107,17 @@
                                          countdownExpired = true;
                                          clearInterval(interval);
                                          
-                                         // Panggil method Livewire
+                                         // Panggil method Livewire untuk menandakan countdown habis
                                          $wire.handleCountdownExpired();
                                          
-                                         // Auto redirect ke order tracking setelah 3 detik
-                                         redirectTimer = setTimeout(() => {
-                                             window.location.href = '{{ route('user.order-tracking', ['id' => $order->id_order]) }}';
-                                         }, 3000);
+                                         // Jangan redirect otomatis: tampilkan UI 'Pesanan ditolak' di halaman
                                      }
                                  }, 1000);
                              } else if (diff <= 0) {
                                  // Jika countdown sudah habis dari awal
                                  countdownExpired = true;
-                                 redirectTimer = setTimeout(() => {
-                                     window.location.href = '{{ route('user.order-tracking', ['id' => $order->id_order]) }}';
-                                 }, 3000);
+                                 // Panggil Livewire untuk memastikan state server terupdate
+                                 $wire.handleCountdownExpired();
                              }
                              
                              // Listen untuk event dari Livewire
