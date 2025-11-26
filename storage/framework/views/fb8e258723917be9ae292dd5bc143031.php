@@ -12,14 +12,14 @@
     <section class="bg-white border-b border-neutral-200 sticky top-0 z-50 mb-5">
         <div class="container mx-auto px-4">
             <div class="flex items-center gap-4 py-4">
-                <a href="<?php echo e(route('admin.dashboard.index')); ?>"
+                <a href="<?php echo e(route('admin.users.index')); ?>"
                    class="text-neutral-700 hover:text-primary-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M15 19l-7-7 7-7"/>
                     </svg>
                 </a>
-                <h1 class="font-bold text-lg text-neutral-900">Kembali ke Dashboard</h1>
+                <h1 class="font-bold text-lg text-neutral-900">Kembali</h1>
             </div>
         </div>
     </section>
@@ -28,8 +28,8 @@
     <section class="px-4">
         <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-20">
             <div class="flex flex-col gap-4 justify-center text-center">
-                <h1>Form Tambah User</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic aperiam quasi voluptates.</p>
+                <h1>Form Edit Detail User</h1>
+                <p>Kelola informasi pengguna melalui formulir berikut untuk memastikan data tetap akurat dan terbarui.</p>
             </div>
             
             <form action="<?php echo e(route('admin.update-user')); ?>" autocomplete="off" method="POST" class="mt-10 mb-10 gap-5">
