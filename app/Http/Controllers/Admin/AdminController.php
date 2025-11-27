@@ -41,7 +41,8 @@ class AdminController extends RoutingController
     public function manageBengkel()
     {
         $bengkels = BengkelModel::all();
-        $calonBengkels = CalonBengkelModel::all();
+        // show calon bengkel with the newest registrations first
+        $calonBengkels = CalonBengkelModel::orderBy('created_at', 'desc')->get();
 
         return view('admin.bengkel.index', compact('bengkels', 'calonBengkels'));
     }
@@ -151,17 +152,34 @@ class AdminController extends RoutingController
             'email' => 'required|email|unique:user,email,'.$user->id_user.',id_user',
             'role' => 'required|in:user,admin,bengkel',
             'wa_number' => 'required|string|max:20',
-            'password' => 'nullable|string|min:6',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                function($attribute, $value, $fail){
+                    $lower = preg_match('/[a-z]/', $value);
+                    $upper = preg_match('/[A-Z]/', $value);
+                    $digit = preg_match('/[0-9]/', $value);
+                    $symbol = preg_match('/[^A-Za-z0-9]/', $value);
+                    if(!$lower || !$upper || !$digit || !$symbol){
+                        $fail('Password harus mengandung huruf kecil, huruf besar, angka, dan simbol.');
+                    }
+                }
+            ],
         ]);
+
+        // Verify admin password before allowing update (extra security)
+        if(!$request->filled('admin_password') || !\Illuminate\Support\Facades\Hash::check($request->admin_password, Auth::user()->password)){
+            return redirect()->back()->withInput()->withErrors(['admin_password' => 'Password admin salah atau tidak diisi.']);
+        }
 
         $user->username = $request->username;
         $user->email = $request->email;
         $user->role = $request->role;
         $user->wa_number = $request->wa_number;
 
-        if($request->filled('password')){
-            $user->password = Hash::make($request->password);
-        }
+        // password now required and validated above
+        $user->password = Hash::make($request->password);
 
         $user->save();
 
@@ -189,6 +207,25 @@ class AdminController extends RoutingController
         } catch (\Exception $e) {
             return redirect()->route('admin.users.index')->with('error', 'Terjadi kesalahan saat menghapus user.');
         }
+    }
+
+    // AJAX endpoint to verify current admin's password
+    public function verifyAdminPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        if(!$user){
+            return response()->json(['ok' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        if(Hash::check($request->password, $user->password)){
+            return response()->json(['ok' => true]);
+        }
+
+        return response()->json(['ok' => false, 'message' => 'Password salah'], 422);
     }
 
     public function cekAktivitas($id_bengkel){

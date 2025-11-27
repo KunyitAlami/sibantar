@@ -94,6 +94,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/tambah-user/store', [AdminController::class, 'tambahUserStore'])
                 ->name('tambah-user-store');
 
+            // AJAX verify admin password before sensitive operations
+            Route::post('/verify-password', [AdminController::class, 'verifyAdminPassword'])
+                ->name('verify-password');
+
             Route::get('/edit-user/{id_user}', [AdminController::class, 'editUser'])
                 ->name('edit-user');
 
