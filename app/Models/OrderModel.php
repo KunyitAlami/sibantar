@@ -27,6 +27,7 @@ class OrderModel extends Model
     ];
 
     public $timestamps = true;
+    protected $dates = ['deleted_at'];
     public function user()
     {
         return $this->belongsTo(UserModel::class, 'id_user', 'id_user');

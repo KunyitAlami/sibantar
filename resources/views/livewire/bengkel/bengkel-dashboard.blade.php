@@ -1,4 +1,24 @@
 <div class="space-y-6">
+    {{-- Flash Messages --}}
+    @if (session()->has('success'))
+        <div x-data="{ show: true }" 
+             x-show="show" 
+             x-init="setTimeout(() => show = false, 3000)"
+             class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" 
+             role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div x-data="{ show: true }" 
+             x-show="show" 
+             x-init="setTimeout(() => show = false, 5000)"
+             class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" 
+             role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
     {{-- BUTTON PANEL --}}
 
     {{-- Mobile: use a compact dropdown instead of horizontal buttons --}}
@@ -330,22 +350,16 @@
                                     <td class="px-3 py-2 sm:px-4 sm:py-3">
                                         <div class="flex items-center justify-center gap-2">
                                             <button type="button" 
-                                                onclick="confirmDelete(event, {{ $l->id_layanan_bengkel }}, '{{ $_instance->getId() }}')"
-                                                wire:loading.attr="disabled"
-                                                wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})"
+                                                wire:click="$dispatch('confirm-delete-layanan', { id: {{ $l->id_layanan_bengkel }} })"
                                                 class="px-3 py-1 sm:px-4 sm:py-2 rounded-full font-semibold border border-red-600 text-red-600 
-                                                    hover:bg-red-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                                                <span wire:loading.remove wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
-                                                <span wire:loading wire:target="hapusLayanan({{ $l->id_layanan_bengkel }})">Hapus</span>
+                                                    hover:bg-red-600 hover:text-white transition-all">
+                                                Hapus
                                             </button>
 
                                             <button type="button"
                                                 wire:click="editLayanan({{ $l->id_layanan_bengkel }})"
-                                                wire:loading.attr="disabled"
-                                                wire:target="editLayanan({{ $l->id_layanan_bengkel }})"
                                                 class="px-3 py-2 sm:px-4 sm:py-2 rounded-full font-semibold border border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-white transition-all text-center">
-                                                <span wire:loading.remove wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
-                                                <span wire:loading wire:target="editLayanan({{ $l->id_layanan_bengkel }})">Edit</span>
+                                                Edit
                                             </button>
                                         </div>
                                     </td>
@@ -461,9 +475,57 @@
 
     </div>
 </div>
-
 <script>
-    function _showDeleteSwal(id, instanceId) {
+document.addEventListener('livewire:init', () => {
+    // Function untuk load SweetAlert2 jika belum ada
+    function loadSweetAlert() {
+        return new Promise((resolve, reject) => {
+            if (typeof Swal !== 'undefined') {
+                console.log('✅ SweetAlert2 already loaded');
+                resolve();
+                return;
+            }
+            
+            console.log('⏳ Loading SweetAlert2...');
+            
+            // Load CSS
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css';
+            document.head.appendChild(link);
+            
+            // Load JS
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            script.onload = () => {
+                console.log('✅ SweetAlert2 loaded successfully');
+                resolve();
+            };
+            script.onerror = () => {
+                console.error('❌ Failed to load SweetAlert2');
+                reject(new Error('Failed to load SweetAlert2'));
+            };
+            document.head.appendChild(script);
+        });
+    }
+    
+    Livewire.on('confirm-delete-layanan', async (event) => {
+        console.log('🔵 Event received:', event);
+        
+
+        try {
+            await loadSweetAlert();
+        } catch (error) {
+            console.error('❌ Failed to load SweetAlert2:', error);
+            
+            // Fallback ke confirm() native jika SweetAlert gagal load
+            if (confirm('Hapus layanan ini? Layanan akan dihapus permanen.')) {
+                console.log('🟢 User confirmed (native), calling Livewire method with id:', event.id);
+                @this.call('hapusLayanan', event.id);
+            }
+            return;
+        }
+        
         Swal.fire({
             title: 'Hapus layanan?',
             text: 'Layanan akan dihapus permanen. Lanjutkan?',
@@ -472,41 +534,16 @@
             confirmButtonText: 'Hapus',
             cancelButtonText: 'Batal',
             customClass: {
-                actions: 'swal2-actions gap-3',
                 confirmButton: 'rounded-full px-6 py-2 bg-red-600 text-white font-semibold hover:bg-red-700',
                 cancelButton: 'rounded-full px-6 py-2 bg-gray-500 text-white font-semibold hover:bg-gray-600'
             },
             buttonsStyling: false
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log('Deleting layanan id:', id, 'via component:', instanceId);
-                try {
-                    const component = Livewire.find(instanceId);
-                    if (component) {
-                        component.call('hapusLayanan', id);
-                    } else {
-                        console.error('Component not found:', instanceId);
-                    }
-                } catch (e) {
-                    console.error('Livewire call failed', e);
-                }
+                console.log('🟢 User confirmed, calling Livewire method with id:', event.id);
+                @this.call('hapusLayanan', event.id);
             }
         });
-    }
-
-    function confirmDelete(event, id, instanceId) {
-        event.preventDefault();
-        event.stopPropagation(); 
-        
-        console.log('confirmDelete called - id:', id, 'instanceId:', instanceId);
-        
-        if (typeof Swal === 'undefined') {
-            const s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-            s.onload = function() { _showDeleteSwal(id, instanceId); };
-            document.head.appendChild(s);
-        } else {
-            _showDeleteSwal(id, instanceId);
-        }
-    }
+    });
+});
 </script>

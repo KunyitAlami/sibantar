@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LayananBengkelModel extends Model
 {
+    use SoftDeletes; 
     protected $table = 'layanan_bengkel';
     protected $primaryKey = 'id_layanan_bengkel';
 
@@ -24,4 +26,5 @@ class LayananBengkelModel extends Model
 
 
     public $timestamps = true;
+    protected $dates = ['deleted_at'];
 }

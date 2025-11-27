@@ -19,6 +19,7 @@ class BengkelDashboard extends Component
     protected $ordersCache = null;
     protected $lastLoadTime = null;
 
+
     public function mount($id_bengkel)
     {
         $this->id_bengkel = $id_bengkel;
@@ -315,28 +316,56 @@ class BengkelDashboard extends Component
     
     public function hapusLayanan($id_layanan_bengkel)
     {
-        Log::info("hapusLayanan called with id_layanan_bengkel={$id_layanan_bengkel}, component id_bengkel={$this->id_bengkel}");
+        Log::info("🔴 ==================== START HAPUS LAYANAN ====================");
+        Log::info("🔴 Method hapusLayanan DIPANGGIL!");
+        Log::info("🔴 Parameter id_layanan_bengkel: {$id_layanan_bengkel}");
+        Log::info("🔴 Component id_bengkel: {$this->id_bengkel}");
 
         $layanan = LayananBengkelModel::find($id_layanan_bengkel);
+        Log::info("🔴 Query result: " . ($layanan ? "FOUND" : "NOT FOUND"));
+
+        if ($layanan) {
+            Log::info("🔴 Layanan data: " . json_encode([
+                'id' => $layanan->id_layanan_bengkel,
+                'id_bengkel' => $layanan->id_bengkel,
+                'nama' => $layanan->nama_layanan,
+            ]));
+        }
 
         if (!$layanan || $layanan->id_bengkel != $this->id_bengkel) {
-            Log::warning("hapusLayanan: layanan not found or ownership mismatch. found_layanan_id=" . ($layanan?->id_layanan_bengkel ?? 'null') . ", layanan_id_bengkel=" . ($layanan?->id_bengkel ?? 'null') );
-            session()->flash('error', 'Layanan tidak ditemukan.');
+            Log::warning("❌ Validation FAILED");
+            session()->flash('error', 'Layanan tidak ditemukan atau bukan milik bengkel ini.');
+            
+            // ✅ TAMBAHKAN DISPATCH
+            $this->dispatch('$refresh'); 
             return;
         }
 
         try {
-            $layanan->delete();
+            Log::info("🔵 Attempting to delete...");
+            $deleted = $layanan->delete();
+            Log::info("✅ Delete result: " . ($deleted ? 'SUCCESS' : 'FAILED'));
+            
+            // ✅ REFRESH DATA
             $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
+            Log::info("✅ Layanan count after delete: " . $this->layanan->count());
 
             session()->flash('success', 'Layanan berhasil dihapus.');
-            Log::info("hapusLayanan: sukses menghapus layanan id={$id_layanan_bengkel} untuk bengkel={$this->id_bengkel}");
+            
+            // ✅ TAMBAHKAN DISPATCH
+            $this->dispatch('$refresh');
+            
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan saat menghapus layanan.');
-            Log::error('Hapus layanan error: '.$e->getMessage());
+            Log::error('🔥 EXCEPTION: ' . $e->getMessage());
+            Log::error('🔥 TRACE: ' . $e->getTraceAsString());
+            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            
+            // ✅ TAMBAHKAN DISPATCH
+            $this->dispatch('$refresh');
         }
+        
+        Log::info("🔴 ==================== END HAPUS LAYANAN ====================");
     }
-
     public function editLayanan($id_layanan_bengkel)
     {
         return redirect()->route('bengkel.edit.layanan', $id_layanan_bengkel);

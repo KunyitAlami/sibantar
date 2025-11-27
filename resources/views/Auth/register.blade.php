@@ -40,7 +40,8 @@
                             required 
                             autofocus
                             maxlength="25"
-                        >
+                            onkeydown="return /^[A-Za-z\s]$/.test(event.key) || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Tab';"
+                        />
                         @error('username')
                             <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
                         @enderror
@@ -177,6 +178,8 @@
                             Daftar Sekarang
                         </button>
                     </div>
+
+
                     
                     <script>
                     function validateRegisterForm(e) {
@@ -299,6 +302,24 @@
             }
         }
     </script>
+
+    <script>
+    const usernameInput = document.getElementById('username');
+
+    usernameInput.addEventListener('keydown', function(e) {
+        // Allow: letters, space, backspace, delete, arrows, tab
+        if (!e.key.match(/^[A-Za-z\s]$/) && !['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    // Handle paste / autofill / input changes
+    usernameInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^A-Za-z\s]/g, '');
+    });
+    </script>
     @endpush
+
+
 
 </x-layout>
