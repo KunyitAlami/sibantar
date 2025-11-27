@@ -24,7 +24,7 @@
                 <li>
                     <a href="{{ route('user.edit-personalisasi', ['id_user' => auth()->user()->id_user]) }}" 
                     class="font-medium {{ request()->routeIs('user.edit-personalisasi') ? 'active' : '' }}">
-                        Edit Personalisasi
+                        Edit Profile
                     </a>
                 </li>
                 <li>
@@ -61,7 +61,7 @@
                     <li>
                         <a href="{{ route('user.edit-personalisasi', ['id_user' => auth()->user()->id_user]) }}" 
                         class="font-medium {{ request()->routeIs('user.edit-personalisasi') ? 'active' : '' }}">
-                            Edit Personalisasi
+                            Edit Profile
                         </a>
                     </li>
                     <div class="divider my-1"></div>
