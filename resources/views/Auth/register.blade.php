@@ -16,13 +16,13 @@
                     @csrf
 
                     @if ($errors->any())
-                        <div class="mb-4 text-danger-600">
+                        <!-- <div class="mb-4 text-danger-600">
                             <ul class="list-disc pl-5">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
-                        </div>
+                        </div> -->
                     @endif
 
                     <!-- Nama Lengkap -->
@@ -79,9 +79,9 @@
                             name="wa_number"
                             class="input"
                             placeholder="08123456789"
-                            maxlength="15"
+                            maxlength="12"
                             inputmode="numeric"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,12)"
                         >
 
                         <p id="waError" class="mt-1 text-sm text-danger-600 hidden"></p>
@@ -118,6 +118,15 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                                 </svg>
                             </button>
+                        </div>
+                        <div id="passwordRequirements" class="mt-2 text-sm">
+                            <ul class="space-y-1">
+                                <li id="req-length" class="text-neutral-500">• Minimal 8 karakter</li>
+                                <li id="req-lower" class="text-neutral-500">• Mengandung huruf kecil (a-z)</li>
+                                <li id="req-upper" class="text-neutral-500">• Mengandung huruf besar (A-Z)</li>
+                                <li id="req-number" class="text-neutral-500">• Mengandung angka (0-9)</li>
+                                <li id="req-symbol" class="text-neutral-500">• Mengandung simbol (mis. !@#$%)</li>
+                            </ul>
                         </div>
                         @error('password')
                             <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
@@ -229,29 +238,39 @@
                             waError.textContent = 'Nomor telepon hanya boleh angka.';
                             waError.classList.remove('hidden');
                             valid = false;
-                        } else if (wa.length > 15) {
-                            waError.textContent = 'Nomor telepon maksimal 15 karakter.';
+                        } else if (wa.length > 12) {
+                            waError.textContent = 'Nomor telepon maksimal 12 karakter.';
                             waError.classList.remove('hidden');
                             valid = false;
                         }
 
-                        // Password match and complexity validation (more specific messages)
-                        var hasLetter = /[A-Za-z]/.test(password);
+                        // Password complexity checks
+                        var missing = [];
+                        var hasLower = /[a-z]/.test(password);
+                        var hasUpper = /[A-Z]/.test(password);
                         var hasNumber = /[0-9]/.test(password);
-                        if (password.length < 8) {
-                            passwordMatchError.textContent = 'Password minimal 8 karakter.';
+                        var hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?]/.test(password);
+                        if (password.length < 8) missing.push('Minimal 8 karakter');
+                        if (!hasLower) missing.push('Huruf kecil (a-z)');
+                        if (!hasUpper) missing.push('Huruf besar (A-Z)');
+                        if (!hasNumber) missing.push('Angka (0-9)');
+                        if (!hasSymbol) missing.push('Simbol (mis. !@#$%)');
+
+                        // Update visible checklist colors
+                        toggleChecklistState('req-length', password.length >= 8);
+                        toggleChecklistState('req-lower', hasLower);
+                        toggleChecklistState('req-upper', hasUpper);
+                        toggleChecklistState('req-number', hasNumber);
+                        toggleChecklistState('req-symbol', hasSymbol);
+
+                        if (missing.length > 0) {
+                            passwordMatchError.textContent = 'Password harus memenuhi: ' + missing.join(', ') + '.';
                             passwordMatchError.classList.remove('hidden');
                             valid = false;
-                        } else if (!hasLetter) {
-                            passwordMatchError.textContent = 'Password harus mengandung minimal satu huruf.';
-                            passwordMatchError.classList.remove('hidden');
-                            valid = false;
-                        } else if (!hasNumber) {
-                            passwordMatchError.textContent = 'Password harus mengandung minimal satu angka.';
-                            passwordMatchError.classList.remove('hidden');
-                            valid = false;
-                        } else if (password !== passwordConfirm) {
-                            passwordMatchError.textContent = 'Password dan konfirmasi password tidak sama.';
+                        }
+
+                        if (password !== passwordConfirm) {
+                            passwordMatchError.textContent = (passwordMatchError.classList.contains('hidden') ? '' : passwordMatchError.textContent + ' ') + 'Password dan konfirmasi tidak sama.';
                             passwordMatchError.classList.remove('hidden');
                             valid = false;
                         }
@@ -261,6 +280,57 @@
                         }
                         return valid;
                     }
+
+                    function toggleChecklistState(id, ok) {
+                        var el = document.getElementById(id);
+                        if (!el) return;
+                        if (ok) {
+                            el.classList.remove('text-neutral-500');
+                            el.classList.add('text-success-600');
+                        } else {
+                            el.classList.remove('text-success-600');
+                            el.classList.add('text-neutral-500');
+                        }
+                    }
+
+                    // Live update for password field
+                    var passwordInput = document.getElementById('password');
+                    var passwordConfirmInput = document.getElementById('password_confirmation');
+                    var passwordMatchError = document.getElementById('passwordMatchError');
+
+                    function updatePasswordChecklist() {
+                        var pwd = passwordInput.value;
+                        var hasLower = /[a-z]/.test(pwd);
+                        var hasUpper = /[A-Z]/.test(pwd);
+                        var hasNumber = /[0-9]/.test(pwd);
+                        var hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?]/.test(pwd);
+                        toggleChecklistState('req-length', pwd.length >= 8);
+                        toggleChecklistState('req-lower', hasLower);
+                        toggleChecklistState('req-upper', hasUpper);
+                        toggleChecklistState('req-number', hasNumber);
+                        toggleChecklistState('req-symbol', hasSymbol);
+
+                        // Clear match error while typing
+                        if (passwordMatchError) {
+                            passwordMatchError.textContent = '';
+                            passwordMatchError.classList.add('hidden');
+                        }
+                    }
+
+                    function updatePasswordMatch() {
+                        if (!passwordMatchError) return;
+                        if (passwordConfirmInput.value && passwordInput.value !== passwordConfirmInput.value) {
+                            passwordMatchError.textContent = 'Password dan konfirmasi tidak sama.';
+                            passwordMatchError.classList.remove('hidden');
+                        } else {
+                            passwordMatchError.textContent = '';
+                            passwordMatchError.classList.add('hidden');
+                        }
+                    }
+
+                    passwordInput?.addEventListener('input', updatePasswordChecklist);
+                    passwordConfirmInput?.addEventListener('input', updatePasswordMatch);
+
                     document.querySelector('form[action="{{ route('register.post') }}"]')?.addEventListener('submit', validateRegisterForm);
                     </script>
                 </form>

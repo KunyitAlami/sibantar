@@ -56,7 +56,7 @@
                     <li><a href="{{ route('bengkel.dashboard', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel]) }}?panel=about">Profile Bengkel</a></li>
                     <li>
                         <a href="{{ route('bengkel.personalisasi', ['id_bengkel' => Auth::user()->bengkel->first()->id_bengkel])}}">
-                            Edit Personalisasi
+                            Edit Profile
                         </a>
                     </li>
                     <li>
