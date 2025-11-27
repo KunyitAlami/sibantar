@@ -105,7 +105,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Akun tidak ditemukan! Pastikan email atau username benar.',
+            'email' => 'Akun tidak ditemukan! Pastikan email benar.',
         ]);
     }
 
@@ -175,8 +175,8 @@ class AuthController extends Controller
                         $fail('Nomor Telepon minimal 10 digit.');
                     }
 
-                    if (strlen($value) > 13) {
-                        $fail('Nomor Telepon maksimal 13 digit.');
+                    if (strlen($value) > 12) {
+                        $fail('Nomor Telepon maksimal 12 digit.');
                     }
 
                     if (preg_match('/^([0-9])\1+$/', $value)) {
@@ -202,8 +202,9 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'password.regex' => 'Password harus mengandung huruf dan angka.',
             'wa_number.required' => 'Nomor Telepon wajib diisi.',
-            'wa_number.max' => 'Nomor Telepon maksimal 15 karakter.',
+            'wa_number.max' => 'Nomor Telepon maksimal 12 karakter.',
             'wa_number.regex' => 'Nomor Telepon hanya boleh berisi angka.',
+            'wa_number.unique' => 'Nomor Telepon sudah terdaftar.',
         ]);
 
         $blocked = UserModel::where(function($q) use ($request){
@@ -255,6 +256,7 @@ class AuthController extends Controller
                 'max:255',
                 Rule::unique('calon_bengkel', 'email'),
                 Rule::unique('user', 'email'),
+                'regex:/^[A-Za-z0-9._%+-]+@gmail\.com$/i',
             ],
             'password' => [
                 'required',
@@ -294,8 +296,8 @@ class AuthController extends Controller
                         $fail('Nomor Telepon minimal 10 digit.');
                     }
 
-                    if (strlen($value) > 13) {
-                        $fail('Nomor Telepon maksimal 13 digit.');
+                    if (strlen($value) > 12) {
+                        $fail('Nomor Telepon maksimal 12 digit.');
                     }
 
                     if (preg_match('/^([0-9])\1+$/', $value)) {
@@ -312,11 +314,35 @@ class AuthController extends Controller
                 'required',
                 'url',
                 'max:500',
-                'regex:/^(https?:\/\/)?(www\.)?(google\.[a-z.]+\/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl)\/.+$/'
+                function($attribute, $value, $fail) {
+                    // Enforce that the link starts with the specific maps.app short link
+                    $requiredPrefix = 'https://maps.app.goo.gl/';
+                    if (stripos($value, $requiredPrefix) !== 0) {
+                        $fail('Link Google Maps harus diawali dengan "https://maps.app.goo.gl/"');
+                    }
+                }
             ],
             'kecamatan' => 'required|string|in:' . implode(',', $daftarKecamatan),
             'jam_buka' => 'required|date_format:H:i',
-            'jam_tutup' => 'required|date_format:H:i|after:jam_buka',
+            'jam_tutup' => [
+                'required',
+                'date_format:H:i',
+                function($attribute, $value, $fail) use ($request) {
+                    $open = \DateTime::createFromFormat('H:i', $request->input('jam_buka'));
+                    $close = \DateTime::createFromFormat('H:i', $value);
+                    if (!$open || !$close) {
+                        // let the date_format rule handle the message
+                        return;
+                    }
+                    // Ensure close is later than open on same day and at least 1 hour apart
+                    $openTs = (int) $open->format('U');
+                    $closeTs = (int) $close->format('U');
+                    $diffSeconds = $closeTs - $openTs;
+                    if ($diffSeconds <= 0 || $diffSeconds < 3600) {
+                        $fail('Jam tutup harus minimal 1 jam setelah jam buka.');
+                    }
+                }
+            ],
             'alamat_lengkap' => 'required|string|min:10|max:500',
             'penjelasan_bengkel' => 'required|string|max:10000',
         ], [
@@ -336,7 +362,10 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
 
             'wa_number.required' => 'Nomor WA wajib diisi.',
-            'wa_number.regex' => 'Nomor WA harus angka, dimulai dengan 08, panjang 10-13 digit.',
+            'wa_number.regex' => 'Nomor WA harus angka, dimulai dengan 08, panjang 10-12 digit.',
+            'wa_number.max' => 'Nomor WA maksimal 12 karakter.',
+            'email.regex' => 'Email harus menggunakan domain @gmail.com.',
+            'wa_number.unique' => 'Nomor WA sudah terdaftar di calon bengkel atau user.',
 
             'nama_bengkel.required' => 'Nama bengkel wajib diisi.',
             'nama_bengkel.min' => 'Nama bengkel minimal 3 karakter.',

@@ -12,18 +12,10 @@
 
             <!-- Register Card -->
             <div class="card p-6 sm:p-8 w-full max-w-4xl mx-auto">
-                <form method="POST" action="{{ route('registerBengkel.post') }}" class="space-y-8">
+                <form method="POST" action="{{ route('registerBengkel.post') }}" class="space-y-8" onsubmit="return validateRegisterBengkelForm(event)">
                     @csrf
 
-                    @if ($errors->any())
-                        <div class="mb-4 text-danger-600">
-                            <ul class="list-disc pl-5">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                    {{-- Errors are shown inline under each field using @error('field') blocks --}}
 
                     {{-- <input type="text" name="faketext" style="display:none" value=" " tabindex="-1">
                         <input type="password" name="fakepassword" style="display:none" value=" " tabindex="-1"> --}}
@@ -62,6 +54,8 @@
                                     class="input @error('wa_number') border-danger-500 @enderror"
                                     placeholder="08123456789"
                                     inputmode="numeric"
+                                    maxlength="12"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,12)"
                                     required
                                 >
                                 <p id="waError" class="mt-1 text-sm text-danger-600 hidden"></p>
@@ -81,6 +75,15 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                                         </svg>
                                     </button>
+                                </div>
+                                <div id="passwordRequirements" class="mt-2 text-sm">
+                                    <ul class="space-y-1">
+                                        <li id="req-length" class="text-neutral-500">• Minimal 8 karakter</li>
+                                        <li id="req-lower" class="text-neutral-500">• Mengandung huruf kecil (a-z)</li>
+                                        <li id="req-upper" class="text-neutral-500">• Mengandung huruf besar (A-Z)</li>
+                                        <li id="req-number" class="text-neutral-500">• Mengandung angka (0-9)</li>
+                                        <li id="req-symbol" class="text-neutral-500">• Mengandung simbol (mis. !@#$%)</li>
+                                    </ul>
                                 </div>
                                 @error('password')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                             </div>
@@ -191,6 +194,7 @@
                                 <div>
                                     <label for="jam_tutup" class="block text-sm font-medium text-neutral-700 mb-2">Jam Tutup Bengkel (WITA)</label>
                                     <input type="time" step="60" id="jam_tutup" name="jam_tutup" class="input @error('jam_tutup') border-danger-500 @enderror" placeholder="23.59" value="{{ old('jam_tutup') }}" required autofocus min="0" max="23.99" step="0.01">
+                                    <p id="jamTutupError" class="mt-1 text-sm text-danger-600 hidden"></p>
                                     @error('jam_tutup')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                                 </div>
                             </div>
@@ -274,6 +278,29 @@
         }
 
         function validateRegisterBengkelForm(e) {
+            // Jam buka/tutup validation (client-side)
+            var jamBuka = document.getElementById('jam_buka').value;
+            var jamTutup = document.getElementById('jam_tutup').value;
+            var jamTutupError = document.getElementById('jamTutupError');
+            if (jamBuka && jamTutup) {
+                try {
+                    var partsA = jamBuka.split(':');
+                    var partsB = jamTutup.split(':');
+                    var dtA = new Date(); dtA.setHours(parseInt(partsA[0],10), parseInt(partsA[1]||0,10),0,0);
+                    var dtB = new Date(); dtB.setHours(parseInt(partsB[0],10), parseInt(partsB[1]||0,10),0,0);
+                    var diffMs = dtB - dtA;
+                    if (isNaN(diffMs) || diffMs <= 0 || diffMs < (60*60*1000)) {
+                        jamTutupError.textContent = 'Jam tutup harus minimal 1 jam setelah jam buka.';
+                        jamTutupError.classList.remove('hidden');
+                        valid = false;
+                    } else {
+                        jamTutupError.textContent = '';
+                        jamTutupError.classList.add('hidden');
+                    }
+                } catch(err) {
+                    // ignore parse errors and let server validate
+                }
+            }
             var email = document.getElementById('email').value.trim();
             var wa = document.getElementById('wa_number').value.trim();
             var password = document.getElementById('password').value;
@@ -303,21 +330,49 @@
                 valid = false;
             }
 
-            // WA number validation
+            // WA number validation (max 12 digits)
             var waPattern = /^[0-9]+$/;
             if (!wa) {
                 waError.textContent = 'Nomor telepon wajib diisi.';
                 waError.classList.remove('hidden');
                 valid = false;
             } else if (!waPattern.test(wa)) {
-                waError.textContent = 'Nomor telepon harus diawali 08 atau 628 (10-15 digit).';
+                waError.textContent = 'Nomor telepon hanya boleh angka.';
+                waError.classList.remove('hidden');
+                valid = false;
+            } else if (wa.length > 12) {
+                waError.textContent = 'Nomor telepon maksimal 12 karakter.';
                 waError.classList.remove('hidden');
                 valid = false;
             }
 
-            // Password match validation
+            // Password complexity checks + match
+            var missing = [];
+            var hasLower = /[a-z]/.test(password);
+            var hasUpper = /[A-Z]/.test(password);
+            var hasNumber = /[0-9]/.test(password);
+            var hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?]/.test(password);
+            if (password.length < 8) missing.push('Minimal 8 karakter');
+            if (!hasLower) missing.push('Huruf kecil (a-z)');
+            if (!hasUpper) missing.push('Huruf besar (A-Z)');
+            if (!hasNumber) missing.push('Angka (0-9)');
+            if (!hasSymbol) missing.push('Simbol (mis. !@#$%)');
+
+            // Update visible checklist colors
+            toggleChecklistState('req-length', password.length >= 8);
+            toggleChecklistState('req-lower', hasLower);
+            toggleChecklistState('req-upper', hasUpper);
+            toggleChecklistState('req-number', hasNumber);
+            toggleChecklistState('req-symbol', hasSymbol);
+
+            if (missing.length > 0) {
+                passwordMatchError.textContent = 'Password harus memenuhi: ' + missing.join(', ') + '.';
+                passwordMatchError.classList.remove('hidden');
+                valid = false;
+            }
+
             if (password !== passwordConfirm) {
-                passwordMatchError.textContent = 'Password dan konfirmasi password tidak sama.';
+                passwordMatchError.textContent = (passwordMatchError.classList.contains('hidden') ? '' : passwordMatchError.textContent + ' ') + 'Password dan konfirmasi password tidak sama.';
                 passwordMatchError.classList.remove('hidden');
                 valid = false;
             }
@@ -328,6 +383,100 @@
             return valid;
         }
         document.querySelector('form[action="{{ route('registerBengkel.post') }}"]')?.addEventListener('submit', validateRegisterBengkelForm);
+
+        // Client-side Google Maps URL validation helper
+        function isValidGoogleMapsUrl(val) {
+            if (!val) return false;
+            // Require starting prefix exactly (case-insensitive)
+            var required = 'https://maps.app.goo.gl/';
+            return val.toLowerCase().indexOf(required) === 0;
+        }
+
+        // Hook into submission flow to validate link_gmaps client-side and show inline error
+        var linkInput = document.getElementById('link_gmaps');
+        var linkErrorEl = null;
+        if (linkInput) {
+            // create inline error element if not already
+            linkErrorEl = document.getElementById('linkGmapsError');
+            if (!linkErrorEl) {
+                linkErrorEl = document.createElement('p');
+                linkErrorEl.id = 'linkGmapsError';
+                linkErrorEl.className = 'mt-1 text-sm text-danger-600 hidden';
+                linkInput.insertAdjacentElement('afterend', linkErrorEl);
+            }
+        }
+
+        // enhance validate function to check maps link
+        const originalValidate = validateRegisterBengkelForm;
+        document.querySelector('form[action="{{ route('registerBengkel.post') }}"]')?.removeEventListener('submit', validateRegisterBengkelForm);
+        document.querySelector('form[action="{{ route('registerBengkel.post') }}"]')?.addEventListener('submit', function(e){
+            var ok = originalValidate(e);
+            if (!ok) return false;
+            if (linkInput) {
+                var val = linkInput.value.trim();
+                if (!isValidGoogleMapsUrl(val)) {
+                    if (linkErrorEl) {
+                        linkErrorEl.textContent = 'Link Google Maps harus format URL Maps yang valid.';
+                        linkErrorEl.classList.remove('hidden');
+                    }
+                    e.preventDefault();
+                    return false;
+                } else if (linkErrorEl) {
+                    linkErrorEl.textContent = '';
+                    linkErrorEl.classList.add('hidden');
+                }
+            }
+            return true;
+        });
+        
+        // Password checklist helpers and live updates
+        function toggleChecklistState(id, ok) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            if (ok) {
+                el.classList.remove('text-neutral-500');
+                el.classList.add('text-success-600');
+            } else {
+                el.classList.remove('text-success-600');
+                el.classList.add('text-neutral-500');
+            }
+        }
+
+        var passwordInput = document.getElementById('password');
+        var passwordConfirmInput = document.getElementById('password_confirmation');
+        var passwordMatchError = document.getElementById('passwordMatchError');
+
+        function updatePasswordChecklist() {
+            var pwd = passwordInput.value;
+            var hasLower = /[a-z]/.test(pwd);
+            var hasUpper = /[A-Z]/.test(pwd);
+            var hasNumber = /[0-9]/.test(pwd);
+            var hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?]/.test(pwd);
+            toggleChecklistState('req-length', pwd.length >= 8);
+            toggleChecklistState('req-lower', hasLower);
+            toggleChecklistState('req-upper', hasUpper);
+            toggleChecklistState('req-number', hasNumber);
+            toggleChecklistState('req-symbol', hasSymbol);
+
+            if (passwordMatchError) {
+                passwordMatchError.textContent = '';
+                passwordMatchError.classList.add('hidden');
+            }
+        }
+
+        function updatePasswordMatch() {
+            if (!passwordMatchError) return;
+            if (passwordConfirmInput.value && passwordInput.value !== passwordConfirmInput.value) {
+                passwordMatchError.textContent = 'Password dan konfirmasi tidak sama.';
+                passwordMatchError.classList.remove('hidden');
+            } else {
+                passwordMatchError.textContent = '';
+                passwordMatchError.classList.add('hidden');
+            }
+        }
+
+        passwordInput?.addEventListener('input', updatePasswordChecklist);
+        passwordConfirmInput?.addEventListener('input', updatePasswordMatch);
     </script>
     @endpush
 

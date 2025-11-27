@@ -59,9 +59,10 @@
                                 inputmode="numeric"
                                 maxlength="15"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                oninput="sanitizeNumericInput(this); validatePriceField('harga_awal')"
                                 value="{{ old('harga_awal', $layanan_bengkel->harga_awal) }}"
                             >
+                            <p id="harga_awal_error" class="mt-2 text-sm text-danger-600 hidden"></p>
                         </div>
 
                         <div class="flex-1">
@@ -74,9 +75,10 @@
                                 inputmode="numeric"
                                 maxlength="15"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                oninput="sanitizeNumericInput(this); validatePriceField('harga_akhir')"
                                 value="{{ old('harga_akhir', $layanan_bengkel->harga_akhir) }}"
                             >
+                            <p id="harga_akhir_error" class="mt-2 text-sm text-danger-600 hidden"></p>
                         </div>
                     </div>
 
@@ -113,55 +115,113 @@
 
                 <script>
                     (function(){
-                        const form = document.getElementById('editLayananForm');
-                        if(!form) return;
+                        const MIN_PRICE = 1000; // minimal realistic price (Rp 1.000)
 
-                        form.addEventListener('submit', function(e){
-                            const a = document.getElementById('harga_awal');
-                            const b = document.getElementById('harga_akhir');
-                            if(!a || !b) return;
-                            const va = parseInt(a.value.replace(/\D/g,'')) || 0;
-                            const vb = parseInt(b.value.replace(/\D/g,'')) || 0;
-                            if(va > vb){
-                                e.preventDefault();
-                                e.stopPropagation();
-                                const showSwal = () => {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Periksa Harga',
-                                        text: 'Harga terendah tidak boleh melebihi harga tertinggi. Mohon periksa kembali.',
-                                        confirmButtonColor: '#0051BA'
-                                    }).then(() => { a.focus(); });
-                                };
+                        function sanitizeNumericInput(el){
+                            if(!el) return;
+                            const only = el.value.replace(/[^0-9]/g, '');
+                            el.value = only;
+                        }
 
-                                if (typeof Swal !== 'undefined') {
-                                    showSwal();
-                                } else {
-                                    const s = document.createElement('script');
-                                    s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-                                    s.onload = showSwal;
-                                    document.head.appendChild(s);
-                                }
+                        function showError(fieldId, message){
+                            const input = document.getElementById(fieldId);
+                            const err = document.getElementById(fieldId + '_error');
+                            if(err){
+                                err.textContent = message;
+                                err.classList.remove('hidden');
+                            }
+                            if(input){
+                                input.classList.add('border-danger-600');
+                            }
+                        }
 
+                        function clearError(fieldId){
+                            const input = document.getElementById(fieldId);
+                            const err = document.getElementById(fieldId + '_error');
+                            if(err){
+                                err.textContent = '';
+                                err.classList.add('hidden');
+                            }
+                            if(input){
+                                input.classList.remove('border-danger-600');
+                            }
+                        }
+
+                        function validatePriceField(fieldId){
+                            const input = document.getElementById(fieldId);
+                            if(!input) return true;
+                            const raw = (input.value || '').replace(/\D/g, '');
+                            if(raw === '' ){
+                                showError(fieldId, 'Harga wajib diisi.');
                                 return false;
                             }
-                        });
-                    })();
+                            if(/^0+$/.test(raw)){
+                                showError(fieldId, 'Harga tidak boleh 0 atau 000000. Mohon masukkan nilai realistis.');
+                                return false;
+                            }
+                            const val = parseInt(raw, 10);
+                            if(isNaN(val) || val <= 0){
+                                showError(fieldId, 'Harga tidak valid.');
+                                return false;
+                            }
+                            if(val < MIN_PRICE){
+                                showError(fieldId, 'Harga terlalu kecil. Minimal Rp ' + MIN_PRICE.toLocaleString('id-ID') + '.');
+                                return false;
+                            }
+                            clearError(fieldId);
+                            return true;
+                        }
 
-                    (function(){
+                        function validateBothPrices(){
+                            const okA = validatePriceField('harga_awal');
+                            const okB = validatePriceField('harga_akhir');
+                            if(!okA || !okB) return false;
+
+                            const a = document.getElementById('harga_awal');
+                            const b = document.getElementById('harga_akhir');
+                            const va = parseInt((a.value || '').replace(/\D/g,''), 10) || 0;
+                            const vb = parseInt((b.value || '').replace(/\D/g,''), 10) || 0;
+                            if(va > vb){
+                                showError('harga_awal', 'Harga terendah tidak boleh lebih besar dari harga tertinggi.');
+                                showError('harga_akhir', 'Periksa kembali nilai harga tertinggi.');
+                                return false;
+                            }
+                            return true;
+                        }
+
                         const form = document.getElementById('editLayananForm');
                         if(!form) return;
 
                         const existingNames = @json($existingNames);
                         const oldName = "{{ $layanan_bengkel->nama_layanan }}";
 
+                        // attach blur listeners
+                        const aInput = document.getElementById('harga_awal');
+                        const bInput = document.getElementById('harga_akhir');
+                        if(aInput){ aInput.addEventListener('blur', function(){ validatePriceField('harga_awal'); }); }
+                        if(bInput){ bInput.addEventListener('blur', function(){ validatePriceField('harga_akhir'); }); }
+
                         form.addEventListener('submit', function(e){
+                            // price validation
+                            const pricesOk = validateBothPrices();
+                            if(!pricesOk){
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const firstErr = document.querySelector('#harga_awal_error:not(.hidden), #harga_akhir_error:not(.hidden)');
+                                if(firstErr){
+                                    const fid = firstErr.id.replace('_error','');
+                                    const el = document.getElementById(fid);
+                                    if(el) el.focus();
+                                }
+                                return false;
+                            }
+
+                            // duplicate name check
                             const nameInput = document.getElementById('nama_layanan');
                             const newName = nameInput.value.trim();
-
-                            // Cek nama layanan duplikat
                             if(newName !== oldName && existingNames.includes(newName)){
                                 e.preventDefault();
+                                e.stopPropagation();
                                 Swal.fire({
                                     icon: 'warning',
                                     title: 'Nama Layanan Duplikat',
@@ -172,33 +232,6 @@
                             }
                         });
                     })();
-                </script>
-
-                <script>
-                (function(){
-                    const form = document.getElementById('editLayananForm');
-                    if(!form) return;
-
-                    const existingNames = @json($existingNames);
-                    const oldName = "{{ $layanan_bengkel->nama_layanan }}";
-
-                    form.addEventListener('submit', function(e){
-                        const nameInput = document.getElementById('nama_layanan');
-                        const newName = nameInput.value.trim();
-
-                        // Cek nama layanan duplikat
-                        if(newName !== oldName && existingNames.includes(newName)){
-                            e.preventDefault();
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Nama Layanan Duplikat',
-                                text: 'Nama layanan ini sudah ada di bengkel Anda. Gunakan nama lain.',
-                                confirmButtonColor: '#0051BA'
-                            }).then(() => nameInput.focus());
-                            return false;
-                        }
-                    });
-                })();
                 </script>
 
 
