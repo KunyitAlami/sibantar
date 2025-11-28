@@ -54,14 +54,18 @@
                         <div class="flex-1">
                             <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Terendah</label>
                             <input 
-                                type="text" 
+                                type="number" 
                                 id="harga_awal"
                                 name="harga_awal" 
                                 required
                                 inputmode="numeric"
-                                maxlength="15"
+                                min="0"
+                                max="1000000"
+                                step="1"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
                                 oninput="sanitizeNumericInput(this); validatePriceField('harga_awal')"
+                                onpaste="handlePasteNumeric(event, this)"
+                                onkeydown="return allowOnlyDigits(event)"
                             >
                             <p id="harga_awal_error" class="mt-2 text-sm text-danger-600 hidden"></p>
                         </div>
@@ -69,14 +73,18 @@
                         <div class="flex-1">
                             <label class="block font-medium text-neutral-800 mb-1">Perkiraan Harga Tertinggi</label>
                             <input 
-                                type="text" 
+                                type="number" 
                                 id="harga_akhir"
                                 name="harga_akhir" 
                                 required
                                 inputmode="numeric"
-                                maxlength="15"
+                                min="0"
+                                max="1000000"
+                                step="1"
                                 class="w-full border border-neutral-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500"
                                 oninput="sanitizeNumericInput(this); validatePriceField('harga_akhir')"
+                                onpaste="handlePasteNumeric(event, this)"
+                                onkeydown="return allowOnlyDigits(event)"
                             >
                             <p id="harga_akhir_error" class="mt-2 text-sm text-danger-600 hidden"></p>
                         </div>
@@ -113,12 +121,31 @@
                 <script>
                     (function(){
                         const MIN_PRICE = 1000; // minimal realist price (Rp 1.000)
+                        const MAX_PRICE = 1000000; // maksimal harga layanan (Rp 1.000.000)
+                        const MAX_PRICE_LENGTH = 7; // maks 7 karakter angka
 
                         function sanitizeNumericInput(el){
                             if(!el) return;
-                            const only = el.value.replace(/[^0-9]/g, '');
-                            // keep as-is but remove leading spaces and non-digit chars
+                            let only = el.value.replace(/[^0-9]/g, '');
+                            if(only.length > MAX_PRICE_LENGTH) only = only.slice(0, MAX_PRICE_LENGTH);
                             el.value = only;
+                        }
+
+                        function handlePasteNumeric(e, el){
+                            e.preventDefault();
+                            const clip = (e.clipboardData || window.clipboardData).getData('text') || '';
+                            const only = clip.replace(/[^0-9]/g, '').slice(0, MAX_PRICE_LENGTH);
+                            el.value = only;
+                            validatePriceField(el.id);
+                        }
+
+                        function allowOnlyDigits(e){
+                            const allowed = [8,9,13,27,37,38,39,40,46];
+                            if(allowed.indexOf(e.keyCode) !== -1) return true;
+                            if((e.ctrlKey || e.metaKey) && ['a','c','v','x','z'].includes(String.fromCharCode(e.keyCode).toLowerCase())) return true;
+                            if(e.key && /^[0-9]$/.test(e.key)) return true;
+                            e.preventDefault();
+                            return false;
                         }
 
                         function showError(fieldId, message){
@@ -154,8 +181,13 @@
                                 return false;
                             }
                             // reject values like "0" or "000000"
+                            // reject values that are all zeros or that start with a leading zero
                             if(/^0+$/.test(raw)){
                                 showError(fieldId, 'Harga tidak boleh 0/0 repetitif. Mohon masukkan nilai realistis.');
+                                return false;
+                            }
+                            if(/^0/.test(raw)){
+                                showError(fieldId, 'Harga tidak boleh diawali angka 0. Hapus angka 0 di depan.');
                                 return false;
                             }
                             const val = parseInt(raw, 10);
@@ -167,7 +199,10 @@
                                 showError(fieldId, 'Harga terlalu kecil. Minimal Rp ' + MIN_PRICE.toLocaleString('id-ID') + '.');
                                 return false;
                             }
-                            // optional: warn if unrealistic large numbers, but accept for now
+                            if(val > MAX_PRICE){
+                                showError(fieldId, 'Harga maksimal Rp ' + MAX_PRICE.toLocaleString('id-ID') + '.');
+                                return false;
+                            }
                             clearError(fieldId);
                             return true;
                         }
