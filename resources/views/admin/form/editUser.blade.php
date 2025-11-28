@@ -35,7 +35,7 @@
                     <label class="font-semibold text-neutral-700">Username</label>
                     <input id="username" autocomplete="off" type="text" name="username" required
                         class="input input-bordered w-full"
-                        value="{{ $user->username }}" oninput="document.getElementById('username_error').classList.add('hidden')">
+                        value="{{ $user->username }}" maxlength="100" oninput="validateUsername()">
                     <p id="username_error" class="mt-2 text-sm text-red-500 hidden"></p>
                     @error('username')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -47,7 +47,7 @@
                     <label class="font-semibold text-neutral-700">Email</label>
                     <input id="email" autocomplete="off" type="email" name="email" required
                         class="input input-bordered w-full"
-                        value="{{ $user->email }}" oninput="document.getElementById('email_error').classList.add('hidden')">
+                        value="{{ $user->email }}" oninput="validateEmail()" onblur="validateEmail()">
                     <p id="email_error" class="mt-2 text-sm text-red-500 hidden"></p>
                     @error('email')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -92,7 +92,9 @@
                     <label class="font-semibold text-neutral-700">Nomor WhatsApp</label>
                     <input id="wa_number" type="text" name="wa_number" required maxlength="12"
                         class="input input-bordered w-full"
-                        value="{{ $user->wa_number }}" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,12)">
+                        value="{{ $user->wa_number }}"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,12); validateWa()"
+                        onblur="validateWa()">
                     <p id="wa_number_error" class="mt-2 text-sm text-red-500 hidden"></p>
                     @error('wa_number')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -141,8 +143,37 @@
                             if(!el) return true;
                             const v = (el.value || '').trim();
                             if(v.length === 0){ showError(id, 'Nomor WA wajib diisi.'); return false; }
-                            if(!/^08[0-9]{1,10}$/.test(v)){
-                                showError(id, 'Nomor WA harus angka, diawali 08, dan maksimal 12 karakter.');
+                            // must start with 08, only digits, length between 9 and 12
+                            if(!/^08[0-9]{7,10}$/.test(v)){
+                                showError(id, 'Nomor harus diawali dengan 08');
+                                return false;
+                            }
+                            return true;
+                        }
+
+                        function validateUsername(){
+                            const id = 'username';
+                            const el = document.getElementById(id);
+                            clearError(id);
+                            if(!el) return true;
+                            const v = (el.value || '').trim();
+                            if(v.length === 0){ showError(id, 'Username wajib diisi.'); return false; }
+                            if(v.length > 100){ showError(id, 'Username terlalu panjang. Maksimal 100 karakter.'); return false; }
+                            return true;
+                        }
+
+                        function validateEmail(){
+                            const id = 'email';
+                            const el = document.getElementById(id);
+                            clearError(id);
+                            if(!el) return true;
+                            const v = (el.value || '').trim();
+                            if(v.length === 0){ showError(id, 'Email wajib diisi.'); return false; }
+                            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                            if(!re.test(v)){ showError(id, 'Format email tidak valid.'); return false; }
+                            // require gmail domain
+                            if(!v.toLowerCase().endsWith('@gmail.com')){
+                                showError(id, 'Email harus menggunakan domain @gmail.com.');
                                 return false;
                             }
                             return true;

@@ -40,7 +40,8 @@ class AdminController extends RoutingController
     // Manage Bengkel listing for admin
     public function manageBengkel()
     {
-        $bengkels = BengkelModel::all();
+        // show registered bengkel with the newest accepted/created first
+        $bengkels = BengkelModel::orderBy('created_at', 'desc')->get();
         // show calon bengkel with the newest registrations first
         $calonBengkels = CalonBengkelModel::orderBy('created_at', 'desc')->get();
 
