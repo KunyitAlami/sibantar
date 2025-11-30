@@ -23,7 +23,9 @@ class BengkelDashboard extends Component
     public function mount($id_bengkel)
     {
         $this->id_bengkel = $id_bengkel;
-        $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
+        $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function setPanel($panel)
@@ -347,7 +349,9 @@ class BengkelDashboard extends Component
             Log::info("✅ Delete result: " . ($deleted ? 'SUCCESS' : 'FAILED'));
             
             // ✅ REFRESH DATA
-            $this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)->get();
+            	$this->layanan = LayananBengkelModel::where('id_bengkel', $this->id_bengkel)
+            	    ->orderBy('created_at', 'desc')
+            	    ->get();
             Log::info("✅ Layanan count after delete: " . $this->layanan->count());
 
             session()->flash('success', 'Layanan berhasil dihapus.');
