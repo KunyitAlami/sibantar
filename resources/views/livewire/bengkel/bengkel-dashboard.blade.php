@@ -381,7 +381,7 @@
                     <h2 class="text-xl font-bold mb-4">Daftar Pesanan</h2>
 
                     @if($orders->isEmpty())
-                        <p class="text-neutral-500">Belum ada pesanan, anda tidak bisa melaporkan pesanan</p>
+                        <p class="text-neutral-500">Belum ada pesanan, tidak bisa melaporkan pesanan</p>
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             @foreach($orders as $order)
