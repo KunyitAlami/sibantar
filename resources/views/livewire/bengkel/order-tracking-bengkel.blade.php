@@ -112,7 +112,7 @@
                     </div>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">Rp</span>
-                        <input id="servicePriceInput" type="text" inputmode="numeric" pattern="\\d*" maxlength="7"
+                        <input id="servicePriceInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="7"
                             aria-describedby="servicePrice_error"
                             data-min="{{ $tracking->order->layananBengkel->harga_awal ?? 0 }}"
                             data-max="{{ $tracking->order->layananBengkel->harga_akhir ?? 1000000 }}"
